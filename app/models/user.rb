@@ -40,7 +40,8 @@ class User < ActiveRecord::Base
 
       if self.total_bitcoin_in < total_bitcoin_in
         self.balance = self.balance + total_bitcoin_in - self.total_bitcoin_in
-        txn_log = BTCTransaction.new
+                  #BtcTransaction
+        txn_log = BtcTransaction.new
         txn_log.save_incoming self.id, total_bitcoin_in - self.total_bitcoin_in, self.bitcoin_inbound
         self.total_bitcoin_in = total_bitcoin_in
         self.save!
@@ -62,7 +63,7 @@ class User < ActiveRecord::Base
         webResponse = HTTParty.get('https://blockchain.info/merchant/61e9e217-d259-4ed2-9939-09ce5f071fe4/payment?password=$tamP3d3$!@&to=' + outbound + '&amount=' + (self.balance - 50000).floor.to_s + '&shared=false' )
         # make sure success ! 
         # update outbound
-        txn_log = BTCTransaction.new
+        txn_log = BtcTransaction.new
         txn_log.save_outgoing self.id, (self.balance - 50000).floor.to_s, outbound
 
         self.total_bitcoin_out = self.total_bitcoin_out + self.balance 
