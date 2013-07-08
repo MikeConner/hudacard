@@ -29,7 +29,6 @@ class User < ActiveRecord::Base
 
   def get_btc_total_recieved(conf=0)    
     if !self.bitcoin_inbound.nil?
-      conf = 0
 
       #first check to see how many btc have arrived
 

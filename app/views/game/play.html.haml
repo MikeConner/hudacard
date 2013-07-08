@@ -72,7 +72,7 @@
           .span2
             - if !@oldgame.nil?
               = hidden_field_tag 'payout', @oldgame.payout.nil? ? "0" : @oldgame.payout 
-              - if @oldgame.payout > 0
+              - if @oldgame.payout_ratio > 0
                 #winbox
                   %h3 WIN
                   %h3 
