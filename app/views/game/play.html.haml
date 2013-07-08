@@ -124,7 +124,10 @@
               = link_to "Fund Account", game_fund_path, :class => "btn btn-success"
             - else 
               Send BTC to:
-              %i= current_user.bitcoin_inbound
+              =link_to   current_user.bitcoin_inbound , "bitcoin:" + current_user.bitcoin_inbound             
+              -#%i= current_user.bitcoin_inbound
+              %a{"data-toggle" => "modal", :href => "#qr", :role => "button"}
+                (QR)
           .span1
             = link_to "Update", game_fundcheck_path, :class => "btn btn-success"
 
@@ -156,7 +159,16 @@
               .hashkey{:id => "hash"}
                 Key for last game:
                 = @oldgame.security_code
+#qr.modal.hide.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-header
+    %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+    %h3#myModalLabel Inbound Address
+  .modal-body
+    = image_tag "/game/qrcode.svg"
+  .modal-footer
+    %button.btn{"aria-hidden" => "true", "data-dismiss" => "modal"} Close
   .span8.offset1
+
     .row
 -#      #controls
   -#      %input#play_sounds{:checked => "", :type => "checkbox"}/

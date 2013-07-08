@@ -27,7 +27,18 @@ class GameController < ApplicationController
     end
   end
 
+  def qrcode
+    qr_uri = "bitcoin:" + current_user.bitcoin_inbound
 
+    respond_to do |format|
+      format.html
+      format.svg  { render :qrcode => qr_uri, :level => :l, :unit => 10, :offset => 14 }
+      #need imagemagik for these:
+      #format.png  { render :qrcode => request.url }
+      #format.gif  { render :qrcode => request.url }
+      #format.jpeg { render :qrcode => request.url }
+    end
+  end
   def new_game
     # load last game (or remove last game if exists)
 

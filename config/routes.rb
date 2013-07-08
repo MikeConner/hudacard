@@ -3,6 +3,8 @@ Hudacard::Application.routes.draw do
   get "game/fund"
   get "game/fundcheck"
   get "game/withdraw"
+  get "game/qrcode"
+
   devise_for :users
 
   # The priority is based upon order of creation:
@@ -60,6 +62,8 @@ Hudacard::Application.routes.draw do
   match 'game/fund', to: 'game#fund', via: [:get]
   match 'game/fundcheck', to: 'game#fundcheck', via: [:get]
   match 'game/withdraw', to: 'game#withdraw', via: [:post, :get]
+  match 'game/qrcode', to: 'game#qrcode', via: [ :get]
+
 
   # See how all your routes lay out with "rake routes"
 
