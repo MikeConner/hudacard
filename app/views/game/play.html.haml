@@ -1,0 +1,181 @@
+.container
+  .span10.offset1
+    .row
+      %br
+      %br
+      %br
+    .row
+      .well
+        Save this URL, do not share
+        = link_to "#{request.protocol}#{request.host_with_port}#{request.fullpath}"         
+
+    - if @bet.nil? or @oldgame.nil?
+      .row
+        .span5.well 
+          %center
+            - if @bad_bet.nil?
+              %h3 You bet ฿#{@bet.to_s} on #{@color.to_s}
+            - else
+              %h3
+                = @bad_bet     
+
+      .row
+        .span1.cardarea{:id => "card1a"}
+          .card.card-back
+        .span1.cardarea{:id => "card2a"}
+          .card.card-back
+        .span1.cardarea{:id => "card3a"}
+          .card.card-back
+        .span1.cardarea{:id => "card4a"}
+          .card.card-back
+        .span1.cardarea{:id => "card5a"}
+          .card.card-back
+      .row
+        %br
+
+    - else
+      .row
+        .span5.well 
+          %center
+            - if @bad_bet.nil?
+              %h3 You bet ฿#{@bet.to_s} on #{@color.to_s}
+            - else
+              %h3
+                = @bad_bet     
+      .row
+        - i = 0
+        - @oldgame.cards.each do |card|
+          .span1.cardarea
+            .card.card-back{:id => "card#{(i+1).to_s}"}
+            %cardfront{ :id => "seq#{i}", :class => "card card-#{card.value}-#{card.suit}"}
+          - i = i + 1
+      .row
+        %br
+    .row
+      .span5.well
+        .row
+          .span3
+            %center.balance{ :id => "balance"}
+              - if current_user.balance.nil?
+                - crb = 0
+              - else
+                - crb = current_user.balance
+              %h3
+                BALANCE
+                %br
+                #satoshibalance
+                  =crb.to_i
+              %h5
+                BTC 
+                #btcbalance
+                  = (crb/100000000).to_s
+          .span2
+            - if !@oldgame.nil?
+              = hidden_field_tag 'payout', @oldgame.payout.nil? ? "0" : @oldgame.payout 
+              - if @oldgame.payout > 0
+                #winbox
+                  %h3 WIN
+                  %h3 
+                    =@oldgame.payout_ratio.to_s + "X"
+                  %h5
+                    = (@oldgame.payout/100000000).round(4).to_s + "BTC"
+              - else
+                #winbox
+                  %h3 LOSE
+                  %h3
+                    =@oldgame.payout_ratio.to_s + "X"
+                  %h5
+                    =(@oldgame.payout/100000000).to_s + "BTC"
+            - else
+              %h3 Make Your Bet 
+      
+    = form_tag(controller: "game", :action => "play") do
+      = hidden_field_tag :game_key, @newgame.game_key
+      .row
+        .span1
+          = submit_tag "Red", :class => 'btn btn-danger', :id => "red"
+        .span1
+          .btn.btn-warning.btn-mini{:id => "minusMili"}
+            = "- ฿0.001"
+          .btn.btn-warning.btn-mini{:id => "minusMiliTen"}
+            = "- ฿0.010"
+
+        .span1
+          - betval = 0
+          - if @oldgame.nil?
+            - betval = 0.001
+          - else
+            - betval = @oldgame.bet/100000000
+          = text_field_tag :bet, betval.to_f
+        .span1
+          .btn.btn-primary.btn-mini{:id => "plusMili"}
+            = "+ ฿0.001"
+          .btn.btn-primary.btn-mini{:id => "plusMiliTen"}
+            = "+ ฿0.010"
+        .span1.pull-right
+          = submit_tag "Black", :class => 'btn btn-inverse', :id => "black"
+
+
+    .row
+      .span5.well
+        .row
+          .span4
+            - if current_user.bitcoin_inbound.nil?
+              = link_to "Fund Account", game_fund_path, :class => "btn btn-success"
+            - else 
+              Send BTC to:
+              %i= current_user.bitcoin_inbound
+          .span1
+            = link_to "Update", game_fundcheck_path, :class => "btn btn-success"
+
+
+    = form_tag(controller: "game", :action => "withdraw") do
+      .row
+        .span5.well
+          .row          
+            .span3
+              = text_field_tag :extract_addy, "Your BTC address"
+            .span1
+              = submit_tag "Cash Out", :class => 'btn btn-danger'
+          .row
+            .span4.offset1
+              %i transaction includes a 0.0005 BTC miners fee.
+    .row
+      .span5.well
+        .row
+          %h2 Jokers:
+          .span1
+            %card{:class => "card card-1-joker"}
+          .span1
+            %card{:class => "card card-2-joker"}
+          .span3
+            MD5 Hash for this game:
+            = @hash
+            %br
+            - if !@oldgame.nil?
+              .hashkey{:id => "hash"}
+                Key for last game:
+                = @oldgame.security_code
+  .span8.offset1
+    .row
+-#      #controls
+  -#      %input#play_sounds{:checked => "", :type => "checkbox"}/
+    -#    Play Sounds
+      -#  %small (Requires an HTML5 audio supporting browser)
+
+      -#%audio#shuffle{:preload => "auto"}
+        -#%source{:src => audio_path("shuffle.ogg") , :type => "audio/ogg"}
+          -#%source{:src => audio_path("shuffle.mp3"), :type => "audio/mp3"}
+            -#%source{:src => audio_path("shuffle.wav"), :type => "audio/wav"}
+      -#%audio#card_drop{:preload => "auto"}
+        -#%source{:src => "cardSlap.ogg", :type => "audio/ogg"}
+          -#%source{:src => "cardSlap.mp3", :type => "audio/mp3"}
+            -#%source{:src => "cardSlap.wav", :type => "audio/wav"}
+      -#%audio#win{:preload => "auto"}
+        -#%source{:src => "audio/win.ogg", :type => "audio/ogg"}
+          -#%source{:src => "audio/win.mp3", :type => "audio/mp3"}
+            -#%source{:src => "audio/win.wav", :type => "audio/wav"}
+      -#%audio#lose{:preload => "auto"}
+        -#%source{:src => "audio/lose.ogg", :type => "audio/ogg"}
+          -#%source{:src => "audio/lose.mp3", :type => "audio/mp3"}
+            -#%source{:src => "audio/lose.wav", :type => "audio/wav"}
