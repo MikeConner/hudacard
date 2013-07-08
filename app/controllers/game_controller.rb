@@ -62,7 +62,7 @@ class GameController < ApplicationController
       end    
       @balanceCalc = 1
       @balanceCalc = current_user.balance
-      if (@bet >= 0.001 and @bet <= 0.05 and @bet*3 < @balanceCalc/100000000) or @bet == 0
+      if (@bet >= 0.001 and @bet <= 0.05 and @bet*3 <= @balanceCalc/100000000) or @bet == 0
         @betSatoshi = (@bet*100000000).to_i
         @color = request["commit"]
         @game_key = request["game_key"]
