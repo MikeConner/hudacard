@@ -30,7 +30,7 @@ class Game < ActiveRecord::Base
     self.security_code = ""
 
     self.cards.each do |card|
-      self.security_code = self.security_code + card.value + card.suit 
+      self.security_code = self.security_code + "[ " + card.value +"-"+ card.suit + " ] - " 
     end
     self.security_code = self.security_code + (0...40).map{(65+rand(26)).chr}.join
     #JEFF _> SECURERANDOM THIS MOTHER!!!

@@ -137,7 +137,7 @@
         .span5.well
           .row          
             .span3
-              = text_field_tag :extract_addy, "Your BTC address"
+              = text_field_tag :extract_addy, nil, :placeholder => "Your BTC address"
             .span1
               = submit_tag "Cash Out", :class => 'btn btn-danger'
           .row
