@@ -153,17 +153,15 @@ else{
             $('#satoshibalance').text(satBal+satPay);
           }
           else {
-
             $('#satoshibalance').countTo({
                         from: satBal,
                         to: satBal+satPay,
                         speed: 3000,
                         refreshInterval: 50,
-                        onComplete: function(value) {
-                            console.debug(this);
-                        }});
-              }, wait*5);
-        }
+                        onComplete: function(value) { console.debug(this);}
+                      });
+          }
+        }, wait*5);
     }
   }
 
