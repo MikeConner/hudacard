@@ -61,20 +61,35 @@ $(document).ready(function(){
   $('#seq4').hide();
   $('#winning').hide();
   $('#hash').hide();
+  $('#announcer2').hide();
+  $('#announcer3').hide();
+  $('#announcer4').hide();
 
   $('#seq0').fadeIn(wait*0);
   $('#card1').hide();
   $('#seq1').delay(wait*0).fadeIn(wait);
   $('#card2').hide();
+  $('#anouncer').delay(wait*0).fadeOut(0);
+  $('#announcer2').delay(wait*0).fadeIn(wait);
+
 
   $('#seq2').delay(wait*2).fadeIn(wait);
   $('#card3').delay(wait*2).fadeOut(0);
+  $('#announcer2').delay(wait).fadeOut(0);
+  $('#announcer3').delay(wait*2).fadeIn(wait);
+
+ 
 
   $('#seq3').delay(wait*3).fadeIn(wait);
   $('#card4').delay(wait*3).fadeOut(0);
+  $('#announcer4').delay(wait*3).fadeIn(wait);
+  $('#announcer3').delay(wait*0).fadeOut(0);
+
 
   $('#seq4').delay(wait*4).fadeIn(wait);
   $('#card5').delay(wait*4).fadeOut(0);
+  $('#announcer4').delay(wait*0).fadeOut(wait);
+
 
   $('#winning').delay(wait*5).fadeIn(wait);
   $('#hash').delay(wait*5).fadeIn(wait);
@@ -134,16 +149,21 @@ else{
 
       setTimeout(function(){
           $('#btcbalance').text(btcBalNew + " mBTC");
-    //      $('#satoshibalance').text(satBal+satPay);
-    $('#satoshibalance').countTo({
-                from: satBal,
-                to: satBal+satPay,
-                speed: 3000,
-                refreshInterval: 50,
-                onComplete: function(value) {
-                    console.debug(this);
-                }});
-      }, wait*5);
+          if (satPay < 0){
+            $('#satoshibalance').text(satBal+satPay);
+          }
+          else {
+
+            $('#satoshibalance').countTo({
+                        from: satBal,
+                        to: satBal+satPay,
+                        speed: 3000,
+                        refreshInterval: 50,
+                        onComplete: function(value) {
+                            console.debug(this);
+                        }});
+              }, wait*5);
+        }
     }
   }
 

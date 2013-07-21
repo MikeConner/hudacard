@@ -70,8 +70,23 @@
                   = (crb/100000).to_s
                   mBTC
           .span2
+            #anouncer
+              %h3 Good Luck
+            #announcer2
+              - if !@oldgame.nil?
+                %h3
+                  = @oldgame.mid_game_notes[0]
+            #announcer3
+              - if !@oldgame.nil?
+                %h3
+                  = @oldgame.mid_game_notes[1]
+            #announcer4
+              - if !@oldgame.nil?
+                %h3
+                  = @oldgame.mid_game_notes[2]
+
             - if !@oldgame.nil?
-              = hidden_field_tag 'payout', @oldgame.payout.nil? ? "0" : @oldgame.payout 
+              = hidden_field_tag 'payout', @oldgame.payout.nil? ? "0" : @oldgame.payout
               - if @oldgame.payout_ratio > 0
                 #winbox
                   %h3 WIN
