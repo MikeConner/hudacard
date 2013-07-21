@@ -83,15 +83,15 @@ $(document).ready(function(){
 
 
   $('#plusMili').click(function() {
-    var origVal = parseFloat($('#bet').val());
-    var newval = origVal + 0.001;
-    $('#bet').val(newval.toFixed(3));
+    var origVal = parseInt($('#bet').val());
+    var newval = origVal + 1;
+    $('#bet').val(parseInt(newval));
     checkRange();
   });
   $('#plusMiliTen').click(function() {
-    var origVal = parseFloat($('#bet').val());
-    var newval = origVal + 0.01;
-    $('#bet').val(newval.toFixed(3));
+    var origVal = parseInt($('#bet').val());
+    var newval = origVal + 10;
+    $('#bet').val(parseInt(newval));
     checkRange();
 
   });
@@ -103,15 +103,15 @@ $(document).ready(function(){
     cr = checkRange();
   });
   $('#minusMili').click(function() {
-    var origVal = parseFloat($('#bet').val());
-    var newval = origVal - 0.001;
-    $('#bet').val(newval.toFixed(3));
+    var origVal = parseInt($('#bet').val());
+    var newval = origVal - 1;
+    $('#bet').val(newval);
     checkRange();
   });
   $('#minusMiliTen').click(function() {
-    var origVal = parseFloat($('#bet').val());
-    var newval = origVal - 0.01;
-    $('#bet').val(newval.toFixed(3));
+    var origVal = parseInt($('#bet').val());
+    var newval = origVal - 10;
+    $('#bet').val(newval);
     checkRange();
 
   });
@@ -122,7 +122,7 @@ $(document).ready(function(){
 
   var satBal = parseInt($('#satoshibalance').text());
   var satPay = parseInt($('#payout').val());
-  var btcBalNew = (satPay + satBal)/100000000
+  var btcBalNew = (satPay + satBal)/100000
 
   
 
@@ -133,7 +133,7 @@ $(document).ready(function(){
 else{
 
       setTimeout(function(){
-          $('#btcbalance').text(btcBalNew);
+          $('#btcbalance').text(btcBalNew + " mBTC");
     //      $('#satoshibalance').text(satBal+satPay);
     $('#satoshibalance').countTo({
                 from: satBal,
@@ -151,22 +151,22 @@ else{
   function checkRange ()
   {
     var rv = 0;
-    if (isNaN(parseFloat($('#bet').val()) )) {
-      var newval = 0.001;
-      $('#bet').val(newval.toFixed(3));
+    if (isNaN(parseInt($('#bet').val()) )) {
+      var newval = 1;
+      $('#bet').val(parseInt(newval));
 
     }
     var origVal = parseFloat($('#bet').val());
-    if (origVal > 0.05)
+    if (origVal > 50)
     {
-      var newval = 0.05;
-      $('#bet').val(newval.toFixed(3));
+      var newval = 50;
+      $('#bet').val(parseInt(newval));
       rv = 2;
     }
     else {
-      if (origVal<0.001) {
-        var newval = 0.001;
-        $('#bet').val(newval.toFixed(3));
+      if (origVal<1) {
+        var newval = 1;
+        $('#bet').val(parseInt(newval));
         rv = 1;
       }
     }

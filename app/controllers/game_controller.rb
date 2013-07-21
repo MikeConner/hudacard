@@ -62,8 +62,8 @@ class GameController < ApplicationController
       end    
       @balanceCalc = 1
       @balanceCalc = current_user.balance
-      if (@bet >= 0.001 and @bet <= 0.05 and @bet*3 <= @balanceCalc/100000000) or @bet == 0
-        @betSatoshi = (@bet*100000000).to_i
+      if (@bet >= 1 and @bet <= 50 and @bet*3 <= @balanceCalc/100000) or @bet == 0
+        @betSatoshi = (@bet*100000).to_i
         @color = request["commit"]
         @game_key = request["game_key"]
 
@@ -79,7 +79,9 @@ class GameController < ApplicationController
           @bad_bet = "Something went wrong.  Old game corrupt.  Bet Invalid!"
         end
       else
-        @bad_bet = "Bet is out of range."
+        max_bet = @balanceCalc/100000/3
+
+        @bad_bet = "Bet is out of range. Max Bet: #{max_bet.to_i} "
       end
   end
 

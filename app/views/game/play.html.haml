@@ -14,7 +14,7 @@
         .span5.well 
           %center
             - if @bad_bet.nil?
-              %h3 You bet ฿#{@bet.to_s} on #{@color.to_s}
+              %h3 You bet m฿#{@bet.to_s} on #{@color.to_s}
             - else
               %h3
                 = @bad_bet     
@@ -38,7 +38,7 @@
         .span5.well 
           %center
             - if @bad_bet.nil?
-              %h3 You bet ฿#{@bet.to_s} on #{@color.to_s}
+              %h3 You bet #{@bet.to_s} m฿ on #{@color.to_s}
             - else
               %h3
                 = @bad_bet     
@@ -66,9 +66,9 @@
                 #satoshibalance
                   =crb.to_i
               %h5
-                BTC 
                 #btcbalance
-                  = (crb/100000000).to_s
+                  = (crb/100000).to_s
+                  mBTC
           .span2
             - if !@oldgame.nil?
               = hidden_field_tag 'payout', @oldgame.payout.nil? ? "0" : @oldgame.payout 
@@ -78,14 +78,14 @@
                   %h3 
                     =@oldgame.payout_ratio.to_s + "X"
                   %h5
-                    = (@oldgame.payout/100000000).round(4).to_s + "BTC"
+                    = (@oldgame.payout/100000).round(0).to_s + "BTC"
               - else
                 #winbox
                   %h3 LOSE
                   %h3
                     =@oldgame.payout_ratio.to_s + "X"
                   %h5
-                    =(@oldgame.payout/100000000).to_s + "BTC"
+                    =(@oldgame.payout/100000).round(0).to_s + "mBTC"
             - else
               %h3 Make Your Bet 
       
@@ -96,22 +96,23 @@
           = submit_tag "Red", :class => 'btn btn-danger', :id => "red"
         .span1
           .btn.btn-warning.btn-mini{:id => "minusMili"}
-            = "- ฿0.001"
+            = "- 1 m฿"
           .btn.btn-warning.btn-mini{:id => "minusMiliTen"}
-            = "- ฿0.010"
+            = "- 10 m฿"
 
         .span1
           - betval = 0
           - if @oldgame.nil?
-            - betval = 0.001
+            - betval = 1
           - else
-            - betval = @oldgame.bet/100000000
-          = text_field_tag :bet, betval.to_f
+            - betval = @oldgame.bet/100000
+          = text_field_tag :bet, betval.to_i, options = {:size => 3}
+          m฿
         .span1
           .btn.btn-primary.btn-mini{:id => "plusMili"}
-            = "+ ฿0.001"
+            = "+ 1 m฿"
           .btn.btn-primary.btn-mini{:id => "plusMiliTen"}
-            = "+ ฿0.010"
+            = "+ 10 m฿"
         .span1.pull-right
           = submit_tag "Black", :class => 'btn btn-inverse', :id => "black"
 
