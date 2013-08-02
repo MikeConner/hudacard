@@ -1,4 +1,3 @@
-/*
 var COUNT_SPEED = 1000; // milliseconds
 
 (function($) {
@@ -46,64 +45,3 @@ var COUNT_SPEED = 1000; // milliseconds
         onComplete: null,  // callback method for when the element finishes updating
     };
 })(jQuery);
-
-$(document).ready(function() {
-  var wait = 1000;
-
-  // Result box WIN/LOSE
-  $('#winbox').hide()
-  // Fronts of the cards
-  $('cardfront').hide();
-  
-  // Mid-game notes
-  $('.midgame').hide();
-
-  // Show first card
-  $('#seq1').show();
-  $('#card1').hide();
-  $('#announcer').delay(wait).fadeOut(0);
-  for (var idx = 2; idx <= 5; idx++) {
-  	$('#seq' + idx).delay(wait * (idx - 1)).fadeIn(wait);
-  	$('#card' + idx).delay(wait * (idx - 1)).fadeOut(0);
-  }
-
-  for (var idx = 2; idx <= 4; idx++) {
-    $('#announcer' + idx).delay(wait * (idx - 1)).fadeIn(wait);
-    $('#announcer' + idx).delay(0).fadeOut(0);  	
-  }
-  
-  
-  $('#winbox').delay(wait * 4).fadeIn(wait);
-  
-  updateBalance(); 
-});
-
-function updateBalance() {
-  var btcBal = parseFloat($('#btcbalance').text());
-
-  var satBal = parseInt($('#satoshibalance').text());
-  var satPay = parseInt($('#payout').val());
-  var btcBalNew = (satPay + satBal) * SATOSHI
-
-  if (isNaN(satPay)){
-    // Is this an error?
-  }
-  else {
-      setTimeout(function(){
-          $('#btcbalance').text(btcBalNew + " mBTC");
-          if (satPay < 0){
-            $('#satoshibalance').text(satBal+satPay);
-          }
-          else {
-            $('#satoshibalance').countTo({
-                        from: satBal,
-                        to: satBal+satPay,
-                        speed: BALANCE_SPEED,
-                        refreshInterval: 50,
-                        onComplete: function(value) { console.debug(this);}
-                      });
-          }
-      }, wait*5);
-   }
-}
-*/

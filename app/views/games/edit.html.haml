@@ -15,7 +15,7 @@
       .span5.well
         .row
           .span3
-            = render :partial => 'balance'
+            = render :partial => 'balance', :locals => { :satoshi_balance => current_user.balance }
           .span2
             %h3 Make Your Bet
             %p== (#{range[:min]}m฿ - #{range[:max]}m฿)

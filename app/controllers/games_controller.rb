@@ -96,6 +96,8 @@ class GamesController < ApplicationController
     if @game.id == @new_game.id
       raise 'New Game creation failed'
     end
+    
+    @old_balance = @game.user.balance - (@game.payout * 100000).round
   end
   
   def error
