@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   respond_to :html, :svg
   
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:show]
   
   def balance_inquiry
     current_user.get_btc_total_received
@@ -24,13 +24,14 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find_by_email(params[:id] + User::EMAIL_SUFFIX)
-    @game = @user.games.last
     
     if current_user != @user
       sign_out current_user unless current_user.nil?
       sign_in(:user, @user)
     end
     
+    @game = @user.games.last
+
     redirect_to edit_game_path(@game)
     
   rescue RuntimeError => err

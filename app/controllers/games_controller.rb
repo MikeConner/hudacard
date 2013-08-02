@@ -1,6 +1,8 @@
 require 'card'
 
 class GamesController < ApplicationController
+  before_filter :authenticate_user!, :except => [:new, :edit]
+  
   # Coming in from root path
   def new    
     # Destroy any current user session
