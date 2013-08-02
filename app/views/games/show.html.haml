@@ -33,6 +33,7 @@
               .midgame#announcer4= notes[2]
             #winbox
               - if @game.payout >= 0
+                = hidden_field_tag :payout, @game.payout * 100000
                 %h3 WIN
               - else
                 %h3 LOSE

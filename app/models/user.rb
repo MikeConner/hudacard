@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
   # Store random token in the email, appending the suffix to make it valid
   # This token will also appear in all this user's games
   EMAIL_SUFFIX = '@me.com'
+  SATOSHI = 100000000
   
   # Could say :on => :create, but not necessary because it's already got a latch to only do it once
   before_validation :ensure_btc_address
@@ -80,7 +81,7 @@ class User < ActiveRecord::Base
   end
   
   def total_bitcoin_in
-    result = 0.0
+    result = 0
     self.btc_transactions.inbound.each do |transaction|
       result += transaction.satoshi
     end
@@ -96,14 +97,13 @@ class User < ActiveRecord::Base
       end
     else
       # first check to see how many btc have arrived
-      webResponse = HTTParty.get("https://blockchain.info/q/getreceivedbyaddress/#{self.inbound_bitcoin_address}?confirmations=#{required_confirmations}" )
-      if webResponse.blank?
+      total_received = BITCOIN_GATEWAY.get_total_received(self.inbound_bitcoin_address, required_confirmations)
+      
+      if total_received.nil?
         raise 'Unable to get received BTC'
       else
-        total_received = webResponse.to_i
-  
         # second, add in additional bitcoin if greater than what has come in previously
-        difference = total_received - self.total_bitcoin_in
+        difference = (total_received * SATOSHI).round - self.total_bitcoin_in
         if difference > 0
           self.btc_transactions.create!(:satoshi => difference)
         elsif difference < 0
@@ -124,13 +124,12 @@ class User < ActiveRecord::Base
       twoconf = get_btc_total_received(2)
       if (zeroconf == oneconf) and (oneconf == twoconf) 
         amount = self.balance - BctTransaction::MINER_FEE
-        webResponse = HTTParty.get("https://blockchain.info/merchant/#{MERCHANT_KEY}/payment?password=#{MERCHANT_PASSWORD}&to=#{outbound_address}&amount=#{amount}&shared=false")
-        if webResponse.has_key?('tx_hash')
-          self.btc_transactions.create!(:satoshi => -self.balance, :to_address => outbound_address, :transaction_id => webResponse['tx_hash'])
+        
+        transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
+        if transaction_id.nil?
+          raise "Withdrawal from #{outbound_address} failed"
         else
-          puts webResponse.inspect
-          
-          raise "Unable to withdraw funds! (#{webResponse.inspect})"
+          self.btc_transactions.create!(:satoshi => -self.balance, :to_address => outbound_address, :transaction_id => transaction_id)
         end
       else
         I18n.t('awaiting_confirmation')
@@ -151,18 +150,9 @@ private
   # Make sure the user has a bitcoin_inbound address defined
   def ensure_btc_address
     if self.inbound_bitcoin_address.nil?
-      self.inbound_bitcoin_address = 'fake address'
-=begin      
-      webResponse = HTTParty.get("https://blockchain.info/merchant/#{MERCHANT_KEY}/new_address?password=#{MERCHANT_PASSWORD}&label=#{self.email}")
-      if webResponse.has_key?('address')
-        self.inbound_bitcoin_address = webResponse['address']
-      else
-        puts webResponse.inspect
-        
-        # This can happen if we're out of addresses for this wallet
-        puts 'Unable to create BTC address'
-      end
-=end
+      self.inbound_bitcoin_address = BITCOIN_GATEWAY.create_inbound_address(self.email)
     end
+    
+    raise 'Could not create inbound bitcoin address' if self.inbound_bitcoin_address.nil?
   end
 end

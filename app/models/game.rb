@@ -15,11 +15,6 @@
 #  random_token  :string(48)
 #
 
-#make sure balance does not go below zero
-#make sure bet is reasonable - balance in account at least 3x bet
-# DONEmake sure bet is not negative
-# load up deck of cards in memory one time so we're nothitting the db every game
-
 class Game < ActiveRecord::Base
   extend FriendlyId
   friendly_id :random_token
@@ -77,7 +72,7 @@ class Game < ActiveRecord::Base
     # Given the color, bet is already stored - compute everything (if zero balance, don't add any transactions)
     self.payout = self.bet * payout_ratio
     if user.balance > 0
-      self.user.btc_transactions.create!(:satoshi => self.payout * 100000, :transaction_id => "game:#{self.id}")
+      self.user.btc_transactions.create!(:satoshi => (self.payout * 100000).round, :address => user.inbound_bitcoin_address, :transaction_id => "game:#{self.id}")
     end
     
     save!
@@ -176,120 +171,6 @@ class Game < ActiveRecord::Base
     notes
   end
   
-=begin  
-  def mid_game_notes
-    red = 0
-    black = 0
-    joker = 0
-    count = 0
-    notes = Array.new
-
-    cards.each do |card|
-      count+=1
-      if card.suit == "heart" or card.suit == "diamond"
-        red = red + 1
-      elsif card.suit == "club" or card.suit == "spade"
-        black = black + 1
-      elsif card.suit == "joker"
-        joker = joker + 1
-      end
-      if count >= 2 && count != 5
-        case count
-        when 2
-          if self.color == "Red" #bet is on red
-            case red
-            when 0
-              notes.push("One more BLACK and you LOSE!" )
-            when 1
-                notes.push("")
-            when 2
-              notes.push("One more RED and you WIN!" )
-            end
-          else                #bet is on black
-            case black
-            when 0
-              notes.push("One more RED and you LOSE!" )
-            when 1
-                notes.push("")
-            when 2
-              notes.push("One more BLACK and you WIN!" )
-            end
-          end
-        when 3
-          if self.color == "Red" #bet is on red
-            case red
-            when 0
-              notes.push("Sorry, one more BLACK and you LOSE DOUBLE!" )
-            when 1
-                notes.push("One more BLACK and you LOSE!")
-            when 2
-              notes.push("One more RED and you WIN!" )
-            when 3
-              notes.push("You WIN!  One more RED and you win DOUBLE!" )
-            end
-          else                #bet is on black
-            case black
-            when 0
-              notes.push("Sorry, One more RED and you LOSE DOUBLE!" )
-            when 1
-                notes.push("One more RED and you LOSE!")
-            when 2
-              notes.push("One more BLACK and you WIN!" )
-            when 3
-              notes.push("You WIN! One more BLACK and you WIN DOUBLE!")
-            end
-          end
-        when 4
-          if self.color == "Red" #bet is on red
-            case red
-            when 0
-              notes.push("You lose double, one more BLACK and you LOSE 3x!" )
-            when 1
-                notes.push("Sorry, One more BLACK and you LOSE DOUBLE!")
-            when 2
-              notes.push("Game is tied. Next card determines winner" )
-            when 3
-              notes.push("You WIN!  One more RED and you win DOUBLE!" )
-            when 4
-              notes.push("You WIN DOUBLE!  One more RED to win 5x JACKPOT!" )
-            end
-          else                #bet is on black
-            case black
-            when 0
-              notes.push("You lose double, one more RED and you LOSE 3x!" )
-            when 1
-                notes.push("Sorry, One more RED and you LOSE DOUBLE!")
-            when 2
-              notes.push("Game is tied. Next card determines winner." )
-            when 3
-              notes.push("You WIN! One more BLACK and you WIN DOUBLE!")
-            when 4
-              notes.push("You WIN DOUBLE!  One more BLACK to win 5x JACKPOT!" )
-
-            end
-          end
-        end
-      end
-    end
-    notes
-  end
-
-
-
-  def conclude
-    compute_payout
-
-    self.payout = bet*self.payout_ratio
-    self.save!
-    if !self.user.nil?
-      if self.user.balance.nil?
-        self.user.balance = 0
-      end
-      self.user.balance = self.user.balance + self.payout
-      self.user.save!
-    end
-  end
-=end
 private
   def payout_ratio
     value = 0
