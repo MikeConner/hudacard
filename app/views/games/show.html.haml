@@ -51,7 +51,7 @@
             %card.card.card-1-joker
           .span1
             %card.card.card-2-joker
-          .span3
+          .span3#hash
             MD5 Hash for this game:
             = @new_game.game_key
             %br
@@ -112,6 +112,8 @@
 
   // Result box WIN/LOSE
   $('#winbox').hide()
+  $('#hash').hide();
+  
   // Fronts of the cards
   $('cardfront').hide();
   
@@ -133,6 +135,7 @@
   }
   
   $('#winbox').delay(wait * 4).fadeIn(wait);
+  $('#hash').delay(wait * 4).fadeIn(wait);
   
   updateBalance(); 
   });

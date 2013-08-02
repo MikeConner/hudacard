@@ -28,7 +28,7 @@ class Card
   def self.pick
     # Joker?
     if Random.rand(52 + NUM_JOKERS) < NUM_JOKERS
-      Card.new(:suit => JOKER, :value => 0)
+      Card.new(:suit => JOKER, :value => (Random.rand(2) + 1).to_s)
     else
       Card.new(:suit => SUIT_WEIGHT.keys.sample, :value => VALUE_WEIGHT.keys.sample)
     end
