@@ -25,6 +25,8 @@ class UsersController < ApplicationController
   def show
     @user = User.find_by_email(params[:id] + User::EMAIL_SUFFIX)
     
+    raise 'User not found' if @user.nil?
+    
     if current_user != @user
       sign_out current_user unless current_user.nil?
       sign_in(:user, @user)

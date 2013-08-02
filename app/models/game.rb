@@ -48,10 +48,10 @@ class Game < ActiveRecord::Base
   def deal_cards
     if self.new_record?
       cards = []
-      repeat
+      while cards.count < 5 do
         new_card = Card.pick
         cards.push(new_card) unless cards.include?(new_card)
-      until 5 == cards.count
+      end
       
       self.security_code = ''
       cards.each do |card|
