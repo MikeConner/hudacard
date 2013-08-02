@@ -1,18 +1,21 @@
 class GameController < ApplicationController
-  
   def new_player
     if !current_user.nil?
       sign_out(current_user)
     end 
+
     random_token = SecureRandom.urlsafe_base64(32, false)
     nu = User.new
     nu.email = random_token + "@me.com"
     nu.password = random_token
     nu.random_token = random_token
-    nu.balance = 0
-    nu.get_btc_address
-    nu.save!
+    # Ensure call saves the record
+    nu.ensure_btc_address
+
     redirect_to '/secret/' + random_token 
+    
+  rescue RuntimeError => err
+    redirect_to root_path, :alert => err
   end
 
   def load_player
@@ -97,13 +100,22 @@ class GameController < ApplicationController
   end
 
   def fund
-    current_user.get_btc_address
+    # Could throw an exception if no address can be created
+    current_user.ensure_btc_address
+
     redirect_to '/secret/' + current_user.random_token
+
+  rescue RuntimeError => err
+    redirect_to root_path, :alert => err
   end
 
   def fundcheck
-    current_user.get_btc_total_recieved(0)
+    current_user.get_btc_total_received
+
     redirect_to '/secret/' + current_user.random_token
+
+  rescue RuntimeError => err
+    redirect_to root_path, :alert => err
   end
   
   def withdraw   

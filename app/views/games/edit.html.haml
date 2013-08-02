@@ -1,0 +1,38 @@
+-# Displayed for a "new" game -- no bet yet
+.container
+  .span10.offset1
+    = render :partial => 'header', :locals => {:game => @game}
+    .row
+      - for i in 1..5 do
+        .span1.cardarea
+          .card.card-back{:id => "card#{(i)}"}
+    .row
+      %br
+    - range = @game.user.bet_range
+    = hidden_field_tag :min_bet, range[:min]
+    = hidden_field_tag :max_bet, range[:max]
+    .row
+      .span5.well
+        .row
+          .span3
+            = render :partial => 'balance'
+          .span2
+            %h3 Make Your Bet
+            %p== (#{range[:min]}m฿ - #{range[:max]}m฿)
+    = form_for @game do |f|
+      = render :partial => 'bet_fields', :locals => { :f => f, :game => @game }
+    = render :partial => 'fund_account'
+    = render :partial => 'withdrawal'
+    .row
+      .span5.well
+        .row
+          %h2 Jokers:
+          .span1
+            %card.card.card-1-joker
+          .span1
+            %card.card.card-2-joker
+          .span3
+            MD5 Hash for this game:
+            = @game.game_key
+            %br
+= render :partial => 'qrcode'

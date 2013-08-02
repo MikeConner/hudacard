@@ -1,0 +1,11 @@
+= form_tag withdrawal_user_path(current_user) do |f|
+  .row
+    .span5.well
+      .row          
+        .span3
+          = text_field_tag :extract_addy, nil, :placeholder => "Your BTC address"
+        .span1
+          = submit_tag "Cash Out", :class => 'btn btn-danger'
+      .row
+        .span4.offset1
+          %i transaction includes a 0.0005 BTC miners fee.

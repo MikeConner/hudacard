@@ -1,0 +1,19 @@
+= f.hidden_field :game_key, :value => game.game_key
+.row
+  .span1
+    = submit_tag Game::RED, :class => 'btn btn-danger', :id => "red"
+  .span1
+    .btn.btn-warning.btn-mini#minusMilli
+      = "- 1 m฿"
+    .btn.btn-warning.btn-mini#minusMilliTen
+      = "- 10 m฿"
+  .span1
+    = f.text_field :bet, :size => 3
+    m฿
+  .span1
+    .btn.btn-primary.btn-mini#plusMilli
+      = "+ 1 m฿"
+    .btn.btn-primary.btn-mini#plusMilliTen
+      = "+ 10 m฿"
+  .span1.pull-right
+    = submit_tag Game::BLACK, :class => 'btn btn-inverse', :id => "black"

@@ -1,0 +1,10 @@
+%center.balance#balance
+  - crb = current_user.balance.nil? ? 0 : current_user.balance
+  %h3
+    BALANCE
+    %br
+    #satoshibalance= crb
+  %h5
+    #btcbalance
+      = (crb/100000).round(3)
+      m฿

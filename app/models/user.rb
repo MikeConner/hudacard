@@ -1,4 +1,36 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                      :integer          not null, primary key
+#  email                   :string(255)      default(""), not null
+#  encrypted_password      :string(255)      default(""), not null
+#  reset_password_token    :string(255)
+#  reset_password_sent_at  :datetime
+#  remember_created_at     :datetime
+#  sign_in_count           :integer          default(0)
+#  current_sign_in_at      :datetime
+#  last_sign_in_at         :datetime
+#  current_sign_in_ip      :string(255)
+#  last_sign_in_ip         :string(255)
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  inbound_bitcoin_address :string(255)
+#
+
 class User < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :random_token
+  
+  include ApplicationHelper
+  
+  # Store random token in the email, appending the suffix to make it valid
+  # This token will also appear in all this user's games
+  EMAIL_SUFFIX = '@me.com'
+  
+  # Could say :on => :create, but not necessary because it's already got a latch to only do it once
+  before_validation :ensure_btc_address
+  
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -7,76 +39,130 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
-  attr_accessible :balance, :bitcoin_inbound
 
-  attr_accessible :total_bitcoin_in, :total_bitcoin_out, :total_address_balance
-  attr_accessible :random_token
+  # New address created for this user
+  attr_accessible :inbound_bitcoin_address
+  # This is the unique web URL that identifies a user -- don't allow mass assignment
+  attr_accessor :random_token
+  
+  has_many :games, :dependent => :restrict
+  has_many :btc_transactions, :dependent => :restrict
 
-  # attr_accessible :title, :body
-  has_many :games
-  has_many :btc_transactions
-
-  def get_btc_address
-    if self.bitcoin_inbound.nil?
-      webResponse = HTTParty.get('https://blockchain.info/merchant/61e9e217-d259-4ed2-9939-09ce5f071fe4/new_address?password=$tamP3d3$!@&label='+self.email)
-      self.bitcoin_inbound = webResponse['address']
-      self.total_bitcoin_in = 0
-      self.total_bitcoin_out = 0
-      self.balance = 0
-      self.save!
+  validates :email, :presence => true,
+                    :uniqueness => { case_sensitive: false },
+                    :format => { with: EMAIL_REGEX }
+  validates_presence_of :inbound_bitcoin_address
+  
+  # Minimum - maximum allowed to bet
+  # Return a hash of min/max
+  def bet_range
+    satoshi_balance = self.balance
+    max_bet = satoshi_balance / 300000
+    
+    # in millis (return MIN/MIN if max is 0; this allows betting with zero balance)
+    {:min => Game::MINIMUM_BET, :max => max_bet < Game::MINIMUM_BET ? Game::MINIMUM_BET : max_bet}
+  end
+  
+  # Compute each time, so that it never gets out of sync
+  # Add balance field back if this becomes a performance issue
+  def balance
+    result = 0
+    self.btc_transactions.each do |transaction|
+      result += transaction.satoshi
     end
+    
+    # Sanity check - has to be >= 0
+    if result < 0
+      raise "Invalid balance (#{result})"
+    end
+    
+    result
+  end
+  
+  def total_bitcoin_in
+    result = 0.0
+    self.btc_transactions.inbound.each do |transaction|
+      result += transaction.satoshi
+    end
+    
+    result
   end
 
-  def get_btc_total_recieved(conf=0)    
-    if !self.bitcoin_inbound.nil?
-
-      #first check to see how many btc have arrived
-
-      webResponse = HTTParty.get('https://blockchain.info/q/getreceivedbyaddress/' + self.bitcoin_inbound + '?confirmations=' + conf.to_s )
-      total_bitcoin_in = webResponse.to_i
-
-      #second, add in additional bitcoin in if greater than what has come in previously
-
-      if self.total_bitcoin_in < total_bitcoin_in
-        self.balance = self.balance + total_bitcoin_in - self.total_bitcoin_in
-                  #BtcTransaction
-        txn_log = BtcTransaction.new
-        txn_log.save_incoming self.id, total_bitcoin_in - self.total_bitcoin_in, self.bitcoin_inbound
-        self.total_bitcoin_in = total_bitcoin_in
-        self.save!
+  def get_btc_total_received(required_confirmations = 0)    
+    if self.inbound_bitcoin_address.nil?
+      # This means uninitialized, so it better be 0
+      if 0 != self.total_bitcoin_in
+        raise "#{self.total_bitcoin_in} bitcoin found; 0 expected"
+      end
+    else
+      # first check to see how many btc have arrived
+      webResponse = HTTParty.get("https://blockchain.info/q/getreceivedbyaddress/#{self.inbound_bitcoin_address}?confirmations=#{required_confirmations}" )
+      if webResponse.blank?
+        raise 'Unable to get received BTC'
+      else
+        total_received = webResponse.to_i
+  
+        # second, add in additional bitcoin if greater than what has come in previously
+        difference = total_received - self.total_bitcoin_in
+        if difference > 0
+          self.btc_transactions.create!(:satoshi => difference)
+        elsif difference < 0
+          raise "Total received discrepancy on #{self.inbound_bitcoin_address} (#{difference})"
+        end
       end
     end
+    
     self.total_bitcoin_in
   end
 
-  def withdraw(outbound)
-    #ensure balance has enough to send out
-    if self.balance > 0.0005*100000000 
-      #make sure inbounds are fully confirmed
-      zeroconf = get_btc_total_recieved(0)
-      oneconf = get_btc_total_recieved(1)
-      twoconf = get_btc_total_recieved(2)
-      #threeconf = get_btc_total_recieved(3)
-      if zeroconf == oneconf and oneconf == twoconf 
-        #take out fee before sending withdraw
-        webResponse = HTTParty.get('https://blockchain.info/merchant/61e9e217-d259-4ed2-9939-09ce5f071fe4/payment?password=$tamP3d3$!@&to=' + outbound + '&amount=' + (self.balance - 50000).floor.to_s + '&shared=false' )
-        # make sure success ! 
-        # update outbound
-        txn_log = BtcTransaction.new
-        txn_log.save_outgoing self.id, (self.balance - 50000).floor.to_s, outbound
-
-        self.total_bitcoin_out = self.total_bitcoin_out + self.balance 
-        self.balance = 0;
-        self.save!
-      else
-        "Waiting for 2 Confirmation on Inbounds"
-      end
+  def withdraw(outbound_address)
+    if balance < BtcTransaction::MINER_FEE
+      I18n.t('low_balance')
     else
-      "Balance Too Low "
+      zeroconf = get_btc_total_received(0)
+      oneconf = get_btc_total_received(1)
+      twoconf = get_btc_total_received(2)
+      if (zeroconf == oneconf) and (oneconf == twoconf) 
+        amount = self.balance - BctTransaction::MINER_FEE
+        webResponse = HTTParty.get("https://blockchain.info/merchant/#{MERCHANT_KEY}/payment?password=#{MERCHANT_PASSWORD}&to=#{outbound_address}&amount=#{amount}&shared=false")
+        if webResponse.has_key?('tx_hash')
+          self.btc_transactions.create!(:satoshi => -self.balance, :to_address => outbound_address, :transaction_id => webResponse['tx_hash'])
+        else
+          puts webResponse.inspect
+          
+          raise "Unable to withdraw funds! (#{webResponse.inspect})"
+        end
+      else
+        I18n.t('awaiting_confirmation')
+      end
     end 
   end
-  # catch condition -> 0 (success)
-  #catch condition: {"error"=>"Insufficient Funds Available: 9950000 Needed: 9959020"}  - waLLET!!!
-  #{"message"=>"Sent 0.099 BTC to 1H7j8aZ9R2oGs1mxsiGMt446QqgYkZDaiz", "tx_hash"=>"fd081a0ceea637672a5bca80a79a9150f307282811c46e2e233432bf4aedeb1d"}
-
+  
+private
+  # recover from email
+  def random_token
+    if self.email =~ /(.*?)@/
+      $1
+    else
+      self.id
+    end
+  end
+  
+  # Make sure the user has a bitcoin_inbound address defined
+  def ensure_btc_address
+    if self.inbound_bitcoin_address.nil?
+      self.inbound_bitcoin_address = 'fake address'
+=begin      
+      webResponse = HTTParty.get("https://blockchain.info/merchant/#{MERCHANT_KEY}/new_address?password=#{MERCHANT_PASSWORD}&label=#{self.email}")
+      if webResponse.has_key?('address')
+        self.inbound_bitcoin_address = webResponse['address']
+      else
+        puts webResponse.inspect
+        
+        # This can happen if we're out of addresses for this wallet
+        puts 'Unable to create BTC address'
+      end
+=end
+    end
+  end
 end

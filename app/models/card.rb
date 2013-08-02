@@ -1,38 +1,78 @@
+class Card
+  # Support validations outside ActiveRecord
+  include ActiveModel::Validations
+  include ActiveModel::Conversion
+  extend ActiveModel::Naming
 
-class Card < ActiveRecord::Base
+  CLUB = 'Club'
+  DIAMOND = 'Diamond'
+  SPADE = 'Spade'
+  HEART = 'Heart'
+  JOKER = 'Joker'
   
+  NUM_JOKERS = 2
+  
+  # "2" => 1, "3" => 2, ...
   VALUE_WEIGHT = Hash[%w(2 3 4 5 6 7 8 9 10 J Q K A).zip((1..13).to_a)]
-  SUIT_WEIGHT = Hash[%w(club diamond spade heart).zip((0..3).to_a)]
+  SUIT_WEIGHT = {CLUB => 0, DIAMOND => 1, SPADE => 2, HEART => 3} 
   
-  attr_accessible :suit, :value
+  RED_WEIGHT = {CLUB => 0, DIAMOND => 1, SPADE => 0, HEART => 1, JOKER => 0}
+  BLACK_WEIGHT = {CLUB => 1, DIAMOND => 0, SPADE => 1, HEART => 0, JOKER => 0}
+  
+  attr_accessor :suit, :value
 
-  #has_many :player_cards, :dependent => :destroy
+  validates :suit, :inclusion => { :in => SUIT_WEIGHT.keys }
+  validates :value, :inclusion => { :in => VALUE_WEIGHT.keys }
+
+  # Pick a card, any card...
+  def self.pick
+    # Joker?
+    if Random.rand(52 + NUM_JOKERS) < NUM_JOKERS
+      Card.new(:suit => JOKER, :value => 0)
+    else
+      Card.new(:suit => SUIT_WEIGHT.keys.sample, :value => VALUE_WEIGHT.keys.sample)
+    end
+  end
   
-  validates_presence_of :suit
-  validates_presence_of :value
+  # Equality operator
+  def ==(other)
+    # Values of Jokers don't matter
+    (self.suit == other.suit) and ((self.value == other.value) or (JOKER == self.suit))
+  end
   
-  #def beats?(current_winner)
-  #  suit == current_winner.suit && value_weight > current_winner.value_weight
-  #end
+  # Needed for new to work
+  def initialize(attributes = {})
+    attributes.each do |name, value|
+      send("#{name}=", value)
+    end
+  end
+  
+  def red_value
+    RED_WEIGHT[self.suit]
+  end
+  
+  def black_value
+    BLACK_WEIGHT[self.suit]
+  end
+  
+  def joker_value
+    JOKER == self.suit ? 1 : 0
+  end
   
   def suit_weight
-    SUIT_WEIGHT[suit]
+    JOKER == self.suit ? 0 : SUIT_WEIGHT[self.suit]
   end
   
   def value_weight
-    VALUE_WEIGHT[value]
+    VALUE_WEIGHT[self.value]
   end
   
-  def in_english
-    value.to_s + " of " + suit.to_s.pluralize
+  def to_s
+    JOKER == self.suit ? JOKER : "#{self.value} of #{self.suit.pluralize}"
   end
-  
-  #def is_a_heart
-  #  suit == "heart"
-  #end
-  
-  #def is_queen_of_spades
-  #  value == "Q" && suit == "spade"
-  #end
-  
+
+  # Needed for ActiveModel support
+  def persisted?
+    false
+  end  
 end

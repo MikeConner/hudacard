@@ -11,64 +11,57 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130708043600) do
+ActiveRecord::Schema.define(:version => 20130801034746) do
 
   create_table "btc_transactions", :force => true do |t|
-    t.datetime "txn_date"
-    t.integer  "satoshi_in"
-    t.integer  "satoshi_out"
-    t.string   "from_address"
-    t.string   "to_address"
+    t.integer  "satoshi"
+    t.string   "address"
+    t.string   "transaction_id"
     t.integer  "user_id"
-    t.string   "label"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
-  create_table "cards", :force => true do |t|
-    t.string   "suit"
-    t.string   "value"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "games", :force => true do |t|
-    t.float    "bet"
-    t.string   "card1"
-    t.string   "card2"
-    t.string   "card3"
-    t.string   "card4"
-    t.string   "card5"
+    t.integer  "bet",                          :default => 1, :null => false
     t.integer  "user_id"
     t.float    "payout"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-    t.string   "session_id"
-    t.string   "color"
-    t.string   "security_code"
-    t.string   "game_key"
-    t.float    "payout_ratio"
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
+    t.string   "color",         :limit => 8
+    t.string   "security_code", :limit => 128
+    t.string   "game_key",      :limit => 32
+    t.string   "cards"
+    t.string   "random_token",  :limit => 48
   end
 
+  create_table "rails_admin_histories", :force => true do |t|
+    t.text     "message"
+    t.string   "username"
+    t.integer  "item"
+    t.string   "table"
+    t.integer  "month",      :limit => 2
+    t.integer  "year",       :limit => 8
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
+
+  add_index "rails_admin_histories", ["item", "table", "month", "year"], :name => "index_rails_admin_histories"
+
   create_table "users", :force => true do |t|
-    t.string   "email",                  :default => "", :null => false
-    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "email",                   :default => "", :null => false
+    t.string   "encrypted_password",      :default => "", :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          :default => 0
+    t.integer  "sign_in_count",           :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
-    t.float    "balance"
-    t.string   "bitcoin_inbound"
-    t.float    "total_bitcoin_in"
-    t.float    "total_bitcoin_out"
-    t.float    "total_address_balance"
-    t.string   "random_token"
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
+    t.string   "inbound_bitcoin_address"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

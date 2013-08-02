@@ -2,4 +2,5 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  awaiting_confirmation: "Waiting for 2 confirmations on inbound bitcoin transaction"
+  low_balance: "Balance too low!"

@@ -1,10 +1,14 @@
 @import "twitter/bootstrap";
 
 
-input[name=bet] {    
+input[id=game_bet] {    
 width: 20px;
 }   
 
+.game-link {
+  color: #08c;
+  text-decoration: none;
+}
 
 /* New cards */
 

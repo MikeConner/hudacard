@@ -16,8 +16,7 @@
             - if @bad_bet.nil?
               %h3 You bet m฿#{@bet.to_s} on #{@color.to_s}
             - else
-              %h3
-                = @bad_bet     
+              %h3= @bad_bet     
 
       .row
         .span1.cardarea{:id => "card1a"}

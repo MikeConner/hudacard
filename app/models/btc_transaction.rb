@@ -1,23 +1,37 @@
+# == Schema Information
+#
+# Table name: btc_transactions
+#
+#  id             :integer          not null, primary key
+#  satoshi        :integer
+#  address        :string(255)
+#  transaction_id :string(255)
+#  user_id        :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
+
 class BtcTransaction < ActiveRecord::Base
-  attr_accessible :from_address, :label, :satoshi_in, :satoshi_out, :to_address, :txn_date, :user_id
-  #from addrss not used 
+  MINER_FEE = 50000
+  
+  # Satoshi reflects the net deposit (so, negative = withdrawal)
+  #   if a withdrawal, address has the destination; otherwise it's deposited into the inbound address associated with the user
+  attr_accessible :satoshi, :address, :transaction_id,
+                  :user_id
+
   belongs_to :user
-
-
-  def save_incoming(uid, sat_in, add_in)
-    self.user_id = uid
-    self.satoshi_in = sat_in
-    self.to_address = add_in
-    self.txn_date = DateTime.now
-    self.save!
+  
+  validates :satoshi, :presence => true,
+                      :numericality => { :only_integer => true },
+                      :exclusion => { :in => [0.0] }
+  validates :address, :presence => { :if => :outbound? }
+  validates :transaction_id, :presence => { :if => :outbound? }
+  
+  scope :inbound, where('satoshi > 0')
+  scope :outbound, where('satoshi < 0')
+  
+private
+  def outbound?
+    self.satoshi < 0
   end
-
-  def save_outgoing(uid, sat_out, add_out)
-    self.user_id = uid
-    self.satoshi_out = sat_out
-    self.to_address = add_out
-    self.txn_date = DateTime.now
-    self.save!
-  end
-
 end
