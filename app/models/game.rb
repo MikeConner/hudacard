@@ -37,7 +37,7 @@ class Game < ActiveRecord::Base
   validates_presence_of :cards
   # These only defined if there's a bet
   validates :color, :inclusion => { :in => [RED, BLACK] }, :allow_nil => true
-  validates :bet, :numericality => { :greater_than_or_equal_to => 0.0 }, :allow_nil => true
+  validates :bet, :numericality => { :greater_than_or_equal_to => 0, :only_integer => true }, :allow_nil => true
   validates_numericality_of :payout, :allow_nil => true
     
   def deal_cards

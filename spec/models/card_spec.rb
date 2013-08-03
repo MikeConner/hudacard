@@ -33,4 +33,44 @@ describe Card do
     
     it { should_not be_valid }
   end
+  
+  describe "equality operator / color values" do
+    before do
+      @card1 = Card.new(:suit => Card::DIAMOND, :value => '2')
+      @card2 = Card.new(:suit => Card::DIAMOND, :value => '2')
+      @card3 = Card.new(:suit => Card::DIAMOND, :value => '3')
+      @card4 = Card.new(:suit => Card::SPADE, :value => '2')
+      @joker1 = Card.new(:suit => Card::JOKER, :value => 0)
+      @joker2 = Card.new(:suit => Card::JOKER, :value => 1)
+    end
+    
+    it "should detect equality" do
+      (@card1 == @card2).should be_true
+      (@card1 == @card3).should_not be_true
+      (@card1 == @card4).should_not be_true
+      (@card1 == @joker1).should_not be_true
+      (@joker1 == @joker2).should be_true
+    end
+    
+    it "should detect red/black values" do
+      @card1.red_value.should be == 1
+      @card1.black_value.should be == 0
+      @card4.red_value.should be == 0
+      @card4.black_value.should be == 1
+      @joker1.joker_value.should be == 1
+      @card1.joker_value.should be == 0
+    end
+    
+    it "should have proper weights" do
+      @card1.suit_weight.should be == 1
+      @joker1.suit_weight.should be == 0
+      @card1.value_weight.should be == 1
+      @card3.value_weight.should be == 2
+    end
+    
+    it "should have text values" do
+      @card1.to_s.should be == '2 of Diamonds'
+      @joker1.to_s.should be == Card::JOKER
+    end
+  end
 end
