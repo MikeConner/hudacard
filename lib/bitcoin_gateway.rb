@@ -3,6 +3,10 @@ require 'singleton'
 class BitcoinGateway
   include Singleton
   
+  def test?
+    false
+  end
+  
   def create_inbound_address(email)
     webResponse = HTTParty.get("https://blockchain.info/merchant/#{MERCHANT_KEY}/new_address?password=#{MERCHANT_PASSWORD}&label=#{email}")
     if webResponse.has_key?('address')

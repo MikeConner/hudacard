@@ -45,7 +45,7 @@ describe Game do
     end
     
     it "but not a payout" do
-      game.bet.should be_nil
+      game.bet.should be == Game::MINIMUM_BET
       game.payout.should be_nil
       game.color.should be_nil
     end

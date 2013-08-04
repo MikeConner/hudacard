@@ -2,6 +2,10 @@ class BitcoinTestGateway < BitcoinGateway
   class << self; attr_accessor :total_received end
   @total_received = 0
 
+  def test?
+    true
+  end
+  
   def create_inbound_address(email)
     SecureRandom.hex(12)
   end
@@ -15,5 +19,7 @@ class BitcoinTestGateway < BitcoinGateway
   
   def withdraw(address, amount)
     SecureRandom.base64(16)
+    # If you don't reset this, you'll get an inconsistency when you try a balance update
+    BitcoinTestGateway::total_received = 0
   end  
 end

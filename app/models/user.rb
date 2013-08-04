@@ -119,20 +119,39 @@ class User < ActiveRecord::Base
     if balance < BtcTransaction::MINER_FEE
       I18n.t('low_balance')
     else
-      zeroconf = get_btc_total_received(0)
-      oneconf = get_btc_total_received(1)
-      twoconf = get_btc_total_received(2)
-      if (zeroconf == oneconf) and (oneconf == twoconf) 
-        amount = self.balance - BctTransaction::MINER_FEE
+      # Unfortunately the get_btc_total_received creates transactions in the test system, and the numbers will never match
+      #   So we need special code
+      if BITCOIN_GATEWAY.test?
+        balance = self.balance
+        amount = balance - BtcTransaction::MINER_FEE
         
         transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
         if transaction_id.nil?
           raise "Withdrawal from #{outbound_address} failed"
         else
-          self.btc_transactions.create!(:satoshi => -self.balance, :to_address => outbound_address, :transaction_id => transaction_id)
-        end
+          self.btc_transactions.create!(:satoshi => -balance, :address => outbound_address, :transaction_id => transaction_id)
+        end    
+        
+        "Amount: #{balance}"    
       else
-        I18n.t('awaiting_confirmation')
+        zeroconf = get_btc_total_received(0)
+        oneconf = get_btc_total_received(1)
+        twoconf = get_btc_total_received(2)
+        if (zeroconf == oneconf) and (oneconf == twoconf) 
+          balance = self.balance
+          amount = balance - BtcTransaction::MINER_FEE
+          
+          transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
+          if transaction_id.nil?
+            raise "Withdrawal from #{outbound_address} failed"
+          else
+            self.btc_transactions.create!(:satoshi => -balance, :to_address => outbound_address, :transaction_id => transaction_id)
+          end
+          
+          "Amount: #{balance}"    
+        else
+          I18n.t('awaiting_confirmation')
+        end
       end
     end 
   end

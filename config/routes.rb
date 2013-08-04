@@ -20,17 +20,4 @@ Hudacard::Application.routes.draw do
   resources :games, :only => [:edit, :update, :show] do
     get 'error', :on => :collection
   end
-=begin
-  root :to => 'game#new_player'
-
-  devise_for :users
-
-  match 'secret/:random_token', to: 'game#play', via: [:post, :get]
-
-  match '/game/play', to: 'game#play', via: [:post, :get]
-  match 'game/fund', to: 'game#fund', via: [:get]
-  match 'game/fundcheck', to: 'game#fundcheck', via: [:get]
-  match 'game/withdraw', to: 'game#withdraw', via: [:post, :get]
-  match 'game/qrcode', to: 'game#qrcode', via: [ :get]
-=end
 end

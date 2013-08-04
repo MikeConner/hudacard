@@ -251,3 +251,34 @@ width: 20px;
   right: 0px;
   width: 300px;
 }
+
+.alert {
+  color: #c60f13;
+// We use this to control alert padding.
+  padding-top:         51px;
+  padding-left:        31px;
+  padding-right:       31px;
+  padding-bottom:      12px;
+
+// We use these to control text style.
+  font-weight: bold;
+  font-size: 14px;
+  font-color: #fff;
+
+// We use this for close hover effect.
+  function-factor: 10%;
+
+// We use these to control border styles.
+  border-style: solid;
+  border-width: 1px;
+  bottom-margin: 20px;
+}
+// We use these to style the close buttons
+a.close {
+  close-color: #333;
+  close-position: 5px;
+  close-font-size: 22px;
+  close-opacity: 0.3;
+  close-opacity-hover: 0.5;
+  close-padding: 10px 20px 0px 0px;
+}
