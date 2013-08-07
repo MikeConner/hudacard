@@ -26,9 +26,13 @@ class BtcTransaction < ActiveRecord::Base
                       :exclusion => { :in => [0.0] }
   validates :address, :presence => { :if => :outbound? }
   validates :transaction_id, :presence => { :if => :outbound? }
+  validates :pending, :inclusion => { :in => [true, false] }
   
   scope :inbound, where('satoshi > 0')
   scope :outbound, where('satoshi < 0')
+  
+  scope :queued, where("pending = #{ActiveRecord::Base.connection.quoted_true}")
+  scope :settled, where("pending = #{ActiveRecord::Base.connection.quoted_false}")
   
 private
   def outbound?

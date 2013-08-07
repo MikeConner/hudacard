@@ -54,6 +54,10 @@ class User < ActiveRecord::Base
                     :format => { with: EMAIL_REGEX }
   validates_presence_of :inbound_bitcoin_address
   
+  def has_pending_withdrawals?
+    self.btc_transactions.queued.outbound.count > 0
+  end
+  
   # Minimum - maximum allowed to bet
   # Return a hash of min/max
   def bet_range
@@ -68,7 +72,7 @@ class User < ActiveRecord::Base
   # Add balance field back if this becomes a performance issue
   def balance
     result = 0
-    self.btc_transactions.each do |transaction|
+    self.btc_transactions.settled.each do |transaction|
       result += transaction.satoshi
     end
     
@@ -115,7 +119,8 @@ class User < ActiveRecord::Base
     self.total_bitcoin_in
   end
 
-  def withdraw(outbound_address)
+  # add default argument that can be set in test mode to make it queue withdrawals
+  def withdraw(outbound_address, should_fail = false)
     if balance < BtcTransaction::MINER_FEE
       I18n.t('low_balance')
     else
@@ -125,14 +130,24 @@ class User < ActiveRecord::Base
         balance = self.balance
         amount = balance - BtcTransaction::MINER_FEE
         
-        transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
-        if transaction_id.nil?
-          raise "Withdrawal from #{outbound_address} failed"
-        else
-          self.btc_transactions.create!(:satoshi => -balance, :address => outbound_address, :transaction_id => transaction_id)
-        end    
+        escrow_balance = BITCOIN_GATEWAY.get_wallet_balance(should_fail)
         
-        "Amount: #{balance}"    
+        if escrow_balance.nil? or (escrow_balance < balance)
+          # Need to queue
+          tx = self.btc_transactions.create!(:satoshi => -balance, :address => outbound_address, :transaction_id => 'pending')
+          tx.pending = true
+          tx.save!
+          "Withdrawal queued. Amount: #{balance}"   
+        else
+          transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
+          if transaction_id.nil?
+            raise "Withdrawal from #{outbound_address} failed"
+          else
+            self.btc_transactions.create!(:satoshi => -balance, :address => outbound_address, :transaction_id => transaction_id)
+          end    
+          
+          "Withdrawal successful. Amount: #{balance}"   
+        end 
       else
         zeroconf = get_btc_total_received(0)
         oneconf = get_btc_total_received(1)
@@ -141,14 +156,24 @@ class User < ActiveRecord::Base
           balance = self.balance
           amount = balance - BtcTransaction::MINER_FEE
           
-          transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
-          if transaction_id.nil?
-            raise "Withdrawal from #{outbound_address} failed"
-          else
-            self.btc_transactions.create!(:satoshi => -balance, :to_address => outbound_address, :transaction_id => transaction_id)
-          end
+          escrow_balance = BITCOIN_GATEWAY.get_wallet_balance
           
-          "Amount: #{balance}"    
+          if escrow_balance.nil? or (escrow_balance < balance)
+            # Need to queue
+            tx = self.btc_transactions.create!(:satoshi => -balance, :address => outbound_address, :transaction_id => 'pending')
+            tx.pending = true
+            tx.save!
+            "Withdrawal queued. Amount: #{balance}"   
+          else
+            transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
+            if transaction_id.nil?
+              raise "Withdrawal from #{outbound_address} failed"
+            else
+              self.btc_transactions.create!(:satoshi => -balance, :address => outbound_address, :transaction_id => transaction_id)
+            end
+            
+            "Withdrawal successful. Amount: #{balance}" 
+          end  
         else
           I18n.t('awaiting_confirmation')
         end

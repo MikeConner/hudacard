@@ -1,0 +1,30 @@
+.container
+  %br
+  %br
+  %br
+  - if @queued.empty?
+    %h1 No Withdrawal Queue
+  - else
+    %h3== Total wallet balance: #{number_with_delimiter(@balance)}
+    %table.table.zebra-striped
+      %thead
+        %tr
+          %th User
+          %th Satoshi
+          %th Address
+          %th Transaction ID
+          %th
+      %tbody
+        - @queued.each do |tx|
+          %tr
+            %td= tx.user_id
+            %td= number_with_delimiter(tx.satoshi)
+            %td= tx.address
+            %td= tx.transaction_id
+            - if @balance >= tx.satoshi
+              %td
+                = form_for tx do |f|
+                  = hidden_field_tag :key, params[:key]
+                  = f.submit 'Pay'
+            - else
+              %td

@@ -37,13 +37,19 @@ class UsersController < ApplicationController
       sign_in(:user, @user)
     end
     
+    # if a user has pending withdrawals, don't let them keep playing
+    if @user.has_pending_withdrawals?
+      @message = 'You have pending withdrawals.'
+      render 'withdrawal' and return
+    end
+
     @game = @user.games.last
 
     redirect_to edit_game_path(@game)
     
   rescue RuntimeError => err
     @errors = '<h1>#{err}</h1>'
-    redirect_to error_games_path
+    render 'games/error'
   end
 
 private
@@ -52,7 +58,7 @@ private
     
     if @user != current_user
       @errors = 'Wrong user'
-      redirect_to error_games_path
+      render 'games/error'
     end
   end
 end

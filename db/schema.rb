@@ -11,15 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130804033224) do
+ActiveRecord::Schema.define(:version => 20130806033340) do
 
   create_table "btc_transactions", :force => true do |t|
     t.integer  "satoshi",        :limit => 8
     t.string   "address"
     t.string   "transaction_id"
     t.integer  "user_id"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.boolean  "pending",                     :default => false, :null => false
   end
 
   create_table "games", :force => true do |t|

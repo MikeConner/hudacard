@@ -61,10 +61,48 @@ describe User do
   
   describe "transactions" do
     let(:user) { FactoryGirl.create(:user_with_transactions) }
-    
+
+    before do
+      @total = 0
+      user.btc_transactions.each do |tx|
+        @total += tx.satoshi
+      end    
+    end  
+      
     it "should have transactions" do
       user.btc_transactions.count.should be == 5
-      user.balance.should be > 0
+      user.reload.balance.should be == @total
+    end
+    
+    describe "add some queued ones" do
+      before do
+        tx = user.btc_transactions.create(:satoshi => 234234, :address => 'alksdjfalskfj', :transaction_id => 'adsfasdf')
+        tx.pending = true
+        tx.save!
+      end
+      
+      it "should not count queued transactions in the balance" do
+        user.btc_transactions.count.should be == 6
+          user.btc_transactions.settled.count.should be == 5
+          user.btc_transactions.queued.count.should be == 1
+        user.balance.should be == @total        
+      end
+      
+      describe "clear, then check balance" do
+        before do
+          q = user.btc_transactions.last
+          q.pending = false
+          q.save!
+          @new_total = @total + 234234
+        end
+        
+        it "should show the full balance now" do
+          user.btc_transactions.count.should be == 6
+          user.btc_transactions.settled.count.should be == 6
+          user.btc_transactions.queued.count.should be == 0
+          user.balance.should be == @new_total                  
+        end
+      end
     end
     
     describe "try to destroy" do

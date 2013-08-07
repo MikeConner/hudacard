@@ -23,16 +23,16 @@ class GamesController < ApplicationController
         render 'edit' and return
       else
         @errors = @game.errors.full_messages
-        redirect_to error_games_path
+        render 'games/error' and return
       end
     else
       @errors = user.errors.full_messages
-      redirect_to error_games_path
+      render 'games/error' and return
     end
     
   rescue RuntimeError => err
     @errors = "<h1>#{err}</h1>"
-    redirect_to error_games_path
+    render 'games/error' and return
   end
   
   # Coming in from "private" saved url - recover user
@@ -43,9 +43,14 @@ class GamesController < ApplicationController
       sign_in(:user, @game.user)
     end
     
+    # if a user has pending withdrawals, don't let them keep playing
+    if @game.user.has_pending_withdrawals?
+      @message = 'You have pending withdrawals.'
+      render 'users/withdrawal' and return
+    end
   rescue RuntimeError => err
     @errors = '<h1>#{err}</h1>'
-    redirect_to error_games_path
+    render 'games/error'
   end
   
   def update
@@ -73,12 +78,12 @@ class GamesController < ApplicationController
       @cards = YAML::load(@game.cards)
       redirect_to @game
     else
-      redirect_to error_games_path
+      render 'games/error' and return
     end    
     
   rescue RuntimeError => err
     @errors = '<h1>#{err}</h1>'
-    redirect_to error_games_path
+    render 'games/error'
   end
   
   def show
@@ -89,6 +94,12 @@ class GamesController < ApplicationController
       redirect_to edit_game_path(@game) and return
     end
     
+    # if a user has pending withdrawals, don't let them keep playing
+    if @game.user.has_pending_withdrawals?
+      @message = 'You have pending withdrawals.'
+      render 'users/withdrawal' and return
+    end
+
     @cards = YAML::load(@game.cards)
     # if there is a game after this one, set it to "new_game" to display the hash
     @new_game = @game.user.games.last
@@ -97,7 +108,8 @@ class GamesController < ApplicationController
       raise 'New Game creation failed'
     end
     
-    @old_balance = @game.user.balance - (@game.payout * 100000).round
+    # If 0 balance, don't count up/down to 0; allow "betting" with zero balance
+    @old_balance = 0 == @game.user.balance ? 0 : @game.user.balance - (@game.payout * 100000).round
   end
   
   def error

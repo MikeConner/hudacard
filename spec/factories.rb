@@ -36,11 +36,16 @@ FactoryGirl.define do
     user
     
     satoshi { Random.rand(1000000) + 100000 }
+    pending false
     
     factory :outbound_btc_transaction do
       satoshi { (Random.rand(1000000) + 100000) * -1 }
       address { SecureRandom.hex(16) }
       transaction_id { SecureRandom.base64(12) }
+    end
+    
+    factory :queued_transaction do
+      pending true
     end
   end
   

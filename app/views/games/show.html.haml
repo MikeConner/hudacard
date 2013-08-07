@@ -101,10 +101,7 @@
     var satPay = parseInt($('#payout').val());
     var btcBalNew = (satPay + satBal) / 100000;
          
-    if (isNaN(satPay)){
-      // Is this an error?
-    }
-    else {
+    if (!(isNaN(satPay) || (0 == satBal))) {
         $('#btcbalance').text(btcBalNew + " m฿");
         if (satPay < 0){
           $('#satoshibalance').text(satBal + satPay);

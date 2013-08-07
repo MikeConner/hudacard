@@ -20,4 +20,6 @@ Hudacard::Application.routes.draw do
   resources :games, :only => [:edit, :update, :show] do
     get 'error', :on => :collection
   end
+  
+  resources :btc_transactions, :only => [:index, :update]
 end

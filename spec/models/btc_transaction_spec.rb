@@ -21,6 +21,7 @@ describe BtcTransaction do
     transaction.should respond_to(:satoshi)
     transaction.should respond_to(:address)
     transaction.should respond_to(:transaction_id)
+    transaction.should respond_to(:pending)
   end
   
   it "should be inbound" do
@@ -32,6 +33,25 @@ describe BtcTransaction do
   
   it { should be_valid }
   
+  describe "invalid pending" do
+    before { transaction.pending = nil }
+    
+    it { should_not be_valid }
+  end
+  
+  it "should show settled" do
+    BtcTransaction.settled.should be == [transaction]
+    BtcTransaction.queued.should be_empty
+  end
+  
+  describe "queued" do
+    let(:transaction) { FactoryGirl.create(:queued_transaction) }
+    
+    it "should show queued" do
+    BtcTransaction.queued.should be == [transaction]
+    BtcTransaction.settled.should be_empty      
+    end
+  end
   describe "invalid satoshi" do
     [nil, 'abc', -2, 1.5, 0.0].each do |value|
       before { transaction.satoshi = value }

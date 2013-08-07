@@ -35,4 +35,14 @@ class BitcoinGateway
       # puts returns nil
     end    
   end
+  
+  def get_wallet_balance
+    webResponse = HTTParty.get("https://blockchain.info/merchant/#{MERCHANT_KEY}/balance?password=#{MERCHANT_PASSWORD}")
+    if webResponse.has_key?('balance')
+      webResponse['balance'].to_i
+    else
+      puts webResponse.inspect
+      # puts returns nil
+    end        
+  end
 end
