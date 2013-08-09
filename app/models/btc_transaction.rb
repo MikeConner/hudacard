@@ -11,8 +11,16 @@
 #  updated_at     :datetime         not null
 #
 
+# CHARTER
+#   Encapsulate a Bitcoin transaction
+#
+# USAGE
+#    Inbound/Outbound based on positive/negative
+#
+# NOTES AND WARNINGS
+#
 class BtcTransaction < ActiveRecord::Base
-  MINER_FEE = 50000
+  MINER_FEE = Bitcoin.new(:btc => 0.005)
   
   # Satoshi reflects the net deposit (so, negative = withdrawal)
   #   if a withdrawal, address has the destination; otherwise it's deposited into the inbound address associated with the user

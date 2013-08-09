@@ -7,3 +7,7 @@
     Save this URL, do not share (it uniquely identifies you -- and your balance)
     %br
     %em= link_to user_url(game.user), user_url(game.user)        
+    %br
+    %a{:id => "bookmarkme", :href => "#", :rel => "sidebar", :title => "Hudacard! Red or Black?"}
+      Add Bookmark
+    = hidden_field_tag :bookmark_url, user_url(game.user)

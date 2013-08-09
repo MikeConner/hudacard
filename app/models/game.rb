@@ -15,6 +15,14 @@
 #  random_token  :string(48)
 #
 
+# CHARTER
+#   Represent a single game (a single bet and payout)
+#
+# USAGE
+#   Create a game, "update" it by betting, then "show" the result
+#
+# NOTES AND WARNINGS
+#
 class Game < ActiveRecord::Base
   extend FriendlyId
   friendly_id :random_token
@@ -22,7 +30,7 @@ class Game < ActiveRecord::Base
   RED = 'Red'
   BLACK = 'Black'
   TOKEN_LENGTH = 32
-  MINIMUM_BET = 1 # 1 milli
+  MINIMUM_BET = Bitcoin.new(:mb => 1)
   
   before_validation :deal_cards
   
@@ -71,8 +79,8 @@ class Game < ActiveRecord::Base
   def play
     # Given the color, bet is already stored - compute everything (if zero balance, don't add any transactions)
     self.payout = self.bet * payout_ratio
-    if user.balance > 0
-      self.user.btc_transactions.create!(:satoshi => (self.payout * 100000).round, :address => user.inbound_bitcoin_address, :transaction_id => "game:#{self.id}")
+    if user.balance.value > 0
+      self.user.btc_transactions.create!(:satoshi => (Bitcoin.new(:mb => self.payout).as_satoshi).round, :address => user.inbound_bitcoin_address, :transaction_id => "game:#{self.id}")
     end
     
     save!

@@ -1,3 +1,11 @@
+# CHARTER
+#   Non-ActiveRecord representation of a card
+#
+# USAGE
+#   Don't need the overhead of DB access just for this. Store serialized sets of these in the game objects.
+#
+# NOTES AND WARNINGS
+#
 class Card
   # Support validations outside ActiveRecord
   include ActiveModel::Validations

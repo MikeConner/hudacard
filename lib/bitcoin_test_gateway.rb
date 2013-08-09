@@ -1,7 +1,9 @@
+require 'bitcoin'
+
 class BitcoinTestGateway < BitcoinGateway  
   class << self; attr_accessor :total_received end
   @total_received = 0
-
+  
   def test?
     true
   end
@@ -12,9 +14,9 @@ class BitcoinTestGateway < BitcoinGateway
   
   # Need to ensure this is monotonically increasing
   def get_total_received(address, confirmations = 0)    
-    BitcoinTestGateway::total_received += (Random.rand * 5).round(3) 
+    BitcoinTestGateway::total_received += Bitcoin.new(:btc => (Random.rand * 5).round(3)).as_satoshi
     
-    BitcoinTestGateway::total_received
+    Bitcoin.new(:satoshi => BitcoinTestGateway::total_received.round)
   end
   
   def withdraw(address, amount)
@@ -25,6 +27,6 @@ class BitcoinTestGateway < BitcoinGateway
   end  
   
   def get_wallet_balance(should_fail = false)
-    should_fail ? nil : (Random.rand(100) + 1) * 100000000
+    should_fail ? nil : Bitcoin.new(:satoshi => Bitcoin.new(:btc => (Random.rand(100) + 1)).as_satoshi)
   end
 end

@@ -18,6 +18,14 @@
 #  inbound_bitcoin_address :string(255)
 #
 
+# CHARTER
+#   User object for security
+#
+# USAGE
+#   Each user has a unique key and bitcoin address (to transfer winnings to from the "house" wallet)
+#
+# NOTES AND WARNINGS
+#
 class User < ActiveRecord::Base
   extend FriendlyId
   friendly_id :random_token
@@ -27,7 +35,7 @@ class User < ActiveRecord::Base
   # Store random token in the email, appending the suffix to make it valid
   # This token will also appear in all this user's games
   EMAIL_SUFFIX = '@me.com'
-  SATOSHI = 100000000
+  MAX_BET = Bitcoin.new(:mb => 50)
   
   # Could say :on => :create, but not necessary because it's already got a latch to only do it once
   before_validation :ensure_btc_address
@@ -61,11 +69,10 @@ class User < ActiveRecord::Base
   # Minimum - maximum allowed to bet
   # Return a hash of min/max
   def bet_range
-    satoshi_balance = self.balance
-    max_bet = satoshi_balance / 300000
+    max_bet_mb = [self.balance.as_mb / 3, MAX_BET.as_mb].min
     
     # in millis (return MIN/MIN if max is 0; this allows betting with zero balance)
-    {:min => Game::MINIMUM_BET, :max => max_bet < Game::MINIMUM_BET ? Game::MINIMUM_BET : max_bet}
+    {:min => Game::MINIMUM_BET.as_mb, :max => max_bet_mb < Game::MINIMUM_BET.as_mb ? Game::MINIMUM_BET.as_mb : max_bet_mb}
   end
   
   # Compute each time, so that it never gets out of sync
@@ -81,7 +88,7 @@ class User < ActiveRecord::Base
       raise "Invalid balance (#{result})"
     end
     
-    result
+    Bitcoin.new(:satoshi => result)
   end
   
   def total_bitcoin_in
@@ -90,13 +97,13 @@ class User < ActiveRecord::Base
       result += transaction.satoshi
     end
     
-    result
+    Bitcoin.new(:satoshi => result)
   end
 
   def get_btc_total_received(required_confirmations = 0)    
     if self.inbound_bitcoin_address.nil?
       # This means uninitialized, so it better be 0
-      if 0 != self.total_bitcoin_in
+      if 0 != self.total_bitcoin_in.as_satoshi
         raise "#{self.total_bitcoin_in} bitcoin found; 0 expected"
       end
     else
@@ -107,7 +114,7 @@ class User < ActiveRecord::Base
         raise 'Unable to get received BTC'
       else
         # second, add in additional bitcoin if greater than what has come in previously
-        difference = (total_received * SATOSHI).round - self.total_bitcoin_in
+        difference = total_received.as_satoshi - self.total_bitcoin_in.as_satoshi
         if difference > 0
           self.btc_transactions.create!(:satoshi => difference)
         elsif difference < 0
@@ -121,46 +128,46 @@ class User < ActiveRecord::Base
 
   # add default argument that can be set in test mode to make it queue withdrawals
   def withdraw(outbound_address, should_fail = false)
-    if balance < BtcTransaction::MINER_FEE
+    satoshi_balance = self.balance.as_satoshi
+
+    if satoshi_balance < BtcTransaction::MINER_FEE.as_satoshi
       I18n.t('low_balance')
     else
       # Unfortunately the get_btc_total_received creates transactions in the test system, and the numbers will never match
       #   So we need special code
       if BITCOIN_GATEWAY.test?
-        balance = self.balance
-        amount = balance - BtcTransaction::MINER_FEE
+        amount = satoshi_balance - BtcTransaction::MINER_FEE.as_satoshi
         
-        escrow_balance = BITCOIN_GATEWAY.get_wallet_balance(should_fail)
+        escrow_balance = BITCOIN_GATEWAY.get_wallet_balance(should_fail).as_satoshi
         
-        if escrow_balance.nil? or (escrow_balance < balance)
+        if escrow_balance.nil? or (escrow_balance < satoshi_balance)
           # Need to queue
-          tx = self.btc_transactions.create!(:satoshi => -balance, :address => outbound_address, :transaction_id => 'pending')
+          tx = self.btc_transactions.create!(:satoshi => -satoshi_balance, :address => outbound_address, :transaction_id => 'pending')
           tx.pending = true
           tx.save!
-          "Withdrawal queued. Amount: #{balance}"   
+          "Withdrawal queued. Amount: #{satoshi_balance}"   
         else
           transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
           if transaction_id.nil?
             raise "Withdrawal from #{outbound_address} failed"
           else
-            self.btc_transactions.create!(:satoshi => -balance, :address => outbound_address, :transaction_id => transaction_id)
+            self.btc_transactions.create!(:satoshi => -satoshi_balance, :address => outbound_address, :transaction_id => transaction_id)
           end    
           
-          "Withdrawal successful. Amount: #{balance}"   
+          "Withdrawal successful. Amount: #{satoshi_balance}"   
         end 
       else
         zeroconf = get_btc_total_received(0)
         oneconf = get_btc_total_received(1)
         twoconf = get_btc_total_received(2)
         if (zeroconf == oneconf) and (oneconf == twoconf) 
-          balance = self.balance
-          amount = balance - BtcTransaction::MINER_FEE
+          amount = satoshi_balance - BtcTransaction::MINER_FEE.as_satoshi
           
-          escrow_balance = BITCOIN_GATEWAY.get_wallet_balance
+          escrow_balance = BITCOIN_GATEWAY.get_wallet_balance.as_satoshi
           
-          if escrow_balance.nil? or (escrow_balance < balance)
+          if escrow_balance.nil? or (escrow_balance < satoshi_balance)
             # Need to queue
-            tx = self.btc_transactions.create!(:satoshi => -balance, :address => outbound_address, :transaction_id => 'pending')
+            tx = self.btc_transactions.create!(:satoshi => -satoshi_balance, :address => outbound_address, :transaction_id => 'pending')
             tx.pending = true
             tx.save!
             "Withdrawal queued. Amount: #{balance}"   
@@ -169,10 +176,10 @@ class User < ActiveRecord::Base
             if transaction_id.nil?
               raise "Withdrawal from #{outbound_address} failed"
             else
-              self.btc_transactions.create!(:satoshi => -balance, :address => outbound_address, :transaction_id => transaction_id)
+              self.btc_transactions.create!(:satoshi => -satoshi_balance, :address => outbound_address, :transaction_id => transaction_id)
             end
             
-            "Withdrawal successful. Amount: #{balance}" 
+            "Withdrawal successful. Amount: #{satoshi_balance}" 
           end  
         else
           I18n.t('awaiting_confirmation')

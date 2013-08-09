@@ -3,7 +3,7 @@ class BtcTransactionsController < ApplicationController
     if ADMIN_KEY == params['key']
       @queued = BtcTransaction.queued.order('user_id')
       if !@queued.empty?
-        @balance = BITCOIN_GATEWAY.get_wallet_balance(false)
+        @balance = BITCOIN_GATEWAY.get_wallet_balance(false).as_satoshi
       end
     else
       @errors = 'Invalid security key'

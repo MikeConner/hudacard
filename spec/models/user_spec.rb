@@ -71,7 +71,7 @@ describe User do
       
     it "should have transactions" do
       user.btc_transactions.count.should be == 5
-      user.reload.balance.should be == @total
+      user.reload.balance.as_satoshi.should be == @total
     end
     
     describe "add some queued ones" do
@@ -85,7 +85,7 @@ describe User do
         user.btc_transactions.count.should be == 6
           user.btc_transactions.settled.count.should be == 5
           user.btc_transactions.queued.count.should be == 1
-        user.balance.should be == @total        
+        user.balance.as_satoshi.should be == @total        
       end
       
       describe "clear, then check balance" do
@@ -100,7 +100,7 @@ describe User do
           user.btc_transactions.count.should be == 6
           user.btc_transactions.settled.count.should be == 6
           user.btc_transactions.queued.count.should be == 0
-          user.balance.should be == @new_total                  
+          user.balance.as_satoshi.should be == @new_total                  
         end
       end
     end
@@ -129,7 +129,7 @@ describe User do
     
     it "should have games" do
       user.games.count.should be == 2
-      user.balance.should be == 0
+      user.balance.as_satoshi.should be == 0
     end
     
     describe "try to destroy" do

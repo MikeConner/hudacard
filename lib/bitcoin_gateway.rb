@@ -1,4 +1,5 @@
 require 'singleton'
+require 'bitcoin'
 
 class BitcoinGateway
   include Singleton
@@ -23,7 +24,7 @@ class BitcoinGateway
   def get_total_received(address, confirmations = 0)
     webResponse = HTTParty.get("https://blockchain.info/q/getreceivedbyaddress/#{address}?confirmations=#{confirmations}")
 
-    webResponse.blank? ? nil : webResponse.to_i
+    webResponse.blank? ? nil : Bitcoin.new(:satoshi => webResponse.to_i)
   end
   
   def withdraw(address, amount)
@@ -39,7 +40,7 @@ class BitcoinGateway
   def get_wallet_balance
     webResponse = HTTParty.get("https://blockchain.info/merchant/#{MERCHANT_KEY}/balance?password=#{MERCHANT_PASSWORD}")
     if webResponse.has_key?('balance')
-      webResponse['balance'].to_i
+      Bitcoin.new(:satoshi => webResponse['balance'].to_i)
     else
       puts webResponse.inspect
       # puts returns nil

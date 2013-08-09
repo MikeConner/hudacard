@@ -1,4 +1,5 @@
 require 'card'
+require 'bitcoin'
 
 class GamesController < ApplicationController
   before_filter :authenticate_user!, :except => [:new, :edit]
@@ -109,7 +110,8 @@ class GamesController < ApplicationController
     end
     
     # If 0 balance, don't count up/down to 0; allow "betting" with zero balance
-    @old_balance = 0 == @game.user.balance ? 0 : @game.user.balance - (@game.payout * 100000).round
+    old = 0 == @game.user.balance.as_satoshi ? 0 : @game.user.balance.as_satoshi - (Bitcoin.new(:mb => @game.payout).as_satoshi).round
+    @old_balance = Bitcoin.new(:satoshi => old)
   end
   
   def error
