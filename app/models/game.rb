@@ -47,7 +47,11 @@ class Game < ActiveRecord::Base
   validates :color, :inclusion => { :in => [RED, BLACK] }, :allow_nil => true
   validates :bet, :numericality => { :greater_than_or_equal_to => 0, :only_integer => true }, :allow_nil => true
   validates_numericality_of :payout, :allow_nil => true
-    
+      
+  def new_game?
+    self.color.nil?
+  end
+  
   def deal_cards
     if self.new_record?
       cards = []

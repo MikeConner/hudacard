@@ -16,6 +16,7 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  inbound_bitcoin_address :string(255)
+#  current_game_id         :integer
 #
 
 # CHARTER
@@ -47,13 +48,15 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me
+  attr_accessible :email, :password, :password_confirmation, :remember_me,
+                  :current_game_id
 
   # New address created for this user
   attr_accessible :inbound_bitcoin_address
   # This is the unique web URL that identifies a user -- don't allow mass assignment
   attr_accessor :random_token
   
+  belongs_to :current_game, :class_name => 'Game'
   has_many :games, :dependent => :restrict
   has_many :btc_transactions, :dependent => :restrict
 
