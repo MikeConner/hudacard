@@ -21,7 +21,8 @@ class GamesController < ApplicationController
       # Create game
       @game = user.games.build(:random_token => token)
       if @game.save
-        render 'edit' and return
+        user.update_attributes!(:current_game_id => @game.id)
+        redirect_to user
       else
         @errors = @game.errors.full_messages
         render 'games/error' and return
@@ -34,24 +35,6 @@ class GamesController < ApplicationController
   rescue RuntimeError => err
     @errors = "<h1>#{err}</h1>"
     render 'games/error' and return
-  end
-  
-  # Coming in from "private" saved url - recover user
-  def edit
-    @game = Game.find(params[:id])
-    if current_user != @game.user
-      sign_out current_user unless current_user.nil?
-      sign_in(:user, @game.user)
-    end
-    
-    # if a user has pending withdrawals, don't let them keep playing
-    if @game.user.has_pending_withdrawals?
-      @message = 'You have pending withdrawals.'
-      render 'users/withdrawal' and return
-    end
-  rescue RuntimeError => err
-    @errors = '<h1>#{err}</h1>'
-    render 'games/error'
   end
   
   def update
@@ -76,8 +59,7 @@ class GamesController < ApplicationController
     
     if @errors.nil?
       # Show displays the results (with JS to make it dynamic)
-      @cards = YAML::load(@game.cards)
-      redirect_to @game
+      redirect_to @game.user
     else
       render 'games/error' and return
     end    
@@ -86,34 +68,7 @@ class GamesController < ApplicationController
     @errors = '<h1>#{err}</h1>'
     render 'games/error'
   end
-  
-  def show
-    @game = Game.find(params[:id])
-    
-    # There should be a defined payout -- otherwise they're manually typing in the URL and trying to cheat
-    if @game.payout.nil?
-      redirect_to edit_game_path(@game) and return
-    end
-    
-    # if a user has pending withdrawals, don't let them keep playing
-    if @game.user.has_pending_withdrawals?
-      @message = 'You have pending withdrawals.'
-      render 'users/withdrawal' and return
-    end
 
-    @cards = YAML::load(@game.cards)
-    # if there is a game after this one, set it to "new_game" to display the hash
-    @new_game = @game.user.games.last
-    # If we get here it'd better have created a new game
-    if @game.id == @new_game.id
-      raise 'New Game creation failed'
-    end
-    
-    # If 0 balance, don't count up/down to 0; allow "betting" with zero balance
-    old = 0 == @game.user.balance.as_satoshi ? 0 : @game.user.balance.as_satoshi - (Bitcoin.new(:mb => @game.payout).as_satoshi).round
-    @old_balance = Bitcoin.new(:satoshi => old)
-  end
-  
   def error
   end
 end
