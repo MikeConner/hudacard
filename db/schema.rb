@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130806033340) do
+ActiveRecord::Schema.define(:version => 20130810011942) do
 
   create_table "btc_transactions", :force => true do |t|
     t.integer  "satoshi",        :limit => 8
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(:version => 20130806033340) do
     t.datetime "created_at",                              :null => false
     t.datetime "updated_at",                              :null => false
     t.string   "inbound_bitcoin_address"
+    t.integer  "current_game_id"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

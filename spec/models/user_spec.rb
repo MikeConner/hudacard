@@ -16,6 +16,7 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  inbound_bitcoin_address :string(255)
+#  current_game_id         :integer
 #
 
 describe User do
@@ -26,6 +27,7 @@ describe User do
   it "should respond to everything" do
     user.should respond_to(:email)
     user.should respond_to(:inbound_bitcoin_address)
+    user.should respond_to(:current_game)
   end
   
   it { should be_valid }

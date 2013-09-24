@@ -17,7 +17,7 @@ Hudacard::Application.routes.draw do
   # Path with token plays the current game ("edits" the game)
   # Placing a bet "updates" the game
   # A game consists of a single bet, so after one update the system shows the result
-  resources :games, :only => [:edit, :update, :show] do
+  resources :games, :only => [:update] do
     get 'error', :on => :collection
   end
   

@@ -3,25 +3,6 @@ var minimum_bet = 1;
 var maximum_bet = 1;
 
 $(document).ready(function() {
-	$("#bookmarkme").click(function() {
-		var url = $('bookmark_url').val();
-		
-	    if (window.sidebar) { // Mozilla Firefox Bookmark
-	        window.sidebar.addPanel(url, document.title,"");
-	    } 
-	    else if( /*@cc_on!@*/false) { // IE Favorite
-	        window.external.AddFavorite(url, document.title); 
-	    } 
-	    else if(window.opera && window.print) { // Opera Hotlist
-	        this.title = document.title;
-	        return true;
-	    } 
-	    else { // webkit - safari/chrome
-	        //alert('Press ' + (navigator.userAgent.toLowerCase().indexOf('mac') != - 1 ? 'Command/Cmd' : 'CTRL') + ' + D to bookmark the link.');
-	        alert('Right click on the link to bookmark it.');
-	    }
-	});
-
   minimum_bet = parseInt($('#min_bet').val());
   maximum_bet = parseInt($('#max_bet').val());
 

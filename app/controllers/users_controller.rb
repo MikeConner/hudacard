@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   def balance_inquiry
     @user.get_btc_total_received
     
-    redirect_to edit_game_path(@user.games.last)
+    redirect_to @user
   end
   
   def qrcode
@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   
   def withdrawal
     if params['extract_addy'].blank?
-      redirect_to edit_game_path(@user.games.last), :alert => 'Bitcoin address required for withdrawal' and return
+      redirect_to @user, :alert => 'Bitcoin address required for withdrawal' and return
     end
     
     @message = @user.withdraw(params['extract_addy'])
@@ -43,9 +43,29 @@ class UsersController < ApplicationController
       render 'withdrawal' and return
     end
 
-    @game = @user.games.last
-
-    redirect_to edit_game_path(@game)
+    @game = @user.current_game
+    
+    if @game.new_game?
+      render 'games/edit' and return
+    else
+      # update (bet that finishes a game) creates a new game, but the "current_game" is still the old one until it's displayed
+      @new_game = @user.games.last
+      
+      # if these are not equal, we've just done an update and the user hasn't been shown the result yet
+      # Update the current game to the new one, then show the old one
+      # A new bet will use the "new" game
+      if @new_game.id != @game.id
+        @user.update_attributes!(:current_game_id => @new_game.id)
+      end
+      @cards = YAML::load(@game.cards)
+    
+      # If 0 balance, don't count up/down to 0; allow "betting" with zero balance
+      old = 0 == @game.user.balance.as_satoshi ? 0 : @game.user.balance.as_satoshi - (Bitcoin.new(:mb => @game.payout).as_satoshi).round
+      @old_balance = Bitcoin.new(:satoshi => old)
+      
+      @cards = YAML::load(@game.cards)
+      render 'games/show' and return
+    end
     
   rescue RuntimeError => err
     @errors = '<h1>#{err}</h1>'
