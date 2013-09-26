@@ -48,8 +48,8 @@ class GamesController < ApplicationController
       
       if @game.save
         token = SecureRandom.urlsafe_base64(Game::TOKEN_LENGTH, false)
-        # create new game
-        @game.user.games.create(:random_token => token)
+        # create new game (default bet to last game's bet)
+        @game.user.games.create(:random_token => token, :bet => @game.bet)
       else
         @errors = @game.errors.full_messages
       end  
@@ -61,7 +61,9 @@ class GamesController < ApplicationController
       # Show displays the results (with JS to make it dynamic)
       redirect_to @game.user
     else
-      render 'games/error' and return
+      # Catch common errors (e.g., non-integer bet); display using flash, not as a separate page
+      # The separate error page is for really bad errors (that should never happen)
+      redirect_to @game.user, :alert => @errors.join('<br>')
     end    
     
   rescue RuntimeError => err

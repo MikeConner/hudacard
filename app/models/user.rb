@@ -121,7 +121,7 @@ class User < ActiveRecord::Base
         if difference > 0
           self.btc_transactions.create!(:satoshi => difference)
         elsif difference < 0
-          raise "Total received discrepancy on #{self.inbound_bitcoin_address} (#{difference})"
+          raise "Total received discrepancy on #{self.inbound_bitcoin_address} (Total Received #{total_received.as_satoshi} - Balance #{self.total_bitcoin_in.as_satoshi} = #{difference})"
         end
       end
     end
