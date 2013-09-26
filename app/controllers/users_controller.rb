@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     @message = @user.withdraw(params['extract_addy'])
     
   rescue RuntimeError => err
-    @errors = '<h1>#{err}</h1>'
+    @errors = err
     render 'games/error'
   end
   
@@ -72,7 +72,7 @@ class UsersController < ApplicationController
     end
     
   rescue RuntimeError => err
-    @errors = '<h1>#{err}</h1>'
+    @errors = err
     render 'games/error'
   end
 
