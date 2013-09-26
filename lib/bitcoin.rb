@@ -24,11 +24,11 @@ class Bitcoin
   end
   
   def as_mb
-    self.value / MBTC_MULT
+    self.value.to_f / MBTC_MULT.to_f
   end
   
   def as_btc
-    self.value / SATOSHI_MULT
+    self.value.to_f / SATOSHI_MULT.to_f
   end
   
   def initialize(options)
