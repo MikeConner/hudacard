@@ -119,7 +119,7 @@ class User < ActiveRecord::Base
         # second, add in additional bitcoin if greater than what has come in previously
         difference = total_received.as_satoshi - self.total_bitcoin_in.as_satoshi
         if difference > 0
-          self.btc_transactions.create!(:satoshi => difference)
+          self.btc_transactions.create!(:satoshi => difference, :address => self.inbound_bitcoin_address, :transaction_id => 'Funding')
         elsif difference < 0
           raise "Total received discrepancy on #{self.inbound_bitcoin_address} (Total Received #{total_received.as_satoshi} - Balance #{self.total_bitcoin_in.as_satoshi} = #{difference})"
         end
