@@ -23,6 +23,7 @@ describe BtcTransaction do
     transaction.should respond_to(:address)
     transaction.should respond_to(:transaction_id)
     transaction.should respond_to(:pending)
+    transaction.should respond_to(:transaction_type)
   end
   
   it "should be inbound" do
@@ -33,6 +34,26 @@ describe BtcTransaction do
   its(:user) { should be == user }
   
   it { should be_valid }
+  
+  describe "Missing type" do
+    before { transaction.transaction_type = nil }
+    
+    it { should_not be_valid }
+  end
+  
+  describe "valid" do
+    BtcTransaction::TRANSACTION_TYPES.each do |types|
+      before { transaction.transaction_type = types }
+      
+      it { should be_valid }
+    end
+  end
+  
+  describe "invalid" do
+    before { transaction.transaction_type = 'Not a type' }
+    
+    it { should_not be_valid }
+  end
   
   describe "invalid pending" do
     before { transaction.pending = nil }

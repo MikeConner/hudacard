@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
   
   def total_bitcoin_in
     result = 0
-    self.btc_transactions.inbound.each do |transaction|
+    self.btc_transactions.external.each do |transaction|
       result += transaction.satoshi
     end
     
@@ -119,7 +119,10 @@ class User < ActiveRecord::Base
         # second, add in additional bitcoin if greater than what has come in previously
         difference = total_received.as_satoshi - self.total_bitcoin_in.as_satoshi
         if difference > 0
-          self.btc_transactions.create!(:satoshi => difference, :address => self.inbound_bitcoin_address, :transaction_id => 'Funding')
+          self.btc_transactions.create!(:satoshi => difference, 
+                                        :address => self.inbound_bitcoin_address, 
+                                        :transaction_id => 'Funding', 
+                                        :transaction_type => BtcTransaction::FUNDING_TRANSACTION)
         elsif difference < 0
           raise "Total received discrepancy on #{self.inbound_bitcoin_address} (Total Received #{total_received.as_satoshi} - Balance #{self.total_bitcoin_in.as_satoshi} = #{difference})"
         end
@@ -145,7 +148,10 @@ class User < ActiveRecord::Base
         
         if escrow_balance.nil? or (escrow_balance < satoshi_balance)
           # Need to queue
-          tx = self.btc_transactions.create!(:satoshi => -satoshi_balance, :address => outbound_address, :transaction_id => 'pending')
+          tx = self.btc_transactions.create!(:satoshi => -satoshi_balance, 
+                                             :address => outbound_address, 
+                                             :transaction_id => 'pending',
+                                             :transaction_type => BtcTransaction::WITHDRAWAL_TRANSACTION)
           tx.pending = true
           tx.save!
           "Withdrawal queued. Amount: #{satoshi_balance}"   
@@ -154,7 +160,10 @@ class User < ActiveRecord::Base
           if transaction_id.nil?
             raise "Withdrawal from #{outbound_address} failed"
           else
-            self.btc_transactions.create!(:satoshi => -satoshi_balance, :address => outbound_address, :transaction_id => transaction_id)
+            self.btc_transactions.create!(:satoshi => -satoshi_balance, 
+                                          :address => outbound_address, 
+                                          :transaction_id => transaction_id,
+                                          :transaction_type => BtcTransaction::WITHDRAWAL_TRANSACTION)
           end    
           
           "Withdrawal successful. Amount: #{satoshi_balance}"   
@@ -170,7 +179,10 @@ class User < ActiveRecord::Base
           
           if escrow_balance.nil? or (escrow_balance < satoshi_balance)
             # Need to queue
-            tx = self.btc_transactions.create!(:satoshi => -satoshi_balance, :address => outbound_address, :transaction_id => 'pending')
+            tx = self.btc_transactions.create!(:satoshi => -satoshi_balance, 
+                                               :address => outbound_address, 
+                                               :transaction_id => 'pending',
+                                               :transaction_type => BtcTransaction::WITHDRAWAL_TRANSACTION)
             tx.pending = true
             tx.save!
             "Withdrawal queued. Amount: #{balance}"   
@@ -179,7 +191,10 @@ class User < ActiveRecord::Base
             if transaction_id.nil?
               raise "Withdrawal from #{outbound_address} failed"
             else
-              self.btc_transactions.create!(:satoshi => -satoshi_balance, :address => outbound_address, :transaction_id => transaction_id)
+              self.btc_transactions.create!(:satoshi => -satoshi_balance, 
+                                            :address => outbound_address, 
+                                            :transaction_id => transaction_id,
+                                            :transaction_type => BtcTransaction::WITHDRAWAL_TRANSACTION)
             end
             
             "Withdrawal successful. Amount: #{satoshi_balance}" 

@@ -84,7 +84,10 @@ class Game < ActiveRecord::Base
     # Given the color, bet is already stored - compute everything (if zero balance, don't add any transactions)
     self.payout = self.bet * payout_ratio
     if user.balance.value > 0
-      self.user.btc_transactions.create!(:satoshi => (Bitcoin.new(:mb => self.payout).as_satoshi).round, :address => user.inbound_bitcoin_address, :transaction_id => "game:#{self.id}")
+      self.user.btc_transactions.create!(:satoshi => (Bitcoin.new(:mb => self.payout).as_satoshi).round, 
+                                         :address => user.inbound_bitcoin_address, 
+                                         :transaction_id => game_tx_id,
+                                         :transaction_type => BtcTransaction::GAME_TRANSACTION)
     end
     
     save!
@@ -184,6 +187,10 @@ class Game < ActiveRecord::Base
   end
   
 private
+  def game_tx_id
+    "game:#{self.id}"
+  end
+  
   def payout_ratio
     value = 0
     

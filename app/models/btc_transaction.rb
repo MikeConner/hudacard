@@ -21,6 +21,12 @@
 # NOTES AND WARNINGS
 #
 class BtcTransaction < ActiveRecord::Base
+  GAME_TRANSACTION = 'Game'
+  FUNDING_TRANSACTION = 'Funding'
+  WITHDRAWAL_TRANSACTION = 'Withdrawal'
+  
+  TRANSACTION_TYPES = [GAME_TRANSACTION, FUNDING_TRANSACTION, WITHDRAWAL_TRANSACTION]
+  
   MINER_FEE = Bitcoin.new(:btc => 0.005)
   
   # Satoshi reflects the net deposit (so, negative = withdrawal)
@@ -36,9 +42,11 @@ class BtcTransaction < ActiveRecord::Base
   validates :address, :presence => { :if => :outbound? }
   validates :transaction_id, :presence => { :if => :outbound? }
   validates :pending, :inclusion => { :in => [true, false] }
+  validates :transaction_type, :inclusion => { :in => TRANSACTION_TYPES } 
   
   scope :inbound, where('satoshi > 0')
   scope :outbound, where('satoshi < 0')
+  scope :external, where("(transaction_type = ?) or (transaction_type = ?)", FUNDING_TRANSACTION, WITHDRAWAL_TRANSACTION)
   
   scope :queued, where("pending = #{ActiveRecord::Base.connection.quoted_true}")
   scope :settled, where("pending = #{ActiveRecord::Base.connection.quoted_false}")
