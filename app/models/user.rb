@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
   validates_presence_of :inbound_bitcoin_address
   
   def has_pending_withdrawals?
-    self.btc_transactions.queued.outbound.count > 0
+    self.btc_transactions.queued.count > 0
   end
   
   # Minimum - maximum allowed to bet
@@ -82,7 +82,7 @@ class User < ActiveRecord::Base
   # Add balance field back if this becomes a performance issue
   def balance
     result = 0
-    self.btc_transactions.settled.each do |transaction|
+    self.btc_transactions.each do |transaction|
       result += transaction.satoshi
     end
     
@@ -185,11 +185,11 @@ class User < ActiveRecord::Base
                                                :transaction_type => BtcTransaction::WITHDRAWAL_TRANSACTION)
             tx.pending = true
             tx.save!
-            "Withdrawal queued. Amount: #{balance}"   
+            "Withdrawal queued. Amount: #{satoshi_balance}"   
           else
             transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
             if transaction_id.nil?
-              raise "Withdrawal from #{outbound_address} failed"
+              raise "Withdrawal of #{satoshi_balance} from #{outbound_address} failed. Please try again later."
             else
               self.btc_transactions.create!(:satoshi => -satoshi_balance, 
                                             :address => outbound_address, 
