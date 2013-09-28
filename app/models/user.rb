@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
     max_bet_mb = [self.balance.as_mb / 3, MAX_BET.as_mb].min
     
     # in millis (return MIN/MIN if max is 0; this allows betting with zero balance)
-    {:min => Game::MINIMUM_BET.as_mb, :max => max_bet_mb < Game::MINIMUM_BET.as_mb ? Game::MINIMUM_BET.as_mb : max_bet_mb}
+    {:min => Game::MINIMUM_BET.as_mb.floor, :max => max_bet_mb < Game::MINIMUM_BET.as_mb ? Game::MINIMUM_BET.as_mb.floor : max_bet_mb.floor}
   end
   
   # Compute each time, so that it never gets out of sync

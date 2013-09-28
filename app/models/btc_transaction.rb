@@ -31,7 +31,7 @@ class BtcTransaction < ActiveRecord::Base
   
   # Satoshi reflects the net deposit (so, negative = withdrawal)
   #   if a withdrawal, address has the destination; otherwise it's deposited into the inbound address associated with the user
-  attr_accessible :satoshi, :address, :transaction_id,
+  attr_accessible :satoshi, :address, :transaction_id, :transaction_type,
                   :user_id
 
   belongs_to :user
