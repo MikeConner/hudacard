@@ -30,6 +30,7 @@ class BitcoinGateway
   def withdraw(address, amount)
     webResponse = HTTParty.get("https://blockchain.info/merchant/#{MERCHANT_KEY}/payment?password=#{MERCHANT_PASSWORD}&to=#{address}&amount=#{amount}&shared=false")
     if webResponse.has_key?('tx_hash')
+      # Bug here.. no tx_hash for withdrawl -> just the hash amount
       webResponse['tx_hash']
     else
       puts webResponse.inspect
