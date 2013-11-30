@@ -27,7 +27,7 @@ class BtcTransaction < ActiveRecord::Base
   
   TRANSACTION_TYPES = [GAME_TRANSACTION, FUNDING_TRANSACTION, WITHDRAWAL_TRANSACTION]
   
-  MINER_FEE = Bitcoin.new(:btc => 0.005)
+  MINER_FEE = Bitcoin.new(:btc => 0.0001)
   
   # Satoshi reflects the net deposit (so, negative = withdrawal)
   #   if a withdrawal, address has the destination; otherwise it's deposited into the inbound address associated with the user

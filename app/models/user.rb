@@ -169,9 +169,9 @@ class User < ActiveRecord::Base
           "Withdrawal successful. Amount: #{satoshi_balance}"   
         end 
       else
-        zeroconf = get_btc_total_received(0)
-        oneconf = get_btc_total_received(1)
-        twoconf = get_btc_total_received(2)
+        zeroconf = get_btc_total_received(0).value
+        oneconf = get_btc_total_received(1).value
+        twoconf = get_btc_total_received(2).value
         if (zeroconf == oneconf) and (oneconf == twoconf) 
           amount = satoshi_balance - BtcTransaction::MINER_FEE.as_satoshi
           
