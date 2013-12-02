@@ -37,6 +37,7 @@ class User < ActiveRecord::Base
   # This token will also appear in all this user's games
   EMAIL_SUFFIX = '@me.com'
   MAX_BET = Bitcoin.new(:mb => 50)
+  COOKIE_NAME = 'Hudacard_User'
   
   # Could say :on => :create, but not necessary because it's already got a latch to only do it once
   before_validation :ensure_btc_address
