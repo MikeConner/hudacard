@@ -6,6 +6,14 @@ class GamesController < ApplicationController
   
   # Coming in from root path
   def new    
+    # Recover user from cookie; don't create new user on "Home" link
+    if !session[User::COOKIE_NAME].nil?
+      user = User.find_by_email(session[User::COOKIE_NAME])
+      if !user.nil?
+        redirect_to user and return
+      end
+    end
+    
     # Destroy any current user session
     if !current_user.nil?
       sign_out current_user
@@ -17,6 +25,8 @@ class GamesController < ApplicationController
     # Save generates bitcoin address and validates
     if user.save
       sign_in user
+      
+      session[User::COOKIE_NAME] = current_user.email
       
       # Create game
       @game = user.games.build(:random_token => token)
