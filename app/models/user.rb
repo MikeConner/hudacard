@@ -126,10 +126,10 @@ class User < ActiveRecord::Base
                                         :transaction_id => 'Funding', 
                                         :transaction_type => BtcTransaction::FUNDING_TRANSACTION)
         end
+    
+        total_received
       end
     end
-    
-    self.total_bitcoin_in
   end
 
   # add default argument that can be set in test mode to make it queue withdrawals
