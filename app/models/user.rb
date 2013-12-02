@@ -118,14 +118,13 @@ class User < ActiveRecord::Base
         raise 'Unable to get received BTC'
       else
         # second, add in additional bitcoin if greater than what has come in previously
+        # Can be temporarily below zero if there are no confirmations
         difference = total_received.as_satoshi - self.total_bitcoin_in.as_satoshi
         if difference > 0
           self.btc_transactions.create!(:satoshi => difference, 
                                         :address => self.inbound_bitcoin_address, 
                                         :transaction_id => 'Funding', 
                                         :transaction_type => BtcTransaction::FUNDING_TRANSACTION)
-        elsif difference < 0
-          raise "Total received discrepancy on #{self.inbound_bitcoin_address} (Total Received #{total_received.as_satoshi} - Balance #{self.total_bitcoin_in.as_satoshi} = #{difference})"
         end
       end
     end
@@ -143,8 +142,6 @@ class User < ActiveRecord::Base
       # Unfortunately the get_btc_total_received creates transactions in the test system, and the numbers will never match
       #   So we need special code
       if BITCOIN_GATEWAY.test?
-        amount = satoshi_balance - BtcTransaction::MINER_FEE.as_satoshi
-        
         escrow_balance = BITCOIN_GATEWAY.get_wallet_balance(should_fail).as_satoshi
         
         if escrow_balance.nil? or (escrow_balance < satoshi_balance)
@@ -157,7 +154,7 @@ class User < ActiveRecord::Base
           tx.save!
           "Withdrawal queued. Amount: #{satoshi_balance}"   
         else
-          transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
+          transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, satoshi_balance)
           if transaction_id.nil?
             raise "Withdrawal from #{outbound_address} failed"
           else
@@ -174,8 +171,6 @@ class User < ActiveRecord::Base
         oneconf = get_btc_total_received(1).value
         twoconf = get_btc_total_received(2).value
         if (zeroconf == oneconf) and (oneconf == twoconf) 
-          amount = satoshi_balance - BtcTransaction::MINER_FEE.as_satoshi
-          
           escrow_balance = BITCOIN_GATEWAY.get_wallet_balance.as_satoshi
           
           if escrow_balance.nil? or (escrow_balance < satoshi_balance)
@@ -188,7 +183,7 @@ class User < ActiveRecord::Base
             tx.save!
             "Withdrawal queued. Amount: #{satoshi_balance}"   
           else
-            transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, amount)
+            transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, satoshi_balance)
             if transaction_id.nil?
               raise "Withdrawal of #{satoshi_balance} from #{outbound_address} failed. Please try again later."
             else
