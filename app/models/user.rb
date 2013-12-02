@@ -97,7 +97,7 @@ class User < ActiveRecord::Base
   
   def total_bitcoin_in
     result = 0
-    self.btc_transactions.external.each do |transaction|
+    self.btc_transactions.inbound.each do |transaction|
       result += transaction.satoshi
     end
     
