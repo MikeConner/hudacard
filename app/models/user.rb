@@ -167,9 +167,12 @@ class User < ActiveRecord::Base
           "Withdrawal successful. Amount: #{satoshi_balance}"   
         end 
       else
-        zeroconf = get_btc_total_received(0).value
-        oneconf = get_btc_total_received(1).value
-        twoconf = get_btc_total_received(2).value
+        zeroconf = get_btc_total_received(0).as_satoshi
+        oneconf = get_btc_total_received(1).as_satoshi
+        twoconf = get_btc_total_received(2).as_satoshi
+        Rails.logger.info("0 = #{zeroconf}")
+        Rails.logger.info("1 = #{oneconf}")
+        Rails.logger.info("2 = #{twoconf}")
         if (zeroconf == oneconf) and (oneconf == twoconf) 
           escrow_balance = BITCOIN_GATEWAY.get_wallet_balance.as_satoshi
           
