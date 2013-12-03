@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   respond_to :html, :svg
   
   before_filter :authenticate_user!, :except => [:show]
-  before_filter :ensure_current_user, :except => [:show]
+  before_filter :ensure_current_user, :except => [:show, :create_admin]
   
   def balance_inquiry
     # Creates funding transaction if they've deposited (0 confirmations required)
@@ -92,6 +92,21 @@ class UsersController < ApplicationController
   def account
     @transactions = @user.btc_transactions.external
     @games = @user.games
+  end
+  
+  # /login/ADMIN_KEY will find/create a user with the ADMIN_KEY id, which CanCan will use to authenticate
+  def create_admin
+    if ADMIN_KEY == params[:id]
+      @user = User.find_by_email(params[:id] + User::EMAIL_SUFFIX)
+      if @user.nil?
+        @user = User.create!(:email => params[:id] + User::EMAIL_SUFFIX, :password => 'xxxxxx', :password_confirmation => 'xxxxxx')
+      end
+      
+      sign_in @user
+      redirect_to rails_admin_path
+    else
+      redirect_to root_path, :alert => I18n.t('admins_only')
+    end
   end
   
 private
