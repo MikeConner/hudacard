@@ -52,7 +52,7 @@
               -# Exclude incomplete (current) game
               - if !game.payout.nil?
                 %tr
-                  %td= game.created_at.try(:strftime, ApplicationHelper::DATE_FORMAT)
+                  %td= game.updated_at.try(:strftime, ApplicationHelper::DATE_FORMAT)
                   %td= game.color
                   %td== #{game.bet} mBTC
                   %td= game.payout

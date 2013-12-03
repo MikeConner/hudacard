@@ -4,6 +4,7 @@
 en:
   admins_only: 'This function restricted to admins'
   awaiting_confirmation: "Waiting for 2 confirmations on inbound bitcoin transaction"
+  contact: "Contact Us"
   low_balance: "Balance too low!"
   user_updated: 'User successfully updated.'
   simple_captcha:
