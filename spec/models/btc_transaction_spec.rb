@@ -35,6 +35,10 @@ describe BtcTransaction do
   
   it { should be_valid }
   
+  it "should not allow mass assignment" do
+    expect { transaction.update_attributes!(:pending => false) }.to raise_exception(ActiveModel::MassAssignmentSecurity::Error)
+  end
+  
   describe "Missing type" do
     before { transaction.transaction_type = nil }
     

@@ -5,8 +5,11 @@ class UsersController < ApplicationController
   before_filter :ensure_current_user, :except => [:show]
   
   def balance_inquiry
+    # Creates funding transaction if they've deposited (0 confirmations required)
     @user.get_btc_total_received
     
+    # Shows calculated balance: 0 if sum of "external" transactions (including unconfirmed deposits) is 0
+    #   Otherwise show sum of external transactions + payout from last game
     redirect_to @user
   end
   

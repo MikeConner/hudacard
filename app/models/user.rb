@@ -80,6 +80,7 @@ class User < ActiveRecord::Base
   end
   
   # Compute each time, so that it never gets out of sync
+  # Total balance -- including unconfirmed deposits and game payouts
   # Add balance field back if this becomes a performance issue
   def balance
     result = 0
@@ -95,6 +96,7 @@ class User < ActiveRecord::Base
     Bitcoin.new(:satoshi => result)
   end
   
+  # Total of inbound transactions, including unconfirmed deposits
   def total_bitcoin_in
     result = 0
     self.btc_transactions.inbound.each do |transaction|
@@ -104,6 +106,10 @@ class User < ActiveRecord::Base
     Bitcoin.new(:satoshi => result)
   end
 
+  # Ask blockchain how much was received at the given confirmation level
+  # 0 = unconfirmed
+  # If the total received > current balance, something must have been deposited -- so create a Funding transaction
+  #   In this manner, unconfirmed deposits create a Funding transaction that will show up in total_bitcoin_in
   def get_btc_total_received(required_confirmations = 0)    
     if self.inbound_bitcoin_address.nil?
       # This means uninitialized, so it better be 0
@@ -133,6 +139,7 @@ class User < ActiveRecord::Base
   end
 
   # add default argument that can be set in test mode to make it queue withdrawals
+  # Cannot withdraw if < miner fee
   def withdraw(outbound_address, should_fail = false)
     satoshi_balance = self.balance.as_satoshi
 
@@ -170,9 +177,6 @@ class User < ActiveRecord::Base
         zeroconf = get_btc_total_received(0).as_satoshi
         oneconf = get_btc_total_received(1).as_satoshi
         twoconf = get_btc_total_received(2).as_satoshi
-        Rails.logger.info("0 = #{zeroconf}")
-        Rails.logger.info("1 = #{oneconf}")
-        Rails.logger.info("2 = #{twoconf}")
         if (zeroconf == oneconf) and (oneconf == twoconf) 
           escrow_balance = BITCOIN_GATEWAY.get_wallet_balance.as_satoshi
           
@@ -182,6 +186,7 @@ class User < ActiveRecord::Base
                                                :address => outbound_address, 
                                                :transaction_id => 'pending',
                                                :transaction_type => BtcTransaction::WITHDRAWAL_TRANSACTION)
+            # mass assignment of pending not allowed
             tx.pending = true
             tx.save!
             "Withdrawal queued. Amount: #{satoshi_balance}"   
