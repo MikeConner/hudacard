@@ -1,0 +1,19 @@
+.container
+  .span5.offset1 
+    .row
+      %br
+      %br
+      .large-6.large-centered.columns
+        = form_tag comment_path do
+          %h2.sign-up-title= I18n.t('contact')
+          = label_tag :category
+          = select_tag :category, options_for_select(@categories, @categories[0])
+  
+          = label_tag :content
+          = text_area_tag :content, nil, :size => '60x3', :placeholder => 'Type your comment here', :style => 'min-height:10rem;'
+          %br
+          %br
+          = show_simple_captcha
+          %br
+          %br
+          = submit_tag 'Submit Comment', :class => 'sign-up-button'

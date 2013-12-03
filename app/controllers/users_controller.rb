@@ -34,6 +34,16 @@ class UsersController < ApplicationController
     render 'games/error'
   end
   
+  def update
+    @user = User.find_by_email(params[:id] + User::EMAIL_SUFFIX)
+    
+    if @user.update_attributes(params[:user])
+      redirect_to root_path, :notice => I18n.t('user_updated')
+    else
+      render 'account'
+    end
+  end
+  
   def show
     @user = User.find_by_email(params[:id] + User::EMAIL_SUFFIX)
     
@@ -79,6 +89,11 @@ class UsersController < ApplicationController
     render 'games/error'
   end
 
+  def account
+    @transactions = @user.btc_transactions.external
+    @games = @user.games
+  end
+  
 private
   def ensure_current_user
     @user = User.find_by_email(params[:id] + User::EMAIL_SUFFIX)

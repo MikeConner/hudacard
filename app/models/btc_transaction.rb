@@ -2,14 +2,15 @@
 #
 # Table name: btc_transactions
 #
-#  id             :integer          not null, primary key
-#  satoshi        :integer
-#  address        :string(255)
-#  transaction_id :string(255)
-#  user_id        :integer
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  pending        :boolean          default(FALSE), not null
+#  id               :integer          not null, primary key
+#  satoshi          :integer
+#  address          :string(255)
+#  transaction_id   :string(255)
+#  user_id          :integer
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  pending          :boolean          default(FALSE), not null
+#  transaction_type :string(255)      default("Game"), not null
 #
 
 # CHARTER
@@ -51,7 +52,6 @@ class BtcTransaction < ActiveRecord::Base
   scope :queued, where("pending = #{ActiveRecord::Base.connection.quoted_true}")
   scope :settled, where("pending = #{ActiveRecord::Base.connection.quoted_false}")
   
-private
   def outbound?
     self.satoshi < 0
   end

@@ -4,3 +4,7 @@
 en:
   awaiting_confirmation: "Waiting for 2 confirmations on inbound bitcoin transaction"
   low_balance: "Balance too low!"
+  user_updated: 'User successfully updated.'
+  simple_captcha:
+    label: "Let's make sure you're human (or a really awesome robot)"
+    placeholder: 'Captcha Response'

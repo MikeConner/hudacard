@@ -1,0 +1,58 @@
+.container
+  .span5.offset1 
+    .row
+      %br
+      %br
+      %br
+      %br
+      = form_for current_user do |f|
+        .field
+          = f.label :msg_email, 'Email (Optional)'
+          = f.text_field :msg_email, :placeholder => 'Your contact email'
+        .field
+          = f.label :outbound_bitcoin_address, 'Default withdrawal bitcoin address'
+          = f.text_field :outbound_bitcoin_address, :placeholder => 'Your bitcoin address'
+        .actions
+          = f.submit 'Update Profile'
+    .row
+      .span6
+        %h1 Transactions
+        %table.table.zebra-striped
+          %thead
+            %tr
+              %th Address
+              %th Satoshi
+              %th Status
+              %th Transaction ID
+          %tbody
+            - @transactions.each do |tx|
+              %tr
+                %td= tx.address
+                %td= number_with_delimiter(tx.satoshi.abs)
+                - if tx.pending?
+                  %td QUEUED
+                  %td
+                - else
+                  %td SETTLED
+                  - if tx.outbound?
+                    %td= tx.transaction_id
+                  - else
+                    %td
+      .span6
+        %h1 Game History
+        %table.table.zebra-striped
+          %thead
+            %tr
+              %th Date
+              %th Color
+              %th Bet
+              %th Payout
+          %tbody
+            - @games.each do |game|
+              -# Exclude incomplete (current) game
+              - if !game.payout.nil?
+                %tr
+                  %td= game.created_at.try(:strftime, ApplicationHelper::DATE_FORMAT)
+                  %td= game.color
+                  %td== #{game.bet} mBTC
+                  %td= game.payout

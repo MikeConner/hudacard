@@ -2,21 +2,23 @@
 #
 # Table name: users
 #
-#  id                      :integer          not null, primary key
-#  email                   :string(255)      default(""), not null
-#  encrypted_password      :string(255)      default(""), not null
-#  reset_password_token    :string(255)
-#  reset_password_sent_at  :datetime
-#  remember_created_at     :datetime
-#  sign_in_count           :integer          default(0)
-#  current_sign_in_at      :datetime
-#  last_sign_in_at         :datetime
-#  current_sign_in_ip      :string(255)
-#  last_sign_in_ip         :string(255)
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  inbound_bitcoin_address :string(255)
-#  current_game_id         :integer
+#  id                       :integer          not null, primary key
+#  email                    :string(255)      default(""), not null
+#  encrypted_password       :string(255)      default(""), not null
+#  reset_password_token     :string(255)
+#  reset_password_sent_at   :datetime
+#  remember_created_at      :datetime
+#  sign_in_count            :integer          default(0)
+#  current_sign_in_at       :datetime
+#  last_sign_in_at          :datetime
+#  current_sign_in_ip       :string(255)
+#  last_sign_in_ip          :string(255)
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  inbound_bitcoin_address  :string(255)
+#  current_game_id          :integer
+#  outbound_bitcoin_address :string(255)
+#  msg_email                :string(255)
 #
 
 describe User do
@@ -26,7 +28,9 @@ describe User do
   
   it "should respond to everything" do
     user.should respond_to(:email)
+    user.should respond_to(:msg_email)
     user.should respond_to(:inbound_bitcoin_address)
+    user.should respond_to(:outbound_bitcoin_address)
     user.should respond_to(:current_game)
   end
   
@@ -49,6 +53,29 @@ describe User do
         @user2.should_not be_valid
       end
     end
+  end
+
+  describe "duplicate msg_email" do
+    before do 
+      @user2 = user.dup
+      @user2.email = 'fish@fishy.com'
+    end
+    
+    it "should allow exact duplicates" do
+      @user2.should be_valid
+    end
+  end
+  
+  describe "missing email address" do
+    before { user.email = nil }
+    
+    it { should_not be_valid }
+  end
+  
+  describe "missing msg email address" do
+    before { user.msg_email = nil }
+    
+    it { should be_valid }
   end
   
   describe "missing inbound address" do
@@ -85,8 +112,8 @@ describe User do
       
       it "should not count queued transactions in the balance" do
         user.btc_transactions.count.should be == 6
-          user.btc_transactions.settled.count.should be == 5
-          user.btc_transactions.queued.count.should be == 1
+        user.btc_transactions.settled.count.should be == 5
+        user.btc_transactions.queued.count.should be == 1
         user.balance.as_satoshi.should be == @total        
       end
       

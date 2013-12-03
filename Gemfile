@@ -63,3 +63,4 @@ gem 'rails_admin'
 gem 'newrelic_rpm', '3.5.7.59'
 
 gem 'friendly_id', '4.0.9'
+gem "galetahub-simple_captcha", '0.1.5', :require => "simple_captcha"

@@ -5,13 +5,12 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      %a.brand{:href => "/"} Red Or Black?
+      %a.brand{:href => "/"} Lucky Fun Colors - still legal in 9 states!
+      -# http://www.youtube.com/watch?v=7gzDC-2ZO8I
       .nav-collapse.collapse
         %ul.nav
-          %li.active
-            %a{:href => "/"} Home
-          %li
-            %a{:href => "#about"} About
-          %li
-            %a{:href => "#contact"} Contact
-      / /.nav-collapse
+          %li.active= link_to 'Play Now!', root_path
+          %li= link_to 'Contact', contact_path
+          - if !current_user.nil?
+            %li= link_to 'Account', account_user_path(current_user)
+          %li= link_to 'Fair Play (About)', about_path

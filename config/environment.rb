@@ -4,9 +4,6 @@ require File.expand_path('../application', __FILE__)
 # Initialize the rails application
 Hudacard::Application.initialize!
 
-=begin
-  Will eventually need a mailer for secure user signup?
-  
 ActionMailer::Base.smtp_settings = { 
   :address => 'smtp.gmail.com', 
   :domain  => 'machovy.com',
@@ -16,4 +13,3 @@ ActionMailer::Base.smtp_settings = {
   :authentication => :plain,
   :enable_starttls_auto => true
 } 
-=end

@@ -2,21 +2,23 @@
 #
 # Table name: users
 #
-#  id                      :integer          not null, primary key
-#  email                   :string(255)      default(""), not null
-#  encrypted_password      :string(255)      default(""), not null
-#  reset_password_token    :string(255)
-#  reset_password_sent_at  :datetime
-#  remember_created_at     :datetime
-#  sign_in_count           :integer          default(0)
-#  current_sign_in_at      :datetime
-#  last_sign_in_at         :datetime
-#  current_sign_in_ip      :string(255)
-#  last_sign_in_ip         :string(255)
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  inbound_bitcoin_address :string(255)
-#  current_game_id         :integer
+#  id                       :integer          not null, primary key
+#  email                    :string(255)      default(""), not null
+#  encrypted_password       :string(255)      default(""), not null
+#  reset_password_token     :string(255)
+#  reset_password_sent_at   :datetime
+#  remember_created_at      :datetime
+#  sign_in_count            :integer          default(0)
+#  current_sign_in_at       :datetime
+#  last_sign_in_at          :datetime
+#  current_sign_in_ip       :string(255)
+#  last_sign_in_ip          :string(255)
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  inbound_bitcoin_address  :string(255)
+#  current_game_id          :integer
+#  outbound_bitcoin_address :string(255)
+#  msg_email                :string(255)
 #
 
 # CHARTER
@@ -52,8 +54,8 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me,
                   :current_game_id
 
-  # New address created for this user
-  attr_accessible :inbound_bitcoin_address
+  # New address created for this user, default withdrawal address and email
+  attr_accessible :inbound_bitcoin_address, :outbound_bitcoin_address, :msg_email
   # This is the unique web URL that identifies a user -- don't allow mass assignment
   attr_accessor :random_token
   
@@ -64,6 +66,7 @@ class User < ActiveRecord::Base
   validates :email, :presence => true,
                     :uniqueness => { case_sensitive: false },
                     :format => { with: EMAIL_REGEX }
+  validates :msg_email, :format => { with: EMAIL_REGEX }, :allow_blank => true
   validates_presence_of :inbound_bitcoin_address
   
   def has_pending_withdrawals?
@@ -84,7 +87,7 @@ class User < ActiveRecord::Base
   # Add balance field back if this becomes a performance issue
   def balance
     result = 0
-    self.btc_transactions.each do |transaction|
+    self.btc_transactions.settled.each do |transaction|
       result += transaction.satoshi
     end
     
@@ -159,7 +162,7 @@ class User < ActiveRecord::Base
                                              :transaction_type => BtcTransaction::WITHDRAWAL_TRANSACTION)
           tx.pending = true
           tx.save!
-          "Withdrawal queued. Amount: #{satoshi_balance}"   
+          "Withdrawal queued. Amount: #{satoshi_balance}. As soon as there enough confirmations, we'll send your bitcoins!"   
         else
           transaction_id = BITCOIN_GATEWAY.withdraw(outbound_address, satoshi_balance)
           if transaction_id.nil?

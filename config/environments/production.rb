@@ -51,6 +51,8 @@ Hudacard::Application.configure do
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default_url_options = { :host => ENV['HOST_DOMAIN'].nil? ? 'hudacard.com' : ENV['HOST_DOMAIN'] }
+  config.action_mailer.delivery_method = :smtp
 
   # Enable threaded mode
   # config.threadsafe!

@@ -6,11 +6,12 @@ Hudacard::Application.routes.draw do
   
   devise_for :users
 
-  resources :users, :only => [:show] do
+  resources :users, :only => [:show, :update] do
     member do
       get 'balance_inquiry'
       get 'qrcode'
       post 'withdrawal'
+      get 'account'
     end
   end
   
@@ -21,5 +22,10 @@ Hudacard::Application.routes.draw do
     get 'error', :on => :collection
   end
   
+  # Admin paths
   resources :btc_transactions, :only => [:index, :update]
+  
+  match "/about" => "static_pages#about"
+  match "/contact" => "static_pages#contact"
+  match "/comment" => "static_pages#comment", :via => :post
 end
