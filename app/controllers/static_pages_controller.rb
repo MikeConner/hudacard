@@ -9,6 +9,12 @@ class StaticPagesController < ApplicationController
   def account
   end
   
+  def admin
+    sign_out current_user unless current_user.nil?
+    
+    redirect_to new_user_session_path
+  end
+  
   def comment
     if simple_captcha_valid?  
       if params[:content].strip.blank?

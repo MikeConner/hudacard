@@ -30,14 +30,14 @@
                 %td= tx.address
                 %td= number_with_delimiter(tx.satoshi.abs)
                 - if tx.pending?
-                  %td QUEUED
+                  %td QUEUED W/D
                   %td
                 - else
                   %td SETTLED
                   - if tx.outbound?
                     %td= tx.transaction_id
                   - else
-                    %td
+                    %td DEPOSIT
       .span6
         %h1 Game History
         %table.table.zebra-striped

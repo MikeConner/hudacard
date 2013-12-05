@@ -9,4 +9,4 @@ en:
   user_updated: 'User successfully updated.'
   simple_captcha:
     label: "Let's make sure you're human (or a really awesome robot)"
-    placeholder: 'Captcha Response'
+    placeholder: 'Type the text'

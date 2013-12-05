@@ -30,6 +30,10 @@ FactoryGirl.define do
         FactoryGirl.create_list(:game, evaluator.num_games, :user => user)
       end
     end
+    
+    factory :admin_user do
+      admin true
+    end
   end
   
   factory :btc_transaction do

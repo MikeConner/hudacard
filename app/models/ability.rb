@@ -5,10 +5,9 @@ class Ability
     can :read, :all                   # allow everyone to read everything
     
     # Restrict Rails admin to a special user
-    if user and (ADMIN_KEY + User::EMAIL_SUFFIX == user.email)
+    if user and user.admin?
       can :access, :rails_admin       # only allow admin users to access Rails Admin
       can :dashboard                  # allow access to dashboard
-      Rails.logger.info('Rejected')
     end
     
     # Define abilities for the passed in user here. For example:

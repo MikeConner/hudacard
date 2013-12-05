@@ -13,9 +13,6 @@ Hudacard::Application.routes.draw do
       post 'withdrawal'
       get 'account'
     end
-    
-    # Find/create special user for Rails admin
-    get 'create_admin', :on => :collection
   end
   
   # Path with token plays the current game ("edits" the game)
@@ -31,5 +28,5 @@ Hudacard::Application.routes.draw do
   match "/about" => "static_pages#about"
   match "/contact" => "static_pages#contact"
   match "/comment" => "static_pages#comment", :via => :post
-  match "/login/:id" => "users#create_admin"
+  match "/login" => "static_pages#admin"
 end

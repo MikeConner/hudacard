@@ -23,6 +23,7 @@
 
 describe User do
   let(:user) { FactoryGirl.create(:user) }
+  let(:admin) { FactoryGirl.create(:admin_user) }
   
   subject { user }
   
@@ -32,10 +33,16 @@ describe User do
     user.should respond_to(:inbound_bitcoin_address)
     user.should respond_to(:outbound_bitcoin_address)
     user.should respond_to(:current_game)
+    user.should respond_to(:admin)
   end
   
   it { should be_valid }
 
+  it "should not be an admin" do
+    user.admin?.should be_false
+    admin.admin?.should be_true
+  end
+  
   describe "duplicate email" do
     before { @user2 = user.dup }
     
