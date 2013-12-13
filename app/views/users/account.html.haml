@@ -14,6 +14,7 @@
           = f.text_field :outbound_bitcoin_address, :placeholder => 'Your bitcoin address'
         .actions
           = f.submit 'Update Profile'
+      = render :partial => 'games/withdrawal'
     .row
       .span6
         %h1 Transactions
