@@ -48,6 +48,7 @@ class BtcTransaction < ActiveRecord::Base
   scope :inbound, where('satoshi > 0')
   scope :outbound, where('satoshi < 0')
   scope :external, where("(transaction_type = ?) or (transaction_type = ?)", FUNDING_TRANSACTION, WITHDRAWAL_TRANSACTION)
+  scope :game, where("(transaction_type != ?) and (transaction_type != ?)", FUNDING_TRANSACTION, WITHDRAWAL_TRANSACTION)
   
   scope :queued, where("pending = #{ActiveRecord::Base.connection.quoted_true}")
   scope :settled, where("pending = #{ActiveRecord::Base.connection.quoted_false}")

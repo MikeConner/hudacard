@@ -93,6 +93,15 @@ class UsersController < ApplicationController
   def account
     @transactions = @user.btc_transactions.external
     @games = @user.games
+    
+    # Details
+    @deposits = @transactions.inbound.inject(0) { |sum, d| sum + d.satoshi }
+    @withdrawals = @transactions.outbound.inject(0) { |sum, w| sum - w.satoshi }
+    @total_dw = @deposits - @withdrawals
+    @winnings = @user.btc_transactions.game.inject(0) { |sum, g| sum + g.satoshi }
+    @grand_total = @total_dw + @winnings
+    @pending_deposits = @transactions.inbound.queued.inject(0) { |sum, d| sum + d.satoshi }
+    @pending_withdrawals = @transactions.outbound.queued.inject(0) { |sum, w| sum - w.satoshi }
   end
   
 private

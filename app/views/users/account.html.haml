@@ -17,6 +17,39 @@
       = render :partial => 'games/withdrawal'
     .row
       .span6
+        %h1 Balance Details
+        %table.table.zebra-striped
+          %thead
+            %tr
+              %th Deposits
+              %th
+              %th Withdrawals
+              %th Total
+          %tbody
+            %tr
+              %td= number_with_delimiter(@deposits)
+              %td -
+              %td= number_with_delimiter(@withdrawals)
+              %td= number_with_delimiter(@total_dw)
+            %tr
+              %td
+              %td
+              %td Game Winnings
+              %td= number_with_delimiter(@winnings)
+            %tr
+              %td Grand Total
+              %td
+              %td
+              %td= number_with_delimiter(@grand_total)
+        %table.table.zebra-striped
+          %thead
+            %tr
+              %th Pending Deposits
+              %th Pending Withdrawals
+          %tbody
+            %tr
+              %td= number_with_delimiter(@pending_deposits)
+              %td= number_with_delimiter(@pending_withdrawals)
         %h1 Transactions
         %table.table.zebra-striped
           %thead

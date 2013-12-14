@@ -100,10 +100,10 @@ class User < ActiveRecord::Base
     Bitcoin.new(:satoshi => result)
   end
   
-  # Total of inbound transactions, including unconfirmed deposits
+  # Total of inbound transactions, including unconfirmed deposits (NOT including game wins)
   def total_bitcoin_in
     result = 0
-    self.btc_transactions.inbound.each do |transaction|
+    self.btc_transactions.external.inbound.each do |transaction|
       result += transaction.satoshi
     end
     
