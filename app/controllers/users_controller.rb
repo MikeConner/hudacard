@@ -106,13 +106,11 @@ private
   end
   
   def ensure_correct_user_or_admin
-    if !current_user.admin? 
-      @user = User.find_by_email(params[:id] + User::EMAIL_SUFFIX)
+    @user = User.find_by_email(params[:id] + User::EMAIL_SUFFIX)
     
-      if @user != current_user
-        @errors = 'Wrong user'
-        render 'games/error'
-      end
+    if !current_user.admin? and (@user != current_user)
+      @errors = 'Wrong user'
+      render 'games/error'
     end
   end
 end
