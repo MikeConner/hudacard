@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   
   before_filter :authenticate_user!, :except => [:show]
   before_filter :ensure_current_user, :except => [:show]
+  before_filter :ensure_correct_user_or_admin, :only => [:account]
   
   def balance_inquiry
     # Creates funding transaction if they've deposited (0 confirmations required)
@@ -101,6 +102,17 @@ private
     if @user != current_user
       @errors = 'Wrong user'
       render 'games/error'
+    end
+  end
+  
+  def ensure_correct_user_or_admin
+    if !current_user.admin? 
+      @user = User.find_by_email(params[:id] + User::EMAIL_SUFFIX)
+    
+      if @user != current_user
+        @errors = 'Wrong user'
+        render 'games/error'
+      end
     end
   end
 end
