@@ -9,6 +9,9 @@
           = label_tag :category
           = select_tag :category, options_for_select(@categories, @categories[0])
   
+          = label_tag :email
+          = text_field_tag :email, nil, :placeholder => 'For a personal response'
+          
           = label_tag :content
           = text_area_tag :content, nil, :size => '60x3', :placeholder => 'Type your comment here', :style => 'min-height:10rem;'
           %br

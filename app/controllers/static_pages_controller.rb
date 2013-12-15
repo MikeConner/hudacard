@@ -20,7 +20,7 @@ class StaticPagesController < ApplicationController
       if params[:content].strip.blank?
         redirect_to contact_path, :alert => 'Please enter a comment'      
       else
-        UserMailer.comment_email(params[:category], params[:content]).deliver
+        UserMailer.comment_email(params[:category], params[:email], params[:content]).deliver
         
         redirect_to root_path, :notice => 'Thanks for your comment!'
       end
