@@ -20,4 +20,12 @@ test: &test
   host: localhost
   encoding: utf8
   pool: 5
-  
+
+production:
+  adapter: postgresql
+  database: hudacard_pd
+  username: rails
+  password: rails!!
+  host: localhost
+  encoding: utf8
+  pool: 5
