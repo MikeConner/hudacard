@@ -1,19 +1,23 @@
 = f.hidden_field :game_key, :value => game.game_key
 .row
-  .span1
-    = submit_tag Game::RED, :class => 'btn btn-danger', :id => "red"
-  .span1
-    .btn.btn-warning.btn-mini#minusMilli
+  .large-2.small-2.columns
+    = submit_tag Game::RED, :class => 'button radius alert', :id => "red"
+  .large-2.small-2.columns
+    .button.alert.radius.tiny#minusMilli
       = "- 1 m฿"
-    .btn.btn-warning.btn-mini#minusMilliTen
+  .large-2.small-2.columns
+    .button.alert.radius.tiny#minusMilliTen
       = "- 10 m฿"
-  .span1
-    = f.text_field :bet, :size => 3
-    m฿
-  .span1
-    .btn.btn-primary.btn-mini#plusMilli
+  .large-2.small-2.columns
+    .button.tiny.radius#plusMilli
       = "+ 1 m฿"
-    .btn.btn-primary.btn-mini#plusMilliTen
+  .large-2.small-2.columns
+    .button.tiny.radius#plusMilliTen
       = "+ 10 m฿"
-  .span1.pull-right
-    = submit_tag Game::BLACK, :class => 'btn btn-inverse', :id => "black"
+  .large-2.small-2.columns
+    = submit_tag Game::BLACK, :class => 'button radius small', :id => "black"
+  .row
+    .large-12.small-12.columns
+      BET:
+      = f.text_field :bet, :size => 5
+      m฿

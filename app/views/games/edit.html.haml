@@ -1,27 +1,43 @@
 -# Displayed for a "new" game -- no bet yet
 .container
-  .span10.offset1
-    = render :partial => 'games/header', :locals => {:game => @game}
-    .row
-      - for i in 1..5 do
-        .span1.cardarea
-          .card.card-back{:id => "card#{(i)}"}
-    .row
-      %br
-    - range = @game.user.bet_range
-    = hidden_field_tag :min_bet, range[:min]
-    = hidden_field_tag :max_bet, range[:max]
-    .row
-      .span5.well
-        .row
-          .span3
+  .row 
+    .small-12.large-12.columns
+      &nbsp;
+  .row
+    .small-12.large-4.columns
+      .row.small-12.large-12.columns
+        .panel
+          = render :partial => 'games/header', :locals => {:game => @game}
+
+          - range = @game.user.bet_range
+          = hidden_field_tag :min_bet, range[:min]
+          = hidden_field_tag :max_bet, range[:max]
+      .row.small-12.large-12.columns
+        = render :partial => 'games/fund_account'
+      .row
+        .small-12.large-12.columns
+          .panel
             = render :partial => 'games/balance', :locals => { :satoshi_balance => current_user.balance }
-          .span2
-            %h3 Make Your Bet
+
+    .small-12.large-8.columns
+      .row
+        .small-12.lage-12.columns
+          .panel.callout.radius
+            bahh
+      .row
+        .small-12.lage-12.columns
+          - for i in 1..5 do
+            .small-2.large-2.columns.cardarea
+              .card.card-back{:id => "card#{(i)}"}
+          .small-2.large-2.columns
+            &nbsp;
+      .row
+        .small-12.large-12.columns
+          .panel
+            = form_for @game do |f|
+              = render :partial => 'games/bet_fields', :locals => { :f => f, :game => @game }
             %p== (#{range[:min]}m฿ - #{range[:max]}m฿)
-    = form_for @game do |f|
-      = render :partial => 'games/bet_fields', :locals => { :f => f, :game => @game }
-    = render :partial => 'games/fund_account'
+
     .row
       .span5.well
         .row

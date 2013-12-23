@@ -16,11 +16,11 @@ group :assets do
   gem 'sass-rails',   '3.2.5'
   #gem 'sass-twitter-bootstrap-rails', '~> 1.0'
   gem 'foundation-rails'
+  gem 'foundation-icons-sass-rails'
 end
 
 gem 'haml', '3.1.7'
 gem 'jquery-rails', '2.1.2'
-gem 'font-awesome-rails'
 gem 'thin', '1.4.1'
 
 group :development, :test do

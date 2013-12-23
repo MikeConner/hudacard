@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require foundation
-//= require twitter/bootstrap/bootstrap-modal
 //= require_tree .
 
 $(function(){ $(document).foundation(); });
