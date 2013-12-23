@@ -14,7 +14,8 @@ group :assets do
   gem 'jquery-ui-rails', '1.1.1'
   gem 'uglifier', '2.1.0'
   gem 'sass-rails',   '3.2.5'
-  gem 'sass-twitter-bootstrap-rails', '~> 1.0'
+  #gem 'sass-twitter-bootstrap-rails', '~> 1.0'
+  gem 'foundation-rails'
 end
 
 gem 'haml', '3.1.7'
