@@ -1,92 +1,112 @@
 .container
   .large-12.small-12.columns.panel
     .row
-      %br
-      %br
-      %br
-      %br
-      = form_for current_user do |f|
-        .field
-          = f.label :msg_email, 'Email (Optional)'
-          = f.text_field :msg_email, :placeholder => 'Your contact email'
-        .field
-          = f.label :outbound_bitcoin_address, 'Default withdrawal bitcoin address'
-          = f.text_field :outbound_bitcoin_address, :placeholder => 'Your bitcoin address'
-        .actions
-          = f.submit 'Update Profile'
-      = render :partial => 'games/withdrawal'
+
+      
+
     .row
-      .span6
-        %h1 Balance Details
-        %table.table.zebra-striped
-          %thead
-            %tr
-              %th Deposits
-              %th
-              %th Withdrawals
-              %th Total
-          %tbody
-            %tr
-              %td= number_with_delimiter(@deposits)
-              %td -
-              %td= number_with_delimiter(@withdrawals)
-              %td= number_with_delimiter(@total_dw)
-            %tr
-              %td
-              %td
-              %td Game Winnings
-              %td= number_with_delimiter(@winnings)
-            %tr
-              %td Grand Total
-              %td
-              %td
-              %td= number_with_delimiter(@grand_total)
-        %table.table.zebra-striped
-          %thead
-            %tr
-              %th Pending Deposits
-              %th Pending Withdrawals
-          %tbody
-            %tr
-              %td= number_with_delimiter(@pending_deposits)
-              %td= number_with_delimiter(@pending_withdrawals)
-        %h1 Transactions
-        %table.table.zebra-striped
-          %thead
-            %tr
-              %th Address
-              %th Satoshi
-              %th Status
-              %th Transaction ID
-          %tbody
-            - @transactions.each do |tx|
+      %dl.tabs{"data-tab" => ""}
+        %dd.active
+          %a{href: "#panel2-1"} Balance Details
+
+
+        %dd
+          %a{href: "#panel2-2"} Cash Out
+
+        %dd
+          %a{href: "#panel2-3"} Profile
+
+        %dd
+          %a{href: "#panel2-4"} Transactions
+        %dd
+          %a{href: "#panel2-5"} Game History
+
+      .tabs-content
+        #panel2-1.content.active
+          %p First panel content goes here...
+          %table.table.zebra-striped
+            %thead
               %tr
-                %td= tx.address
-                %td= number_with_delimiter(tx.satoshi.abs)
-                - if tx.pending?
-                  %td QUEUED W/D
-                  %td
-                - else
-                  %td SETTLED
-                  - if tx.outbound?
-                    %td= tx.transaction_id
-                  - else
-                    %td DEPOSIT
-      .span6
-        %h1 Game History
-        %table.table.zebra-striped
-          %thead
-            %tr
-              %th Date
-              %th Color
-              %th Bet
-              %th Payout
-          %tbody
-            - @games.each do |game|
-              -# Exclude incomplete (current) game
-              - if !game.payout.nil?
+                %th Deposits
+                %th
+                %th Withdrawals
+                %th Total
+            %tbody
+              %tr
+                %td= number_with_delimiter(@deposits)
+                %td -
+                %td= number_with_delimiter(@withdrawals)
+                %td= number_with_delimiter(@total_dw)
+              %tr
+                %td
+                %td
+                %td Game Winnings
+                %td= number_with_delimiter(@winnings)
+              %tr
+                %td Grand Total
+                %td
+                %td
+                %td= number_with_delimiter(@grand_total)
+          %table.table.zebra-striped
+            %thead
+              %tr
+                %th Pending Deposits
+                %th Pending Withdrawals
+            %tbody
+              %tr
+                %td= number_with_delimiter(@pending_deposits)
+                %td= number_with_delimiter(@pending_withdrawals)
+        #panel2-2.content
+          = render :partial => 'games/withdrawal'
+
+        #panel2-3.content
+          = form_for current_user do |f|
+            .field
+              = f.label :msg_email, 'Email (Optional)'
+              = f.text_field :msg_email, :placeholder => 'Your contact email'
+            .field
+              = f.label :outbound_bitcoin_address, 'Default withdrawal bitcoin address'
+              = f.text_field :outbound_bitcoin_address, :placeholder => 'Your bitcoin address'
+            .actions
+              = f.submit 'Update Profile', :class => "button"
+
+        #panel2-4.content
+          %table.table.zebra-striped
+            %thead
+              %tr
+                %th Address
+                %th Satoshi
+                %th Status
+                %th Transaction ID
+            %tbody
+              - @transactions.each do |tx|
                 %tr
-                  %td= game.updated_at.try(:strftime, ApplicationHelper::DATE_FORMAT)
-                  %td= game.color
-                  %td== #{game.bet} mBTC
-                  %td= game.payout
+                  %td= tx.address
+                  %td= number_with_delimiter(tx.satoshi.abs)
+                  - if tx.pending?
+                    %td QUEUED W/D
+                    %td
+                  - else
+                    %td SETTLED
+                    - if tx.outbound?
+                      %td= tx.transaction_id
+                    - else
+                      %td DEPOSIT
+        #panel2-5.content
+          %table.table.zebra-striped
+            %thead
+              %tr
+                %th Date
+                %th Color
+                %th Bet
+                %th Payout
+            %tbody
+              - @games.each do |game|
+                -# Exclude incomplete (current) game
+                - if !game.payout.nil?
+                  %tr
+                    %td= game.updated_at.try(:strftime, ApplicationHelper::DATE_FORMAT)
+                    %td= game.color
+                    %td== #{game.bet} mBTC
+                    %td= game.payout
+
