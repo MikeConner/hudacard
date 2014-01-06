@@ -1,27 +1,39 @@
 -# Display running game, after bet placed
+-# Displayed for a "new" game -- no bet yet
 .container
-  .span10.offset1
-    = render :partial => 'games/header', :locals => {:game => @game}
-    .row
-      .span5.well 
-        %center
-          %h3 You bet #{@game.bet} m฿ on #{@game.color}
-    .row
-      - for i in 1..5 do
-        .span1.cardarea
-          .card.card-back{:id => "card#{i}"}
-          %cardfront{:id => "seq#{i}", :class => "card card-#{@cards[i-1].value}-#{@cards[i-1].suit.downcase}"}
-    .row
-      %br
-    - range = @game.user.bet_range
-    = hidden_field_tag :min_bet, range[:min]
-    = hidden_field_tag :max_bet, range[:max]
-    .row
-      .span5.well
-        .row
-          .span3
+  .row 
+    .small-12.large-12.columns
+      &nbsp;
+  .row
+    .small-12.large-4.columns
+      .row.small-12.large-12.columns
+        .panel
+          = render :partial => 'games/header', :locals => {:game => @game}
+          - range = @game.user.bet_range
+          = hidden_field_tag :min_bet, range[:min]
+          = hidden_field_tag :max_bet, range[:max]
+        
+      .row.small-12.large-12.columns
+        = render :partial => 'games/fund_account'
+      .row
+        .small-12.large-12.columns
+          .panel
             = render :partial => 'games/balance', :locals => { :satoshi_balance => @old_balance }
-          .span2
+      .row
+        .small-12.large-12.columns
+          .panel
+            .row
+              %h2 Jokers:
+              .small-6.large-6.columns
+                %card.card.card-1-joker
+              .small-6.large-6.columns
+                %card.card.card-2-joker
+
+    .small-12.large-8.columns
+      .row
+        .small-12.lage-12.columns
+          .panel.callout.radius
+            %h3 You bet #{@game.bet} m฿ on #{@game.color}
             #announcer
               %h3 Good Luck
             - notes = @game.mid_game_notes
@@ -40,24 +52,31 @@
                 %h3 LOSE
               %h3= @game.ratio.round(1).to_s + "X"
               %h5= @game.payout.round(1).to_s + "m฿"
-            %p== (#{range[:min]}m฿ - #{range[:max]}m฿)
-    = form_for @new_game do |f|
-      = render :partial => 'games/bet_fields', :locals => { :f => f, :game => @new_game }
-    = render :partial => 'games/fund_account'
-    .row
-      .span5.well
-        .row
-          %h2 Jokers:
-          .span1
-            %card.card.card-1-joker
-          .span1
-            %card.card.card-2-joker
-          .span3#hash
-            MD5 Hash for this game:
-            = @new_game.game_key
-            %br
-            Key for last game:
+            
+
+      .row
+        .small-12.large-12.columns.panel.rounded-top-corners.shadowed
+          - for i in 1..5 do
+            .small-2.large-2.columns.cardarea
+              .card.card-back{:id => "card#{i}"}
+              %cardfront{:id => "seq#{i}", :class => "card card-#{@cards[i-1].value}-#{@cards[i-1].suit.downcase}"}
+          .small-2.large-2.columns.cardarea
+
+        .small-6.large-6.columns.panel
+          .hash#hash
+            Key for this game:
             = @game.security_code
+        .small-6.large-6.columns.panel
+          MD5 Hash for next game:
+          = @new_game.game_key
+
+      .row
+        .small-12.large-12.columns
+          .panel
+            = form_for @new_game do |f|
+              = render :partial => 'games/bet_fields', :locals => { :f => f, :game => @new_game }
+    
+
 = render :partial => 'games/qrcode'
 = render :partial => 'games/footer'
 :javascript
@@ -69,6 +88,7 @@
   // Result box WIN/LOSE
   $('#winbox').hide()
   $('#hash').hide();
+
   
   // Fronts of the cards
   $('cardfront').hide();

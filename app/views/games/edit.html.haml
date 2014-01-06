@@ -18,12 +18,25 @@
         .small-12.large-12.columns
           .panel
             = render :partial => 'games/balance', :locals => { :satoshi_balance => current_user.balance }
+      .row
+        .small-12.large-12.columns
+          .panel
+            .row
+              %h2 Jokers:
+              .small-6.large-6.columns
+                %card.card.card-1-joker
+              .small-6.large-6.columns
+                %card.card.card-2-joker
+              .hash
+                MD5 Hash for this game:
+                = @game.game_key
+                %br
 
     .small-12.large-8.columns
       .row
         .small-12.lage-12.columns
           .panel.callout.radius
-            bahh
+            
       .row
         .small-12.lage-12.columns
           - for i in 1..5 do
@@ -38,18 +51,6 @@
               = render :partial => 'games/bet_fields', :locals => { :f => f, :game => @game }
             %p== (#{range[:min]}m฿ - #{range[:max]}m฿)
 
-    .row
-      .span5.well
-        .row
-          %h2 Jokers:
-          .span1
-            %card.card.card-1-joker
-          .span1
-            %card.card.card-2-joker
-          .span3
-            MD5 Hash for this game:
-            = @game.game_key
-            %br
 = render :partial => 'games/qrcode'
 = render :partial => 'games/footer'
 

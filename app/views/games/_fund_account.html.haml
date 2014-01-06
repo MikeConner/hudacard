@@ -5,6 +5,6 @@
   = link_to balance_inquiry_user_path(current_user) do
     Send BTC to:
     = link_to current_user.inbound_bitcoin_address, 'bitcoin:' + current_user.inbound_bitcoin_address 
-    = link_to '(QR)', '#qr', :data => { :toggle => 'modal' }, :role => 'button'         
+    = link_to '(QR)', '#', :data => {"reveal-id" => "qr"}, :role => 'button' 
   = link_to balance_inquiry_user_path(current_user) do
     %i.fi-refresh

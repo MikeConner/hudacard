@@ -8,9 +8,11 @@
     = stylesheet_link_tag "application", :media => "all" 
     = javascript_include_tag "vendor/modernizr"
     = csrf_meta_tags 
+
     = render 'layouts/application/shim'
   %body
     = render 'layouts/application/header'
     = render 'shared/flash_messages'
-    = yield
     = javascript_include_tag "application"
+
+    = yield

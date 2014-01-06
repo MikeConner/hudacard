@@ -1,8 +1,7 @@
-#qr.modal.hide.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+#qr.reveal-modal{"data-reveal" => ""}
   .modal-header
-    %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
     %h3#myModalLabel Inbound Address
   .modal-body
     = image_tag "#{qrcode_user_path(current_user)}.svg"
   .modal-footer
-    %button.btn{"aria-hidden" => "true", "data-dismiss" => "modal"} Close
+    %a.close-reveal-modal × 

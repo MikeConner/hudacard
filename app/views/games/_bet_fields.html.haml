@@ -1,23 +1,23 @@
 = f.hidden_field :game_key, :value => game.game_key
 .row
-  .large-2.small-2.columns
-    = submit_tag Game::RED, :class => 'button radius alert', :id => "red"
-  .large-2.small-2.columns
+  .large-8.small-8.columns
+    Make Your Bet:
+    - range = @game.user.bet_range
+    %p== (#{range[:min]}m฿ - #{range[:max]}m฿)
+  .large-4.small-4.columns
+    = f.text_field :bet, :size => 5
+    m฿
+.row
+  .large-4.small-4.columns
     .button.alert.radius.tiny#minusMilli
       = "- 1 m฿"
-  .large-2.small-2.columns
     .button.alert.radius.tiny#minusMilliTen
       = "- 10 m฿"
-  .large-2.small-2.columns
     .button.tiny.radius#plusMilli
       = "+ 1 m฿"
-  .large-2.small-2.columns
     .button.tiny.radius#plusMilliTen
       = "+ 10 m฿"
-  .large-2.small-2.columns
-    = submit_tag Game::BLACK, :class => 'button radius small', :id => "black"
-  .row
-    .large-12.small-12.columns
-      BET:
-      = f.text_field :bet, :size => 5
-      m฿
+  .large-4.small-4.columns
+    = submit_tag Game::RED, :class => 'button button-lrg radius ', :id => "red", :style => "background: red;"
+  .large-4.small-4.columns
+    = submit_tag Game::BLACK, :class => 'button radius button-lrg', :id => "black", :style => "background: black;"
