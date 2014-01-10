@@ -1,0 +1,10 @@
+.top-bar {
+  h1 a img {
+    width: 23rem;
+  }
+  .top-bar-section {
+    ul li > a { 
+      text-transform: $topbar-link-text-transform;
+    }
+  }
+}

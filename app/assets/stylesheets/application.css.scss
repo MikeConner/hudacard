@@ -1,6 +1,14 @@
 @import "foundation_and_overrides";
 @import 'foundation-icons';
 
+// Partials
+@import "partials/account";
+@import "partials/contact";
+@import "partials/games";
+@import "partials/fairplay";
+@import "partials/footer";
+@import "partials/topbar";
+
 input[id=game_bet] {    
 width: 80px;
 }   
