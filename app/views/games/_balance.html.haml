@@ -1,9 +1,3 @@
-%center.balance#balance
-  %h3
-    BALANCE
-    %br
-    #satoshibalance= satoshi_balance.as_satoshi
-  %h5
-    #btcbalance
-      = (satoshi_balance.as_mb).round(3)
-      m฿
+= satoshi_balance.as_satoshi
+= (satoshi_balance.as_mb).round(3)
+m฿

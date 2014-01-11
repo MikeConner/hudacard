@@ -25,14 +25,19 @@ h4 { font-size: 1.5rem }
 h5 { font-size: 1.25rem; }
 h6 { font-size: 1rem; }
 
+p, a, ul, li {
+  font-size: 1.6rem;
+}
 
+a {
+  color: $secondary-color;
+}
 
-
-
-
-
-
-
+// Button
+.primary-btn {
+  @include button(1.1rem, #ee4d4e, 0.5rem, false, false, false);
+  margin: 1rem 0;
+}
 
 
 

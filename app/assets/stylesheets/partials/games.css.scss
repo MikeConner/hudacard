@@ -1,3 +1,44 @@
 .games-hero {
   padding: 4rem 0;
+  .game-container {
+    background: white;
+    padding: 2rem 0.5rem;
+  }
+  .game-controls {
+    background: $primary-color;
+    color: white;
+    padding: 2rem;
+    .bet-currency {
+      background: lighten($primary-color, 10%);
+      text-align: center;
+    }
+  }
+  .tabs-content {
+    background: white;
+    padding: 1rem 2rem;
+    .content {
+      padding: 0;
+    }
+    .tabs-section {
+      border-bottom: 1px solid lightgray;
+      margin: 0 -2rem;
+      padding: 2rem 2.4rem;
+      &:last-of-type {
+        border-bottom: none;
+      }
+      h3 {
+        font-weight: bold;
+        margin: 0;
+      }
+      .card {
+        display: inline-block;
+        margin: 1rem 1rem 0 0;
+      }
+      .disclaimer {
+        display: block;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+      }
+    }
+  }
 }

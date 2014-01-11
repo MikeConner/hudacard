@@ -1,10 +1,9 @@
-.panel
-  - if current_user.inbound_bitcoin_address.nil?
-    = link_to "Fund Account", fund_user_path(current_user), :class => "btn btn-success"
-  - else 
-  = link_to balance_inquiry_user_path(current_user) do
-    Send BTC to:
-    = link_to current_user.inbound_bitcoin_address, 'bitcoin:' + current_user.inbound_bitcoin_address 
-    = link_to '(QR)', '#', :data => {"reveal-id" => "qr"}, :role => 'button' 
-  = link_to balance_inquiry_user_path(current_user) do
-    %i.fi-refresh
+- if current_user.inbound_bitcoin_address.nil?
+  = link_to "Fund Account", fund_user_path(current_user), :class => "btn btn-success"
+- else 
+= link_to balance_inquiry_user_path(current_user) do
+  = link_to '(QR)', '#', :data => {"reveal-id" => "qr"}, :role => 'button'
+  = link_to current_user.inbound_bitcoin_address, 'bitcoin:' + current_user.inbound_bitcoin_address  
+= link_to balance_inquiry_user_path(current_user), :class => 'primary-btn' do
+  Update
+  %i.fi-refresh
