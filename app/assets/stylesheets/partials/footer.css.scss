@@ -1,0 +1,25 @@
+// Footer
+footer {
+  background: $primary-color;
+  color: white;
+  padding: 1rem;
+  h1, h2, h3, h4, h5, h6 {
+    color: white;
+  }
+  p { 
+    font-size: 1.2rem;
+  }
+  a {
+    color: $secondary-color;
+  }
+}
+.copyright {
+  background-color: darken($primary-color, 2%); 
+  padding: 2rem 0;
+  h5 {
+    color: white;
+    span {
+      color: $secondary-color;
+    }
+  }
+}
