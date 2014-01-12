@@ -864,9 +864,9 @@ $body-font-style: normal;
 // $include-html-tabs-classes: $include-html-classes;
 
 // $tabs-navigation-padding: rem-calc(16);
-// $tabs-navigation-bg-color: #efefef  ;
+$tabs-navigation-bg-color: $primary-color;
 // $tabs-navigation-hover-bg-color: darken($tabs-navigation-bg-color, 5%);
-// $tabs-navigation-font-color: #222;
+$tabs-navigation-font-color: lighten($primary-color, 25%);
 // $tabs-navigation-font-size: rem-calc(16);
 // $tabs-navigation-font-family: $body-font-family;
 
