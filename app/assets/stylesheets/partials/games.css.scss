@@ -68,7 +68,7 @@
         font-size: 1.1rem;
         position: absolute;
         left: 3rem;
-        top: 32rem;
+        top: 31.5rem;
       }
       input {
         color: darken($primary-color, 25%);
@@ -79,8 +79,9 @@
       }
     }
     .title {
-      padding: 1.5rem 0 1rem 1rem;
+      padding: 1rem 0 0.5rem 1.5rem;
       p {
+        color: lighten($primary-color, 25%);
         display: inline-block;
         float: left;
         margin: 0;
@@ -91,7 +92,7 @@
         float: right;
         font-size: 1.2rem;
         width: 10%;
-        margin: -1.5rem 0 -1rem 0;
+        margin: -1rem 0 -1rem 0;
         padding: 2rem;
       }
     }
