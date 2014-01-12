@@ -75,6 +75,10 @@ button, .button, a, input {
 
 // Hudacard styles to override  
 
+[class*="column"] + [class*="column"]:last-child {
+  float: left;
+}
+
 .game-link {
   color: #08c;
   text-decoration: none;
@@ -115,7 +119,7 @@ button, .button, a, input {
 /* @group cards */
 
 .card {
-  background: #fff url(../assets/deck.gif);
+  background: #fff url(../assets/deck.png);
   display: block;
   height: 100px;
   overflow: hidden;
