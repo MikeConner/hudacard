@@ -33,6 +33,16 @@ h6 { font-size: 1rem; }
   background-size: cover;
 }
 
+.clear:before,
+.clear:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.clear:after {
+    clear: both;
+}
+
 .tabs dd {
   top: 0;
 }
@@ -45,9 +55,17 @@ a {
   color: $secondary-color;
 }
 
+button, .button, a, input {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  &:focus {
+    outline: none;
+  }
+}
+
 // Button
 .primary-btn {
-  @include button(1.1rem, #ee4d4e, 0.5rem, false, false, false);
+  @include button(1.1rem, $tertiary-color, 0.5rem, false, false, false);
   margin: 1rem 0;
 }
 
@@ -55,11 +73,7 @@ a {
 
 
 
-// Hudacard styles to override
-
-input[id=game_bet] {    
-width: 80px;
-}   
+// Hudacard styles to override  
 
 .game-link {
   color: #08c;

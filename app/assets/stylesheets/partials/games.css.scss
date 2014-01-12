@@ -7,10 +7,93 @@
   .game-controls {
     background: $primary-color;
     color: white;
-    padding: 2rem;
     .bet-currency {
       background: lighten($primary-color, 10%);
       text-align: center;
+    }
+    .bet-choice {
+      float: left;
+      width: 65%;
+      background: darken($primary-color, 25%);
+      input {
+        margin-bottom: 0;
+      }
+      .red-bet-btn {
+        @include button(false, $tertiary-color, false, false, false, true);
+        float: left;
+        font-size: 1.6rem;
+        margin: 0;
+        padding: 3.65rem 0;
+        width: 50%;
+      } 
+      .black-bet-btn {
+        @include button(false, darken($primary-color, 25%), false, false, false, true);
+        float: left;
+        font-size: 1.6rem;
+        margin: 0;
+        padding: 3.65rem 0;
+        width: 50%;
+      }
+    }
+    .increments {
+      float: left;
+      width: 35%;
+      background: white;
+      .minus {
+        @include button(false, lighten($secondary-color, 15%), false, false, false, true);
+        color: darken($secondary-color, 15%);
+        float: left;
+        font-size: 2.75rem;
+        font-weight: bold;
+        margin: 0;
+        padding: 1rem 0;
+        width: 50%;
+      }
+      .plus {
+        @include button(false, $secondary-color, false, false, false, true);
+        color: darken($secondary-color, 15%);
+        float: left;
+        font-size: 2.75rem;
+        font-weight: bold;
+        margin: 0;
+        padding: 1rem 0;
+        width: 50%;
+      }
+    }
+    .bet-field {
+      color: darken($primary-color, 25%);
+      font-weight: bold;
+      width: 100%;
+      span.total {
+        font-size: 1.1rem;
+        position: absolute;
+        left: 3rem;
+        top: 32rem;
+      }
+      input {
+        color: darken($primary-color, 25%);
+        font-weight: bold;
+        margin: 0;
+        padding: 0 1rem 0 10rem;
+        text-align: right;
+      }
+    }
+    .title {
+      padding: 1.5rem 0 1rem 1rem;
+      p {
+        display: inline-block;
+        float: left;
+        margin: 0;
+        width: 90%;
+      }
+      span {
+        background: lighten($primary-color, 15%);
+        float: right;
+        font-size: 1.2rem;
+        width: 10%;
+        margin: -1.5rem 0 -1rem 0;
+        padding: 2rem;
+      }
     }
   }
   .tabs-content {
