@@ -29,4 +29,5 @@ Hudacard::Application.routes.draw do
   match "/contact" => "static_pages#contact"
   match "/comment" => "static_pages#comment", :via => :post
   match "/login" => "static_pages#admin"
+  match "/playground" => "static_pages#playground"
 end
