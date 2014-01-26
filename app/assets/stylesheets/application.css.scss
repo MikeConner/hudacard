@@ -75,284 +75,284 @@ button, .button, a, input {
 
 // Hudacard styles to override  
 
-[class*="column"] + [class*="column"]:last-child {
-  float: left;
-}
+// [class*="column"] + [class*="column"]:last-child {
+//   float: left;
+// }
 
-.game-link {
-  color: #08c;
-  text-decoration: none;
-}
+// .game-link {
+//   color: #08c;
+//   text-decoration: none;
+// }
 
-/* New cards */
+// /* New cards */
 
-.ccard {
-  background: #fff url(../assets/svgdeck.svg);
-  display: block;
-  height: 220px;
-  overflow: hidden;
-  text-indent: -9999px;
-  width: 160px;
-}
+// .ccard {
+//   background: #fff url(../assets/svgdeck.svg);
+//   display: block;
+//   height: 220px;
+//   overflow: hidden;
+//   text-indent: -9999px;
+//   width: 160px;
+// }
 
-@for $i from 2 through 10 {
-  .ccard-#{$i}-diamond {
-    background-position: -165px * $i + 240px -55px;
-  }
-}
-@for $i from 2 through 10 {
-  .ccard-#{$i}-club {
-    background-position: -165px * $i + 240px -285px;
-  }
-}
+// @for $i from 2 through 10 {
+//   .ccard-#{$i}-diamond {
+//     background-position: -165px * $i + 240px -55px;
+//   }
+// }
+// @for $i from 2 through 10 {
+//   .ccard-#{$i}-club {
+//     background-position: -165px * $i + 240px -285px;
+//   }
+// }
 
-@for $i from 2 through 10 {
-  .ccard-#{$i}-heart {
-    background-position: -165px * $i + 240px -515px;
-  }
-}
+// @for $i from 2 through 10 {
+//   .ccard-#{$i}-heart {
+//     background-position: -165px * $i + 240px -515px;
+//   }
+// }
 
-.ccard-back {
-  background-position: -2236px -515px;    
-}
+// .ccard-back {
+//   background-position: -2236px -515px;    
+// }
 
-/* @group cards */
+// /* @group cards */
 
-.card {
-  background: #fff url(../assets/deck.png);
-  display: block;
-  height: 100px;
-  overflow: hidden;
-  text-indent: -9999px;
-  width: 72px;
-}
+// .card {
+//   background: #fff url(../assets/deck.png);
+//   display: block;
+//   height: 100px;
+//   overflow: hidden;
+//   text-indent: -9999px;
+//   width: 72px;
+// }
 
-@for $i from 2 through 10 {
-  .card-#{$i}-heart {
-    background-position: -72px * $i + 72px 0;
-  }
-}
+// @for $i from 2 through 10 {
+//   .card-#{$i}-heart {
+//     background-position: -72px * $i + 72px 0;
+//   }
+// }
 
-.card-J-heart {
-  background-position: -720px 0;
-}
+// .card-J-heart {
+//   background-position: -720px 0;
+// }
 
-.card-Q-heart {
-  background-position: -792px 0;
-}
+// .card-Q-heart {
+//   background-position: -792px 0;
+// }
 
-.card-K-heart {
-  background-position: -864px 0;
-}
+// .card-K-heart {
+//   background-position: -864px 0;
+// }
 
-.card-A-heart {
-  background-position: 0 0;
-}
+// .card-A-heart {
+//   background-position: 0 0;
+// }
 
-@for $i from 2 through 10 {
-  .card-#{$i}-diamond {
-    background-position: -72px * $i + 72px -100px;
-  }
-}
-.hidden {
-  display: none;
-}
-.card-back {
-  background-position: -360px -400px;    
-}
-.card-1-joker{
-  background-position: -0px -400px;  
-}
-.card-2-joker{
-  background-position: -216px -400px;  
-}
+// @for $i from 2 through 10 {
+//   .card-#{$i}-diamond {
+//     background-position: -72px * $i + 72px -100px;
+//   }
+// }
+// .hidden {
+//   display: none;
+// }
+// .card-back {
+//   background-position: -360px -400px;    
+// }
+// .card-1-joker{
+//   background-position: -0px -400px;  
+// }
+// .card-2-joker{
+//   background-position: -216px -400px;  
+// }
 
-.card-J-diamond {
-  background-position: -720px -100px;
-}
+// .card-J-diamond {
+//   background-position: -720px -100px;
+// }
 
-.card-Q-diamond {
-  background-position: -792px -100px;
-}
+// .card-Q-diamond {
+//   background-position: -792px -100px;
+// }
 
-.card-K-diamond {
-  background-position: -864px -100px;
-}
+// .card-K-diamond {
+//   background-position: -864px -100px;
+// }
 
-.card-A-diamond {
-  background-position: 0 -100px;
-}
+// .card-A-diamond {
+//   background-position: 0 -100px;
+// }
 
-@for $i from 2 through 10 {
-  .card-#{$i}-club {
-    background-position: -72px * $i + 72px -200px;
-  }
-}
+// @for $i from 2 through 10 {
+//   .card-#{$i}-club {
+//     background-position: -72px * $i + 72px -200px;
+//   }
+// }
 
-.card-J-club {
-  background-position: -720px -200px;
-}
+// .card-J-club {
+//   background-position: -720px -200px;
+// }
 
-.card-Q-club {
-  background-position: -792px -200px;
-}
+// .card-Q-club {
+//   background-position: -792px -200px;
+// }
 
-.card-K-club {
-  background-position: -864px -200px;
-}
+// .card-K-club {
+//   background-position: -864px -200px;
+// }
 
-.card-A-club {
-  background-position: 0 -200px;
-}
+// .card-A-club {
+//   background-position: 0 -200px;
+// }
 
-@for $i from 2 through 10 {
-  .card-#{$i}-spade {
-    background-position: -72px * $i + 72px -300px;
-  }
-}
+// @for $i from 2 through 10 {
+//   .card-#{$i}-spade {
+//     background-position: -72px * $i + 72px -300px;
+//   }
+// }
 
-.card-J-spade {
-  background-position: -720px -300px;
-}
+// .card-J-spade {
+//   background-position: -720px -300px;
+// }
 
-.card-Q-spade {
-  background-position: -792px -300px;
-}
+// .card-Q-spade {
+//   background-position: -792px -300px;
+// }
 
-.card-K-spade {
-  background-position: -864px -300px;
-}
+// .card-K-spade {
+//   background-position: -864px -300px;
+// }
 
-.card-A-spade {
-  background-position: 0 -300px;
-}
+// .card-A-spade {
+//   background-position: 0 -300px;
+// }
 
-/* @group previous-trick */
+// /* @group previous-trick */
 
 
-.previous-trick-cards{
-  display: none;
-  height: 150px;
-  position: relative;
-  right: -20px;
+// .previous-trick-cards{
+//   display: none;
+//   height: 150px;
+//   position: relative;
+//   right: -20px;
   
-  .card{
-    margin-right: -55px;
-  }
-}
+//   .card{
+//     margin-right: -55px;
+//   }
+// }
 
-/* @group scoreboard */
+// /* @group scoreboard */
 
-.scoreboard{
-  color: #fff
-}
+// .scoreboard{
+//   color: #fff
+// }
 
-/* @group seated-players */
+// /* @group seated-players */
 
-.seated-players{
-  position: absolute;
+// .seated-players{
+//   position: absolute;
   
-  .seated-at-none, .seated-at-left, .seated-at-top, .seated-at-right{
-    &.false {
-      .current-player-nil-true {
-        background: url(../assets/user.png);
-        bottom: -130px;
-        height: 120px;
-        width: 120px;
+//   .seated-at-none, .seated-at-left, .seated-at-top, .seated-at-right{
+//     &.false {
+//       .current-player-nil-true {
+//         background: url(../assets/user.png);
+//         bottom: -130px;
+//         height: 120px;
+//         width: 120px;
         
-        .round-score {
-        color: white;
-        position: relative;
-        bottom: -105px;
-        }
-      }
-    }
-  }
-  .seated-at-left, .seated-at-top, .seated-at-right{
-    &.false{
-      background: url(../assets/user.png);
-    }
-    height: 120px;
-    width: 120px;
-    position: absolute;
-    .round-score{
-      color: white;
-      position:relative;
-      bottom: -103px;
-    }
-  }
+//         .round-score {
+//         color: white;
+//         position: relative;
+//         bottom: -105px;
+//         }
+//       }
+//     }
+//   }
+//   .seated-at-left, .seated-at-top, .seated-at-right{
+//     &.false{
+//       background: url(../assets/user.png);
+//     }
+//     height: 120px;
+//     width: 120px;
+//     position: absolute;
+//     .round-score{
+//       color: white;
+//       position:relative;
+//       bottom: -103px;
+//     }
+//   }
   
-  .seated-at-none{
-    position: absolute;
-    right: -300px;
-    width: 120px;
+//   .seated-at-none{
+//     position: absolute;
+//     right: -300px;
+//     width: 120px;
 
-    .round-score{
-      color: white;
-      position:relative;
-      bottom: -145px;
-    }
-  }
-  .seated-at-left{
-    &.true{
-      background: url(http://cageme.herokuapp.com/120/120);
-    }
-    left: -90px;
-    top: -250px;
-  }
+//     .round-score{
+//       color: white;
+//       position:relative;
+//       bottom: -145px;
+//     }
+//   }
+//   .seated-at-left{
+//     &.true{
+//       background: url(http://cageme.herokuapp.com/120/120);
+//     }
+//     left: -90px;
+//     top: -250px;
+//   }
   
-  .seated-at-top{
-    &.true{
-      background: url(http://cageme.herokuapp.com/121/121);
-    }
-    right: -300px;
-    top: -520px;
-  }
+//   .seated-at-top{
+//     &.true{
+//       background: url(http://cageme.herokuapp.com/121/121);
+//     }
+//     right: -300px;
+//     top: -520px;
+//   }
   
-  .seated-at-right{
-    &.true{
-      background: url(http://cageme.herokuapp.com/122/122);
-    }
-    right: -570px;
-    top: -250px;
-  }
-}
+//   .seated-at-right{
+//     &.true{
+//       background: url(http://cageme.herokuapp.com/122/122);
+//     }
+//     right: -570px;
+//     top: -250px;
+//   }
+// }
 
-/* @group opentok's */
+// /* @group opentok's */
 
-#all-the-streams{
-  position: absolute;
-  right: 0px;
-  width: 300px;
-}
+// #all-the-streams{
+//   position: absolute;
+//   right: 0px;
+//   width: 300px;
+// }
 
-.alert {
-  color: #c60f13;
-// We use this to control alert padding.
-  padding-top:         51px;
-  padding-left:        31px;
-  padding-right:       31px;
-  padding-bottom:      12px;
+// .alert {
+//   color: #c60f13;
+// // We use this to control alert padding.
+//   padding-top:         51px;
+//   padding-left:        31px;
+//   padding-right:       31px;
+//   padding-bottom:      12px;
 
-// We use these to control text style.
-  font-weight: bold;
-  font-size: 14px;
-  font-color: #fff;
+// // We use these to control text style.
+//   font-weight: bold;
+//   font-size: 14px;
+//   font-color: #fff;
 
-// We use this for close hover effect.
-  function-factor: 10%;
+// // We use this for close hover effect.
+//   function-factor: 10%;
 
-// We use these to control border styles.
-  border-style: solid;
-  border-width: 1px;
-  bottom-margin: 20px;
-}
-// We use these to style the close buttons
-a.close {
-  close-color: #333;
-  close-position: 5px;
-  close-font-size: 22px;
-  close-opacity: 0.3;
-  close-opacity-hover: 0.5;
-  close-padding: 10px 20px 0px 0px;
-}
+// // We use these to control border styles.
+//   border-style: solid;
+//   border-width: 1px;
+//   bottom-margin: 20px;
+// }
+// // We use these to style the close buttons
+// a.close {
+//   close-color: #333;
+//   close-position: 5px;
+//   close-font-size: 22px;
+//   close-opacity: 0.3;
+//   close-opacity-hover: 0.5;
+//   close-padding: 10px 20px 0px 0px;
+// }
