@@ -57,6 +57,10 @@
             .small-2.large-2.columns.cardarea
               .card.card-back{:id => "card#{i}"}
               %cardfront{:id => "seq#{i}", :class => "card card-#{@cards[i-1].value}-#{@cards[i-1].suit.downcase}"}
+              = hidden_field_tag "suit#{i}", "#{@cards[i-1].suit.downcase}"
+              = hidden_field_tag "value#{i}", "#{@cards[i-1].value}"
+
+
           .small-2.large-2.columns.cardarea
 
         .small-6.large-6.columns.panel
@@ -94,10 +98,16 @@
   $('.midgame').hide();
 
   // Show first card
+
+
+
+  
   $('#seq1').show();
+  drawCard($('#seq1'), changeCard($('#value1').val()), $('#suit1').val(), 120);
   $('#card1').hide();
   $('#announcer').delay(wait).fadeOut(0);
   for (var idx = 2; idx <= 5; idx++) {
+    drawCard($('#seq' + idx), changeCard($('#value' + idx).val()), $('#suit'+idx).val(), 120);
     $('#seq' + idx).delay(wait * (idx - 1)).fadeIn(wait);
     $('#card' + idx).delay(wait * (idx - 1)).fadeOut(0);
   }

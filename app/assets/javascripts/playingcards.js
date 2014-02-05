@@ -1,3 +1,25 @@
+function changeCard( rank ) {
+var RANKS = {
+    A : 'ace',
+    2: 'two',
+    3: 'three',
+    4: 'four',
+    5: 'five',
+    6: 'six',
+    7: 'seven',
+    8: 'eight',
+    9: 'nine',
+    10: 'ten',
+    J: 'jack',
+    Q: 'queen',
+    K: 'king'
+  };
+  return RANKS[rank];
+
+
+};
+
+
 function drawCard(target, rank, suit, width) {
   var RANKS = {
     ace: 'A',
@@ -106,6 +128,3 @@ function drawCard(target, rank, suit, width) {
 
   target.addClass('card'); target.html('<div class="card-' + rank + ' ' + suit + '">' + spans.join("\n") + '</div>');
 }
-
-drawCard($('#card1'), 'ace', 'diamond', 120);
-drawCard($('#card2'), 'ten', 'spade', 150);
