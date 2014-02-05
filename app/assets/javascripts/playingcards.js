@@ -106,15 +106,15 @@ function drawCard(target, rank, suit, width) {
   }
 
   else if (rank == 'jack') {
-    spans.push('<span class="face middle_center"><img src="img/faces/face-jack-' + suit + '.png"></span>');
+    spans.push('<span class="face middle_center"><img src="/img/faces/face-jack-' + suit + '.png"></span>');
   }
 
   else if (rank == 'queen') {
-    spans.push('<span class="face middle_center"><img src="img/faces/face-queen-' + suit + '.png"></span>');
+    spans.push('<span class="face middle_center"><img src="/img/faces/face-queen-' + suit + '.png"></span>');
   }
 
   else if (rank == 'king') {
-    spans.push('<span class="face middle_center"><img src="img/faces/face-king-' + suit + '.png"></span>');
+    spans.push('<span class="face middle_center"><img src="/img/faces/face-king-' + suit + '.png"></span>');
   }
 
   spans.push('<div class="corner bottom"><span class="number">' + RANKS[rank] + '</span><span>' + SUITS[suit] + '</span></div>');
