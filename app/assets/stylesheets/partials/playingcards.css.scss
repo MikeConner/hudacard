@@ -27,8 +27,11 @@
   box-shadow: none;
 }
 .card .card-back img {
-  width: 16em;
-  height: 22.4em;
+  position: relative!important;
+  width: 100%!important;
+  height: inherit!important;
+  top: 0!important;
+  left: 0!important;
 }
 .card .flipped {
   -ms-transform: rotateY(180deg);
