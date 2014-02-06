@@ -36,14 +36,15 @@ function drawCard(target, rank, suit, width) {
     jack: 'J',
     queen: 'Q',
     king: 'K',
-    joker: 'JK'
+    joker: ''
   };
 
   var SUITS = {
     club: '&clubs;',
     diamond: '&diams;',
     spade: '&spades;',
-    heart: '&hearts;'
+    heart: '&hearts;',
+    joker: ''
   };
 
   var spans = new Array();
@@ -134,3 +135,5 @@ function drawCard(target, rank, suit, width) {
 
   target.addClass('card'); target.html('<div class="card-' + rank + ' ' + suit + '">' + spans.join("\n") + '</div>');
 }
+
+

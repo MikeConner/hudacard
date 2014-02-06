@@ -17,3 +17,5 @@
     .main-container
       = yield
     = render :partial => 'games/footer'
+    :javascript
+      drawCard($('.joker'), 'joker', 'joker', 115);
