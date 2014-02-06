@@ -27,11 +27,15 @@ h5 { font-size: 1.25rem; }
 h6 { font-size: 1rem; }
 
 body { 
-  background: url(hudacard-bg.jpg) no-repeat center center fixed; 
+  background: darken($primary-color, 2%); 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+
+.main-container {
+  background: url(hudacard-bg.jpg) no-repeat center center fixed;
 }
 
 .clear:before,

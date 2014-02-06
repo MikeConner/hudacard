@@ -14,5 +14,6 @@
     = render 'layouts/application/header'
     = render 'shared/flash_messages'
     = javascript_include_tag "application"
-
-    = yield
+    .main-container
+      = yield
+    = render :partial => 'games/footer'
