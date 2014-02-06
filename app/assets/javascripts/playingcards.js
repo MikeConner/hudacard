@@ -12,7 +12,8 @@ var RANKS = {
     10: 'ten',
     J: 'jack',
     Q: 'queen',
-    K: 'king'
+    K: 'king',
+    JK: '',
   };
   return RANKS[rank];
 
@@ -34,7 +35,8 @@ function drawCard(target, rank, suit, width) {
     ten: '10',
     jack: 'J',
     queen: 'Q',
-    king: 'K'
+    king: 'K',
+    joker: 'JK'
   };
 
   var SUITS = {
@@ -115,6 +117,10 @@ function drawCard(target, rank, suit, width) {
 
   else if (rank == 'king') {
     spans.push('<span class="face middle_center"><img src="/img/faces/face-king-' + suit + '.png"></span>');
+  }
+
+  else if (rank == 'joker') {
+    spans.push('<span class="face middle_center"><img src="/img/faces/face-joker.png"></span>');
   }
 
   spans.push('<div class="corner bottom"><span class="number">' + RANKS[rank] + '</span><span>' + SUITS[suit] + '</span></div>');

@@ -1,0 +1,20 @@
+.panel.callout.radius
+  %h3 You bet #{@game.bet} m฿ on #{@game.color}
+  #announcer
+    %h3 Good Luck
+  - notes = @game.mid_game_notes
+  %h3
+    .midgame#announcer2= notes[0]
+  %h3
+    .midgame#announcer3= notes[1]
+  %h3
+    .midgame#announcer4= notes[2]
+  #winbox
+    - if @game.payout != 0
+      = hidden_field_tag :payout, (@game.payout * 100000).round
+    - if @game.payout > 0
+      %h3 WIN
+    - else
+      %h3 LOSE
+    %h3= @game.ratio.round(1).to_s + "X"
+    %h5= @game.payout.round(1).to_s + "m฿"

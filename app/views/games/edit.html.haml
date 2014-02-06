@@ -5,43 +5,17 @@
       - range = @game.user.bet_range
       = hidden_field_tag :min_bet, range[:min]
       = hidden_field_tag :max_bet, range[:max]
-      .large-4.columns
-        %dl.tabs{"data-tab" => ""}
-          %dd.active
-            %a{href: "#panel2-1"} Bitcoin
-          %dd
-            %a{href: "#panel2-2"} Other info
-        .tabs-content
-          #panel2-1.content.active
-            .tabs-section
-              %h3 Save this URL, do not share
-              %span.disclaimer (it uniquely identifies you -- and your balance) 
-              %a{href: "#"} http://hudacard.herokuapp.com/
-            .tabs-section
-              %h3 Send Bitcoin to address
-              %span.disclaimer (update this as many times as needed)  
-              = render :partial => 'games/fund_account'
-            // This will get moved to main game section
-            -#
-              .tabs-section 
-                %h3 Balance
-                = render :partial => 'games/balance', :locals => { :satoshi_balance => current_user.balance }
-            .tabs-section
-              %h3 Jokers
-              %card.card.card-1-joker
-              %card.card.card-2-joker
-          #panel2-2.content
-            %p Second panel content goes here... 
+      = render :partial => 'games/sidebar'
       .large-8.columns
-        .game-alerts
-          .row
-            .large-12.columns
-              .panel.callout.radius
+        -# .game-alerts
+        -#   .row
+        -#     .large-12.columns
+        -#       .panel.callout.radius
         .game-container
           .row
             .large-12.columns
               - for i in 1..5 do
-                .small-2.large-2.columns.cardarea
+                .large-2.columns.cardarea
                   .card.card-back{:id => "card#{(i)}"}
           .row
             .large-6.columns

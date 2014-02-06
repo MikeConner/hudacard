@@ -3,6 +3,12 @@
   .game-container {
     background: white;
     padding: 2rem 0.5rem;
+    .large-2 {
+      margin-right: 0.5rem;
+      &:last-child {
+        float: left;
+      }
+    }
   }
   .game-controls {
     background: $primary-color;

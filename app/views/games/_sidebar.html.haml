@@ -1,0 +1,28 @@
+.large-4.columns
+  %dl.tabs{"data-tab" => ""}
+    %dd.active
+      %a{href: "#panel2-1"} Bitcoin
+    %dd
+      %a{href: "#panel2-2"} Other info
+  .tabs-content
+    #panel2-1.content.active
+      .tabs-section
+        %h3 Save this URL, do not share
+        %span.disclaimer (it uniquely identifies you -- and your balance) 
+        %a{href: "#"} http://hudacard.herokuapp.com/
+      .tabs-section
+        %h3 Send Bitcoin to address
+        %span.disclaimer (update this as many times as needed)  
+        = render :partial => 'games/fund_account'
+      // This will get moved to main game section
+      -#
+        .tabs-section 
+          %h3 Balance
+          = render :partial => 'games/balance', :locals => { :satoshi_balance => current_user.balance }
+          -# = render :partial => 'games/balance', :locals => { :satoshi_balance => @old_balance }
+      .tabs-section
+        %h3 Jokers
+        %card.card.joker
+        %card.card.joker
+    #panel2-2.content
+      %p Second panel content goes here... 
