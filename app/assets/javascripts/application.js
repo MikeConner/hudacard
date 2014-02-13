@@ -16,7 +16,3 @@
 //= require_tree .
 
 $(function(){ $(document).foundation(); });
-
-$('#myTabs').on('toggled', function (event, tab) {
-  console.log(tab);
-});
