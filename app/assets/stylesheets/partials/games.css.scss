@@ -2,24 +2,34 @@
   padding: 5.5rem 0;
   .game-container {
     background: white;
-    padding: 2rem 0.5rem;
+    padding: 2rem 0.5rem 0.75rem;
     .large-2 {
       margin-right: 0.5rem;
       &:last-child {
         float: left;
       }
     }
+    .hash-panel {
+      padding: 1rem 2rem;
+      h4 {
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        color: $secondary-color;
+        font-size: 1.2rem;
+        margin: 0;
+        word-wrap: break-word;
+      }
+    }
   }
   .game-controls {
     background: $primary-color;
     color: white;
-    .bet-currency {
-      background: lighten($primary-color, 10%);
-      text-align: center;
-    }
     .bet-choice {
       float: left;
-      width: 65%;
+      width: 45%;
       background: darken($primary-color, 25%);
       input {
         margin-bottom: 0;
@@ -29,7 +39,7 @@
         float: left;
         font-size: 1.6rem;
         margin: 0;
-        padding: 3.65rem 0;
+        padding: 2.5rem 0;
         width: 50%;
       } 
       .black-bet-btn {
@@ -37,52 +47,45 @@
         float: left;
         font-size: 1.6rem;
         margin: 0;
-        padding: 3.65rem 0;
+        padding: 2.5rem 0;
         width: 50%;
       }
     }
     .increments {
       float: left;
-      width: 35%;
-      background: white;
+      width: 55%;
+      background: darken($secondary-color, 15%);
       .minus {
         @include button(false, lighten($secondary-color, 15%), false, false, false, true);
         color: darken($secondary-color, 15%);
         float: left;
-        font-size: 2.75rem;
+        font-size: 1.5rem;
         font-weight: bold;
         margin: 0;
-        padding: 1rem 0;
-        width: 50%;
+        padding: 2.5rem 0;
+        width: 25%;
       }
       .plus {
         @include button(false, $secondary-color, false, false, false, true);
         color: darken($secondary-color, 15%);
         float: left;
-        font-size: 2.75rem;
+        font-size: 1.5rem;
         font-weight: bold;
         margin: 0;
-        padding: 1rem 0;
-        width: 50%;
+        padding: 2.5rem 0;
+        width: 25%;
       }
     }
-    .bet-field {
-      color: darken($primary-color, 25%);
+    #game_bet {
+      background: none;
+      border: none;
+      color: white;
       font-weight: bold;
-      width: 100%;
-      span.total {
-        font-size: 1.1rem;
-        position: absolute;
-        left: 3rem;
-        top: 31.5rem;
-      }
-      input {
-        color: darken($primary-color, 25%);
-        font-weight: bold;
-        margin: 0;
-        padding: 0 1rem 0 10rem;
-        text-align: right;
-      }
+      font-size: 2rem;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      text-align: center;
     }
     .title {
       padding: 1rem 0 0.5rem 1.5rem;
@@ -91,6 +94,7 @@
         display: inline-block;
         float: left;
         margin: 0;
+        padding-top: 0.75rem;
         width: 90%;
       }
       span {
@@ -108,11 +112,16 @@
     padding: 1rem 2rem;
     .content {
       padding: 0;
+      width: 100%;
     }
     .tabs-section {
       border-bottom: 1px solid lightgray;
       margin: 0 -2rem;
       padding: 2rem 2.4rem;
+      a {
+        width: 100%;
+        word-wrap: break-word;
+      }
       &:last-of-type {
         border-bottom: none;
       }
@@ -131,4 +140,12 @@
       }
     }
   }
+}
+
+// Card Flip Animation
+.card.flipped {
+  -webkit-transform: rotateY( 180deg );
+  -moz-transform: rotateY( 180deg );
+  -o-transform: rotateY( 180deg );
+  transform: rotateY( 180deg );
 }

@@ -9,27 +9,18 @@
 /     m฿
 .title.clear
   %p Make your bet (Maximum is 50)
-  %span m฿
+  %span= f.text_field :bet
 .increments
+  .minus#minusMilli
+    = "- 1m฿"
   .minus#minusMilliTen
-    = "-"
+    = "- 10m฿"
   .plus#plusMilliTen
-    = "+"
-  .bet-field
-    %span.total Total Amount:
-    = f.text_field :bet
+    = "+ 10m฿"
+  .plus#plusMilli
+    = "+ 1m฿"
+    
 .bet-choice
   = submit_tag Game::RED, :class => 'red-bet-btn', :id => "red"
   = submit_tag Game::BLACK, :class => 'black-bet-btn', :id => "black"
-.row
-  .large-5.columns
-    / .button.alert.radius.tiny#minusMilli
-    /   = "- 1 m฿"
-    / .button.alert.radius.tiny#minusMilliTen
-    /   = "- 10 m฿"
-    / .button.tiny.radius#plusMilli
-    /   = "+ 1 m฿"
-    / .button.tiny.radius#plusMilliTen
-    /   = "+ 10 m฿"
-  .large-7.columns
     

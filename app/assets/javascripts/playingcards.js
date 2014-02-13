@@ -13,7 +13,7 @@ var RANKS = {
     J: 'jack',
     Q: 'queen',
     K: 'king',
-    JK: '',
+    JK: 'joker',
   };
   return RANKS[rank];
 

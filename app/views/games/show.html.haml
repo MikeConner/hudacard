@@ -17,13 +17,13 @@
                   %cardfront{:id => "seq#{i}", :class => "card card-#{@cards[i-1].value}-#{@cards[i-1].suit.downcase}"}
                   = hidden_field_tag "suit#{i}", "#{@cards[i-1].suit.downcase}"
                   = hidden_field_tag "value#{i}", "#{@cards[i-1].value}"
-              .small-6.large-6.columns.panel
+              .large-6.columns.hash-panel
+                %h4 MD5 Hash for next game:
+                %p= @new_game.game_key
+              .large-6.columns.hash-panel
                 .hash#hash
-                  Key for this game:
-                  = @game.security_code
-              .small-6.large-6.columns.panel
-                MD5 Hash for next game:
-                = @new_game.game_key
+                  %h4 Key for this game:
+                  %p= @game.security_code
         .game-controls
           = form_for @new_game do |f|
             = render :partial => 'games/bet_fields', :locals => { :f => f, :game => @new_game }
