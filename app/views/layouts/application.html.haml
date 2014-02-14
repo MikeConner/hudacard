@@ -7,8 +7,7 @@
     %meta{:content => "", :name => "Red or Black?"}/
     = stylesheet_link_tag "application", :media => "all" 
     = javascript_include_tag "vendor/modernizr"
-    = csrf_meta_tags 
-
+    = csrf_meta_tags
     = render 'layouts/application/shim'
   %body
     = render 'layouts/application/header'
@@ -17,6 +16,7 @@
     .main-container
       = yield
     = render :partial => 'games/footer'
+    = yield :js
     :javascript
       drawCard($('.joker'), 'joker', 'joker', 115);
       drawCard($('.card-back'), 'back', 'back', 160);
