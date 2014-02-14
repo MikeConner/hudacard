@@ -62,7 +62,7 @@ class Game < ActiveRecord::Base
       
       self.security_code = ''
       cards.each do |card|
-        self.security_code += "[" + card.to_s + "]" 
+        self.security_code += "[ " + card.to_s[0, 6] + " ]\n"  
       end
       self.security_code += SecureRandom.hex(20)
       self.game_key = Digest::MD5.hexdigest(self.security_code)
