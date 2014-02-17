@@ -15,7 +15,7 @@ var BALANCE_SPEED = 3000;
 
   // Show first card
   $('#seq1').show();
-  drawCard($('#seq1'), changeCard($('#value1').val()), $('#suit1').val(), 160);
+  drawCard($('#seq1'), changeCard($('#value1').val(), $('#suit1').val()), $('#suit1').val(), 160);
   $('#card1').hide();
   $('#announcer').delay(wait).fadeOut(0);
   for (var idx = 2; idx <= 5; idx++) {

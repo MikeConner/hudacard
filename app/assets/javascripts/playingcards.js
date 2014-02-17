@@ -1,4 +1,4 @@
-function changeCard( rank ) {
+function changeCard( rank, suit) {
 var RANKS = {
     A : 'ace',
     2: 'two',
@@ -15,8 +15,15 @@ var RANKS = {
     K: 'king',
     JK: 'joker',
   };
-  return RANKS[rank];
 
+  if (suit == 'joker') {
+    return '';
+  }
+
+  else
+  {
+    return RANKS[rank];
+  };
 
 };
 
@@ -36,7 +43,7 @@ function drawCard(target, rank, suit, width) {
     jack: 'J',
     queen: 'Q',
     king: 'K',
-    joker: '',
+    joker: ' ',
     back: ''
   };
 
@@ -47,6 +54,10 @@ function drawCard(target, rank, suit, width) {
     heart: '&hearts;',
     joker: '',
     back: ''
+  };
+
+  if (suit=='joker'){
+    rank = 'joker';
   };
 
   var spans = new Array();

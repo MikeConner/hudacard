@@ -3,7 +3,7 @@
     %dd.active
       %a{href: "#panel2-1"} Bitcoin
     %dd
-      %a{href: "#panel2-2"} Other info
+      %a{href: "#panel2-2"} Game Info
   .tabs-content
     #panel2-1.content.active
       .tabs-section
@@ -20,11 +20,22 @@
           %h3 Balance
           = render :partial => 'games/balance', :locals => { :satoshi_balance => current_user.balance }
           -# = render :partial => 'games/balance', :locals => { :satoshi_balance => @old_balance }
+
+    #panel2-2.content
+      .tabs-section
+        %h3 Game Info 
+      .tabs-section
+        .large-12.columns
+          %h4 MD5 Hash for next game:
+          %p= @new_game.game_key
+        %br
+      .tabs-section 
+        .large-12.columns
+          .hash#hash
+            %h4 Key for this game:
+            %p= @game.security_code
+
       .tabs-section.clear
         %h3 Jokers
         .card.joker
         .card.joker
-    #panel2-2.content
-      .tabs-section
-        %h3 Headline
-        %span.disclaimer Second panel content goes here... 
