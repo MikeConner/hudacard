@@ -10,30 +10,36 @@
         %h3 Save this URL, do not share
         %span.disclaimer (it uniquely identifies you -- and your balance) 
         %a{href: "#"} http://hudacard.herokuapp.com/
+      .tabs-section 
+        %h1 Balance
+        %h2.gamebalance
+          = current_user.balance.as_satoshi
+        %h2.mbBalance
+          ==#{ (current_user.balance.as_mb).round(3)} m฿
+
+        -#= render :partial => 'games/balance', :locals => { :satoshi_balance => current_user.balance }
+        -# = render :partial => 'games/balance', :locals => { :satoshi_balance => @old_balance }
+
       .tabs-section
         %h3 Send Bitcoin to address
         %span.disclaimer (update this as many times as needed)  
         = render :partial => 'games/fund_account'
       // This will get moved to main game section
-      -#
-        .tabs-section 
-          %h3 Balance
-          = render :partial => 'games/balance', :locals => { :satoshi_balance => current_user.balance }
-          -# = render :partial => 'games/balance', :locals => { :satoshi_balance => @old_balance }
 
     #panel2-2.content
       .tabs-section
         %h3 Game Info 
-      .tabs-section
-        .large-12.columns
-          %h4 MD5 Hash for next game:
-          %p= @new_game.game_key
-        %br
-      .tabs-section 
-        .large-12.columns
-          .hash#hash
-            %h4 Key for this game:
-            %p= @game.security_code
+        - if !@new_game.nil?
+          .tabs-section
+            .large-12.columns
+              %h4 MD5 Hash for next game:
+              %p= @new_game.game_key
+            %br
+          .tabs-section 
+            .large-12.columns
+              .hash#hash
+                %h4 Key for this game:
+                %p= @game.security_code
 
       .tabs-section.clear
         %h3 Jokers
