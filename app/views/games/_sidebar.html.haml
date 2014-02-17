@@ -12,13 +12,41 @@
         %a{href: "#"} http://hudacard.herokuapp.com/
       .tabs-section 
         %h1 Balance
-        %h2.gamebalance
-          = current_user.balance.as_satoshi
+        %h2.oldbalance
+          #satoshibalance
+            -if ! @old_balance.nil?
+              =@old_balance.as_satoshi
+            - else
+              = current_user.balance.as_satoshi
         %h2.mbBalance
-          ==#{ (current_user.balance.as_mb).round(3)} m฿
-
+          #btcbalance
+            - if @old_balance.nil?
+              ==#{ (current_user.balance.as_mb).round(3)} m฿
+        %br
+              
         -#= render :partial => 'games/balance', :locals => { :satoshi_balance => current_user.balance }
         -# = render :partial => 'games/balance', :locals => { :satoshi_balance => @old_balance }
+        %h2.winnings
+          -if !@game.payout.nil?
+            .span2
+              #announcer
+                %h3 Good Luck
+              - notes = @game.mid_game_notes
+              %h3
+                .midgame#announcer2= notes[0]
+              %h3
+                .midgame#announcer3= notes[1]
+              %h3
+                .midgame#announcer4= notes[2]
+              #winbox
+                - if @game.payout != 0
+                  = hidden_field_tag :payout, (@game.payout * 100000).round
+                - if @game.payout > 0
+                  %h3 WIN #{@game.payout}
+                - else
+                  %h3 LOSE #{@game.payout}
+
+
 
       .tabs-section
         %h3 Send Bitcoin to address
