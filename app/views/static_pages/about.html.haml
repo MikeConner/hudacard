@@ -1,6 +1,78 @@
 .container
-  .span5.offset1 
+  .small-12.large-12.columns.panel
     .row
-      %br
-      %br
-      %h1 About
+      %h1 
+        About the Lucky Fun Colors Game
+      %h3
+        How to Play
+      %p
+        The game rules are simple. The player chooses a color: red or black. The dealer will then deal five cards face up. If 3 or more cards match your color, then you win! The more cards that match your color, the more money that you win. If all 5 cards match the color you chose, then you win 5X your initial bet!
+      %p
+        Conversely, the more cards that match the dealer's color, the more you lose. You can lose up to 3X the amount of your initial bet if all 5 cards dealt favor the dealer. This is what we mean when we say that your fortune changes with every turn of the cards. As each card is revealed, it has an immediate impact on how much you can win.
+      %h3
+        Fair gaming explained
+      %p
+        Lucky Fun Gaming is proud to offer fair and fun games. For each hand, we provide mathematical proof that we have not changed the order of the cards since you placed your bet. Here is how it works:
+      %p
+        %ul
+          %li
+            1)  Before you even place your bet, our server has already “shuffled” the deck and is ready to deal.
+          %li
+            2)  Also before you bet, we show you an MD5 hash of the next game (more on that later).
+          %li
+            3)  After the hand is over, you see the input to the MD5 function, allowing you to verify that the hand was dealt correctly.
+      %p
+        So what exactly is an “MD5 hash?”
+      %p
+        An MD5 hash is a special type of one-way math function. You can feed any combination of text or data into the MD5 function, and that input will produce a unique sequence of 32 characters of numbers and letters.
+      %p
+        Great, so how do I use it to check my hand?
+        Before you bet and deal a hand, we show you the hand's MD5 hash value. After you see the results of each hand, we show you the input that generated that value. You can then calculate the MD5 hash for yourself and verify that it's the same value as what we showed you before the hand. This proves that the deck was shuffled fairly before you even placed a bet. We suggest this calculator (http://www.md5calc.com/) if you want to try for yourself.
+      %h3
+        Payout Tables
+      %h4
+        Winning Hands
+      %table
+        %tr
+          %th
+            Number of player cards dealt
+          %th
+            Payout
+        %tr
+          %td
+            All five cards your color
+          %td
+            5X initial bet (Win 5:1)
+        %tr
+          %td
+            Four cards       “        “
+          %td
+            2X initial bet (Win 2:1)
+        %tr
+          %td
+            Three cards    “       “
+          %td
+            1.2X initial bet (Win 6:5)
+      %h4
+        Losing Hands
+      %table
+        %tr
+          %th
+            Number of player cards dealt
+          %th
+            Amount Lost
+        %tr
+          %td    
+            3 cards dealer's color
+          %td
+            Lose only your initial bet
+        %tr
+          %td
+            4 cards dealer's color
+          %td
+            Lose 2X your initial bet
+        %tr
+          %td
+            All 5 cards dealer's color
+          %td
+            Lose 3X your initial bet
