@@ -9,7 +9,8 @@
       .tabs-section
         %h3 Save this URL, do not share
         %span.disclaimer (it uniquely identifies you -- and your balance) 
-        %a{href: "#"} http://hudacard.herokuapp.com/
+        #bookmark
+          %a{href: "#"} #{request.protocol}#{request.host_with_port}#{request.fullpath}
       .tabs-section 
         %h1 Balance
         %h2.oldbalance

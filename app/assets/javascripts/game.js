@@ -6,6 +6,22 @@ $(document).ready(function() {
   minimum_bet = parseInt($('#min_bet').val());
   maximum_bet = parseInt($('#max_bet').val());
 
+
+  $('#doubleMilli').click(function() {
+    var origVal = parseInt($('#game_bet').val());
+    var newval = origVal*2;
+    $('#game_bet').val(newval);
+    checkRange();
+  });
+
+  
+  $('#halfMilli').click(function() {
+    var origVal = parseInt($('#game_bet').val());
+    var newval = parseInt(origVal/2);
+    $('#game_bet').val(newval);
+    checkRange();
+  });
+
   $('#plusMilli').click(function() {
     var origVal = parseInt($('#game_bet').val());
     var newval = origVal + minimum_bet;

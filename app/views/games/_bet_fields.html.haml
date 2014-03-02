@@ -11,14 +11,14 @@
   %p Make your bet (Maximum is 50)
   %span= f.text_field :bet
 .increments
+  .minus#halfMilli
+    = "1/2"
   .minus#minusMilli
     = "- 1m฿"
-  .minus#minusMilliTen
-    = "- 10m฿"
-  .plus#plusMilliTen
-    = "+ 10m฿"
   .plus#plusMilli
     = "+ 1m฿"
+  .plus#doubleMilli
+    = "2x"
     
 .bet-choice
   = submit_tag Game::RED, :class => 'red-bet-btn', :id => "red"
