@@ -62,7 +62,7 @@ class Game < ActiveRecord::Base
       
       self.security_code = ''
       cards.each do |card|
-        self.security_code += "[ " + card.to_s[0, 6] + " ]\n"  
+        self.security_code += "[ " + card.to_s[0, 6] + " ]"  
       end
       self.security_code += SecureRandom.hex(20)
       self.game_key = Digest::MD5.hexdigest(self.security_code)
@@ -184,6 +184,12 @@ class Game < ActiveRecord::Base
     end
     
     notes
+  end
+  
+  # Exclude "zero balance" transactions from history
+  #   If there is no associated transaction, it's just "practice"
+  def practice?
+    BtcTransaction.find_by_transaction_id(game_tx_id).nil?
   end
   
 private

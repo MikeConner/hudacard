@@ -51,20 +51,26 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
     @errors = nil
     
-    # Stores the bet
-    if @game.update_attributes(params[:game].merge(:color => params[:commit]))
-      # Commit has red/black; compute payout
-      @game.play
-      
-      if @game.save
-        token = SecureRandom.urlsafe_base64(Game::TOKEN_LENGTH, false)
-        # create new game (default bet to last game's bet)
-        @game.user.games.create(:random_token => token, :bet => @game.bet)
-      else
+    # Name has to match games/bet_fields partial
+    if 'amount' == params[:clicked_on]
+      if !@game.update_attributes(params[:game])
         @errors = @game.errors.full_messages
-      end  
+      end
     else
-      @errors = @game.errors.full_messages    
+      if @game.update_attributes(params[:game].merge(:color => params[:commit]))
+        # Commit has red/black; compute payout
+        @game.play
+        
+        if @game.save
+          token = SecureRandom.urlsafe_base64(Game::TOKEN_LENGTH, false)
+          # create new game (default bet to last game's bet)
+          @game.user.games.create(:random_token => token, :bet => @game.bet)
+        else
+          @errors = @game.errors.full_messages
+        end  
+      else
+        @errors = @game.errors.full_messages    
+      end
     end
     
     if @errors.nil?

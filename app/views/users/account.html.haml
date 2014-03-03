@@ -103,7 +103,7 @@
             %tbody
               - @games.each do |game|
                 -# Exclude incomplete (current) game
-                - if !game.payout.nil?
+                - if !game.payout.nil? && !game.practice?
                   %tr
                     %td= game.updated_at.try(:strftime, ApplicationHelper::DATE_FORMAT)
                     %td= game.color

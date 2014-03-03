@@ -9,7 +9,8 @@
 /     m฿
 .title.clear
   %p Make your bet (Maximum is 50)
-  %span= f.text_field :bet
+  -# Set a hidden field if we submit because of pressing Enter on the bet field; val has to match controller
+  %span= f.text_field :bet, :onclick => "$('#clicked_on').val('amount')"
 .increments
   .minus#halfMilli
     = "1/2"
@@ -23,4 +24,4 @@
 .bet-choice
   = submit_tag Game::RED, :class => 'red-bet-btn', :id => "red"
   = submit_tag Game::BLACK, :class => 'black-bet-btn', :id => "black"
-    
+  = hidden_field_tag :clicked_on, nil
