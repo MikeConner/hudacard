@@ -18,5 +18,6 @@
 //= require playingcards
 //= require game
 //= require stickyFooter
+//= require flip
 
 $(function(){ $(document).foundation(); });
