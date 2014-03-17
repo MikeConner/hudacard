@@ -2,14 +2,14 @@ var BALANCE_SPEED = 3000;
 
   $(document).ready(function() {
   var wait = 1000;
-  
+
   // Result box WIN/LOSE
   $('#winbox').hide()
   $('#hash').hide();
-  
+
   // Fronts of the cards
   $('cardfront').hide();
-  
+
   // Mid-game notes
   $('.midgame').hide();
 
@@ -26,20 +26,31 @@ var BALANCE_SPEED = 3000;
 
   for (var idx = 2; idx <= 4; idx++) {
     $('#announcer' + idx).delay(wait * (idx - 1)).fadeIn(wait);
-    $('#announcer' + idx).delay(0).fadeOut(0);    
+    $('#announcer' + idx).delay(0).fadeOut(0);
   }
-  
+
     $('#winbox').delay(wait * 4).fadeIn(wait);
     $('#hash').delay(wait * 4).fadeIn(wait);
-    
+
     setTimeout(updateBalance, wait * 5);
   });
+
+  // Annouce progress
+  var progression = 20,
+  progress = setInterval(function() {
+    $('#progress .progress-text').text(progression + '%');
+    $('#progress .progress-bar').css({'width':progression+'%'});
+    if(progression == 100) {
+        clearInterval(progress);
+    } else
+        progression += 20;
+  }, 800);
 
   function updateBalance() {
     var satBal = parseInt($('#satoshibalance').text());
     var satPay = parseInt($('#payout').val());
     var btcBalNew = (satPay + satBal) / 100000;
-         
+
     if (!(isNaN(satPay) || (0 == satBal))) {
         $('#btcbalance').text(btcBalNew + " m฿");
         if (satPay < 0){

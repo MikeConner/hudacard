@@ -18,7 +18,7 @@
                   -#%cardfront{:id => "seq#{i}", :class => "card card-#{@cards[i-1].value}-#{@cards[i-1].suit.downcase}"}
                   = hidden_field_tag "suit#{i}", "#{@cards[i-1].suit.downcase}"
                   = hidden_field_tag "value#{i}", "#{@cards[i-1].value}"
-              
+
         .game-controls
           = form_for @new_game do |f|
             = render :partial => 'games/bet_fields', :locals => { :f => f, :game => @new_game }
