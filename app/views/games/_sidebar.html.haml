@@ -23,9 +23,6 @@
           #btcbalance
             - if @old_balance.nil?
               ==#{ (current_user.balance.as_mb).round(3)} m฿
-        #progress
-          %span.progress-text
-          .progress-bar
         -#= render :partial => 'games/balance', :locals => { :satoshi_balance => current_user.balance }
         -# = render :partial => 'games/balance', :locals => { :satoshi_balance => @old_balance }
         %h2.winnings

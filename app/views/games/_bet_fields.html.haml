@@ -7,6 +7,9 @@
 /   .large-4.small-4.columns
 /     = f.text_field :bet, :size => 5
 /     m฿
+#progress
+  %span.progress-text
+  .progress-bar
 .title.clear
   %p Make your bet (Maximum is 50)
   -# Set a hidden field if we submit because of pressing Enter on the bet field; val has to match controller
@@ -20,7 +23,6 @@
     = "+ 1m฿"
   .plus#doubleMilli
     = "2x"
-    
 .bet-choice
   = submit_tag Game::RED, :class => 'red-bet-btn', :id => "red"
   = submit_tag Game::BLACK, :class => 'black-bet-btn', :id => "black"
