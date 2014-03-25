@@ -1,5 +1,7 @@
 var BALANCE_SPEED = 3000;
 
+
+
   $(document).ready(function() {
   var wait = 1000;
 
@@ -25,8 +27,9 @@ var BALANCE_SPEED = 3000;
   }
 
   for (var idx = 2; idx <= 4; idx++) {
-    $('#announcer' + idx).delay(wait * (idx - 1)).fadeIn(wait);
-    $('#announcer' + idx).delay(0).fadeOut(0);
+    $(".progress-bar").delay(wait * (idx - 1)).css('background-color', progressColor($('#announcer' + idx).text()) );
+//    $('#announcer' + idx).delay(wait * (idx - 1)).fadeIn(wait);
+//    $('#announcer' + idx).delay(0).fadeOut(0);
   }
 
     $('#winbox').delay(wait * 4).fadeIn(wait);
@@ -34,6 +37,27 @@ var BALANCE_SPEED = 3000;
 
     setTimeout(updateBalance, wait * 5);
   });
+
+  function progressColor(antxt) {
+    rv = "blue";
+    if (antxt.indexOf("you WIN!") > 0){
+      rv = "light Green";
+    
+    } else if (antxt.indexOf("you LOSE!") > 0){
+      rv = "Orange";
+    } else if (antxt.indexOf("you LOSE 3x!") > 0){
+          rv = "Red";
+    } else if (antxt.indexOf("5x JACKPOT!") > 0){
+            rv = "Green";
+    } else if (antxt.indexOf("WIN DOUBLE!") > 0){
+            rv = "Green";
+    } else if (antxt.indexOf("determines winner") > 0){
+            rv = "BLUE";
+    } else if (antxt.indexOf("LOSE DOUBLE!") > 0){
+            rv = "Red";
+    } 
+    return rv;
+  };
 
   // Annouce progress
   var progression = 20,
