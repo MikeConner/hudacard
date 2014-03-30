@@ -5,7 +5,7 @@
       -# Show the first one, hide 2-5; these will fade in/out using JS
       - progress = 1 == x ? "" : 'bet-progress'
       - game_progress = (x > 1 and x < 5) ? game.mid_game_progress[x - 2] : ""
-      %tr{:value => x, :id => "progress#{x}", :class => "title clear #{game_progress} #{progress}"}  
+      %tr{:id => "progress#{x}", :class => "title clear #{game_progress} #{progress}"}  
         %td.bet_text Make your bet (Maximum is 50)
         - if 5 == x
           %td.payout-announcer= @payout

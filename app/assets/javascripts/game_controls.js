@@ -1,4 +1,5 @@
 var BALANCE_SPEED = 3000;
+var cardNum = 2;
 
 $(document).ready(function() {
   var wait = 1000;
@@ -23,8 +24,15 @@ $(document).ready(function() {
     $('#seq' + idx).delay(wait * (idx - 1)).fadeIn(wait);
     $('#card' + idx).delay(wait * (idx - 1)).fadeOut(0);
     
-    $('#progress' + idx).delay(wait * (idx - 1)).fadeIn(wait);
-    $('#progress' + (idx - 1).toString()).delay(wait * (idx - 1)).fadeOut(0);
+    // Problem seems to be passing in the idx variable. It's reading it *after* the delay, not before
+    //  So it always "jumps" right to the end
+    // Explicitly setting them outside the loop doesn't work either, though
+
+    // This works - just call a generic routine, which has an external variable counter    
+    setTimeout(progress, wait * (idx-1));
+
+    //$('#progress' + idx).delay(wait * (idx - 1)).fadeIn(wait);
+    //$('#progress' + (idx - 1).toString()).delay(wait * (idx - 1)).fadeOut(0);
   }
     
   $('#winbox').delay(wait * 4).fadeIn(wait);
@@ -33,6 +41,12 @@ $(document).ready(function() {
   setTimeout(updateBalance, wait * 5);
 });
  
+  function progress() {
+  	$('#progress' + cardNum).show();
+  	$('#progress' + (cardNum - 1).toString()).hide();
+  	cardNum++;
+  }
+  
   function updateBalance() {
     var satBal = parseInt($('#satoshibalance').text());
     var satPay = parseInt($('#payout').val());
