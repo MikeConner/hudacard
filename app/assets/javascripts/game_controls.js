@@ -34,10 +34,15 @@ var BALANCE_SPEED = 3000;
   BIG_LOSS_COLOR = 'big-loss-color'
 */  
     // Change class of #bet-progress to reflect progress; class will change background and foreground colors as necessary
-    setTimeout(addProgressClass($('#progress' + idx).val(), wait * (idx - 1)));
+    var newClass = $('#progress' + idx).val();
+    
     if (idx > 2) {
-        setTimeout(removeProgressClass($('#progress' + (idx - 1).toString()).val(), wait * (idx - 1)));
+      var oldClass = $('#progress' + (idx - 1).toString()).val();
+      if (oldClass != newClass) {
+        setTimeout(removeProgressClass(oldClass, wait * (idx - 1)));      	
+      }
     }
+    setTimeout(addProgressClass(newClass, wait * (idx - 1)));
     /*
     $("#bet-progress").delay(wait * (idx - 1)).addClass($('#progress' + idx).val());
     if (idx > 2) {
