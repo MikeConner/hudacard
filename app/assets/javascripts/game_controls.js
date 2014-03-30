@@ -44,6 +44,7 @@ $(document).ready(function() {
   function progress() {
   	$('#progress' + cardNum).show();
   	$('#progress' + (cardNum - 1).toString()).hide();
+  	document.getElementById('flip-sound').play();
   	cardNum++;
   }
   

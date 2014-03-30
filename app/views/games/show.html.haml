@@ -23,5 +23,6 @@
           = form_for @new_game do |f|
             = render :partial => 'games/bet_fields', :locals => { :f => f, :game => @new_game }
 = render :partial => 'games/qrcode'
+%audio#flip-sound{:src => 'http://www.soundjay.com/misc/page-flip-19.wav', :preload => "auto"}
 = content_for :js do
   #{javascript_include_tag "game_controls"}
