@@ -32,6 +32,12 @@ class Game < ActiveRecord::Base
   TOKEN_LENGTH = 32
   MINIMUM_BET = Bitcoin.new(:mb => 1)
   
+  NEUTRAL_COLOR = 'neutral-color'
+  WINNING_COLOR = 'winning-color'
+  JACKPOT_COLOR = 'jackpot-color'
+  SMALL_LOSS_COLOR = 'small-loss-color'
+  BIG_LOSS_COLOR = 'big-loss-color'
+  
   before_validation :deal_cards
   
   # Bet/payout are in mBTC
@@ -93,97 +99,61 @@ class Game < ActiveRecord::Base
     save!
   end
   
-  def mid_game_notes
+  def mid_game_progress
     red = 0
     black = 0
     joker = 0
     count = 0
-    notes = []
+    progress = []
 
     YAML::load(self.cards).each do |card|
       count += 1
       red += card.red_value
       black += card.black_value
-      
+     
       if count >= 2 && count != 5
         case count
         when 2
-          if RED == self.color #bet is on red
-            case red
-            when 0
-              notes.push("One more BLACK and you LOSE!" )
-            when 1
-              notes.push("")
-            when 2
-              notes.push("One more RED and you WIN!" )
-            end
-          else                #bet is on black
-            case black
-            when 0
-              notes.push("One more RED and you LOSE!" )
-            when 1
-              notes.push("")
-            when 2
-              notes.push("One more BLACK and you WIN!" )
-            end
+          cnt = RED == self.color ? red : black
+          case cnt
+          when 0
+            progress.push(SMALL_LOSS_COLOR) # "One more RED/BLACK and you LOSE!"
+          when 1
+            progress.push(NEUTRAL_COLOR)
+          when 2
+            progress.push(WINNING_COLOR) # "One more RED/BLACK and you WIN!"
           end
         when 3
-          if RED == self.color #bet is on red
-            case red
-            when 0
-              notes.push("Sorry, one more BLACK and you LOSE DOUBLE!" )
-            when 1
-              notes.push("One more BLACK and you LOSE!")
-            when 2
-              notes.push("One more RED and you WIN!" )
-            when 3
-              notes.push("You WIN!  One more RED and you win DOUBLE!" )
-            end
-          else                #bet is on black
-            case black
-            when 0
-              notes.push("Sorry, One more RED and you LOSE DOUBLE!" )
-            when 1
-              notes.push("One more RED and you LOSE!")
-            when 2
-              notes.push("One more BLACK and you WIN!" )
-            when 3
-              notes.push("You WIN! One more BLACK and you WIN DOUBLE!")
-            end
+          cnt = RED == self.color ? red : black
+          case cnt
+          when 0
+            progress.push(SMALL_LOSS_COLOR) # "One more RED/BLACK and you LOSE!"
+          when 1
+            progress.push(NEUTRAL_COLOR)
+          when 2
+            progress.push(WINNING_COLOR) # "One more RED/BLACK and you WIN!"
+          when 3
+            progress.push(WINNING_COLOR) # "One more RED/BLACK and you WIN!"
           end
         when 4
-          if RED == self.color #bet is on red
-            case red
-            when 0
-              notes.push("You lose double, one more BLACK and you LOSE 3x!" )
-            when 1
-              notes.push("Sorry, One more BLACK and you LOSE DOUBLE!")
-            when 2
-              notes.push("Game is tied. Next card determines winner" )
-            when 3
-              notes.push("You WIN!  One more RED and you win DOUBLE!" )
-            when 4
-              notes.push("You WIN DOUBLE!  One more RED to win 5x JACKPOT!" )
-            end
-          else                #bet is on black
-            case black
-            when 0
-              notes.push("You lose double, one more RED and you LOSE 3x!" )
-            when 1
-              notes.push("Sorry, One more RED and you LOSE DOUBLE!")
-            when 2
-              notes.push("Game is tied. Next card determines winner." )
-            when 3
-              notes.push("You WIN! One more BLACK and you WIN DOUBLE!")
-            when 4
-              notes.push("You WIN DOUBLE!  One more BLACK to win 5x JACKPOT!" )
-            end
+          cnt = RED == self.color ? red : black
+          case cnt
+          when 0
+            progress.push(BIG_LOSS_COLOR) # You lose double, one more RED/BLACK and you LOSE 3x!"
+          when 1
+            progress.push(SMALL_LOSS_COLOR) # "Sorry, One more RED/BLACK and you LOSE DOUBLE!"
+          when 2
+            progress.push(NEUTRAL_COLOR) # "Game is tied. Next card determines winner"
+          when 3
+            progress.push(WINNING_COLOR) # "One more RED/BLACK and you WIN!"
+          when 4
+            progress.push(JACKPOT_COLOR) # "You WIN DOUBLE!  One more RED/BLACK to win 5x JACKPOT!"
           end
         end
       end
     end
     
-    notes
+    progress
   end
   
   # Exclude "zero balance" transactions from history

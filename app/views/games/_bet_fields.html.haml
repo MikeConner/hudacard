@@ -7,11 +7,9 @@
 /   .large-4.small-4.columns
 /     = f.text_field :bet, :size => 5
 /     m฿
-#progress
-  %span.progress-text
-  .progress-bar
-.title.clear
+#bet-progress.title.clear
   %p Make your bet (Maximum is 50)
+  %p#payout-announcer= @payout
   -# Set a hidden field if we submit because of pressing Enter on the bet field; val has to match controller
   %span= f.text_field :bet, :onclick => "$('#clicked_on').val('amount')"
 .increments

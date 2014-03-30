@@ -4,6 +4,7 @@
   %section.games-hero
     .row
       - range = @game.user.bet_range
+      - @payout = @game.payout > 0 ?  "WIN #{@game.payout}" : "LOSE #{@game.payout}"
       = hidden_field_tag :min_bet, range[:min]
       = hidden_field_tag :max_bet, range[:max]
       = render :partial => 'games/sidebar'

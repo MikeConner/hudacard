@@ -1,7 +1,5 @@
 var BALANCE_SPEED = 3000;
 
-
-
   $(document).ready(function() {
   var wait = 1000;
 
@@ -27,39 +25,52 @@ var BALANCE_SPEED = 3000;
   }
 
   for (var idx = 2; idx <= 4; idx++) {
-    $(".progress-bar").delay(wait * (idx - 1)).css('background-color', progressColor($('#announcer' + idx).text()) );
+/* 
+ * class names for
+  NEUTRAL_COLOR = 'neutral-color'
+  WINNING_COLOR = 'winning-color'
+  JACKPOT_COLOR = 'jackpot-color'
+  SMALL_LOSS_COLOR = 'small-loss-color'
+  BIG_LOSS_COLOR = 'big-loss-color'
+*/  
+    // Change class of #bet-progress to reflect progress; class will change background and foreground colors as necessary
+    setTimeout(addProgressClass($('#progress' + idx).val(), wait * (idx - 1)));
+    if (idx > 2) {
+        setTimeout(removeProgressClass($('#progress' + (idx - 1).toString()).val(), wait * (idx - 1)));
+    }
+    /*
+    $("#bet-progress").delay(wait * (idx - 1)).addClass($('#progress' + idx).val());
+    if (idx > 2) {
+        $("#bet-progress").delay(wait * (idx - 1)).removeClass($('#progress' + (idx - 1).toString()).val());    	
+    }*/
+//    $(".progress-bar").delay(wait * (idx - 1)).css('background-color', progressColor($('#announcer' + idx).text()) );
 //    $('#announcer' + idx).delay(wait * (idx - 1)).fadeIn(wait);
 //    $('#announcer' + idx).delay(0).fadeOut(0);
   }
 
+    //$("#bet-progress").delay(wait * 4).removeClass($('#progress4').val());     
+    setTimeout(removeProgressClass($('#progress4').val(), wait * 4));  
+    setTimeout(displayPayout, wait * 4);
+      
     $('#winbox').delay(wait * 4).fadeIn(wait);
     $('#hash').delay(wait * 4).fadeIn(wait);
 
     setTimeout(updateBalance, wait * 5);
   });
-
-  function progressColor(antxt) {
-    rv = "blue";
-    if (antxt.indexOf("you WIN!") > 0){
-      rv = "light Green";
-    
-    } else if (antxt.indexOf("you LOSE!") > 0){
-      rv = "Orange";
-    } else if (antxt.indexOf("you LOSE 3x!") > 0){
-          rv = "Red";
-    } else if (antxt.indexOf("5x JACKPOT!") > 0){
-            rv = "Green";
-    } else if (antxt.indexOf("WIN DOUBLE!") > 0){
-            rv = "Green";
-    } else if (antxt.indexOf("determines winner") > 0){
-            rv = "BLUE";
-    } else if (antxt.indexOf("LOSE DOUBLE!") > 0){
-            rv = "Red";
-    } 
-    return rv;
-  };
-
-  // Annouce progress
+ 
+  function addProgressClass(className) {
+  	$("#bet-progress").addClass(className);
+  }
+  
+  function removeProgressClass(className) {
+  	$("#bet-progress").removeClass(className);  	
+  }
+  
+  function displayPayout() {
+    //$('#payout-announcer').delay(wait * 4).css('display', 'block');
+  	$('#payout-announcer').css('display', 'block');
+  }
+  // Announce progress
   var progression = 20,
   progress = setInterval(function() {
     $('#progress .progress-text').text(progression + '%');

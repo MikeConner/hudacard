@@ -26,17 +26,14 @@
         -#= render :partial => 'games/balance', :locals => { :satoshi_balance => current_user.balance }
         -# = render :partial => 'games/balance', :locals => { :satoshi_balance => @old_balance }
         %h2.winnings
-          -if !@game.payout.nil?
+          - if !@game.payout.nil?
             .span2
               #announcer
                 %h3 Good Luck
-              - notes = @game.mid_game_notes
-              %h3
-                .midgame#announcer2= notes[0]
-              %h3
-                .midgame#announcer3= notes[1]
-              %h3
-                .midgame#announcer4= notes[2]
+              - color_classes = @game.mid_game_progress
+              = hidden_field_tag :progress2, color_classes[0]
+              = hidden_field_tag :progress3, color_classes[1]
+              = hidden_field_tag :progress4, color_classes[2]
               #winbox
                 - if @game.payout != 0
                   = hidden_field_tag :payout, (@game.payout * 100000).round
