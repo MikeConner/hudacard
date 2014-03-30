@@ -30,10 +30,6 @@
             .span2
               #announcer
                 %h3 Good Luck
-              - color_classes = @game.mid_game_progress
-              = hidden_field_tag :progress2, color_classes[0]
-              = hidden_field_tag :progress3, color_classes[1]
-              = hidden_field_tag :progress4, color_classes[2]
               #winbox
                 - if @game.payout != 0
                   = hidden_field_tag :payout, (@game.payout * 100000).round

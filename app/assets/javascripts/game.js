@@ -6,7 +6,8 @@ $(document).ready(function() {
   minimum_bet = parseInt($('#min_bet').val());
   maximum_bet = parseInt($('#max_bet').val());
 
-
+  $('.bet-progress').hide();
+  
   $('#doubleMilli').click(function() {
     var origVal = parseInt($('#game_bet').val());
     var newval = origVal*2;

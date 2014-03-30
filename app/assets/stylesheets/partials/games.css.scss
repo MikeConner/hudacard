@@ -1,14 +1,5 @@
-#progress {
-    position: relative;
-    width: 100%;
-    height: $progress-height;
-    border: 1px solid $primary-color;
-    background-color: lighten($primary-color, 40%)
-}
-
-#payout-announcer {
-  display: none;
-  float: right;
+.payout-announcer {
+  text-align: right;
 }
 
 .neutral-color {
@@ -34,19 +25,6 @@
 .big-loss-color {
   background-color: red;
   // Also set foreground color so you can see the text  
-}
-
-#progress .progress-bar {
-    background: $primary-color;
-    height: ($progress-height - 0.2rem);
-    width: 20%;
-    display: inline-block;
-}
-
-#progress .progress-text {
-    position:absolute;
-    z-index:2;
-    right:0;
 }
 
 .oldbalance {
@@ -142,7 +120,7 @@
         width: 25%;
       }
     }
-    #game_bet {
+    .game_bet {
       background: none;
       border: none;
       color: white;
@@ -155,15 +133,15 @@
     }
     .title {
       padding: 1rem 0 0.5rem 1.5rem;
-      p {
+      .bet_text {
         color: lighten($primary-color, 25%);
         display: inline-block;
         float: left;
         margin: 0;
         padding-top: 0.75rem;
-        width: 90%;
+        //width: 90%;
       }
-      span {
+      .make_bet {
         background: lighten($primary-color, 15%);
         float: right;
         font-size: 1.2rem;

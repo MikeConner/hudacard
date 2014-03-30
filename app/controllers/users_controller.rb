@@ -75,7 +75,6 @@ class UsersController < ApplicationController
       if @new_game.id != @game.id
         @user.update_attributes!(:current_game_id => @new_game.id)
       end
-      @cards = YAML::load(@game.cards)
     
       # If 0 balance, don't count up/down to 0; allow "betting" with zero balance
       old = 0 == @game.user.balance.as_satoshi ? 0 : @game.user.balance.as_satoshi - (Bitcoin.new(:mb => @game.payout).as_satoshi).round

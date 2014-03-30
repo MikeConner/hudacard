@@ -1,17 +1,17 @@
 = f.hidden_field :game_key, :value => game.game_key
-/ .row
-/   .large-8.small-8.columns
-/     Make Your Bet:
-/     - range = @game.user.bet_range
-/     %p== (#{range[:min]}m฿ - #{range[:max]}m฿)
-/   .large-4.small-4.columns
-/     = f.text_field :bet, :size => 5
-/     m฿
-#bet-progress.title.clear
-  %p Make your bet (Maximum is 50)
-  %p#payout-announcer= @payout
-  -# Set a hidden field if we submit because of pressing Enter on the bet field; val has to match controller
-  %span= f.text_field :bet, :onclick => "$('#clicked_on').val('amount')"
+%table
+  %tbody
+    - for x in 1..5 do
+      -# Show the first one, hide 2-5; these will fade in/out using JS
+      - progress = 1 == x ? "" : 'bet-progress'
+      - game_progress = (x > 1 and x < 5) ? game.mid_game_progress[x - 2] : ""
+      %tr{:value => x, :id => "progress#{x}", :class => "title clear #{game_progress} #{progress}"}  
+        %td.bet_text Make your bet (Maximum is 50)
+        - if 5 == x
+          %td.payout-announcer= @payout
+        - else
+          %td
+        %td.make_bet= f.text_field :bet, :class => 'game_bet', :onclick => "$('#clicked_on').val('amount')"
 .increments
   .minus#halfMilli
     = "1/2"
