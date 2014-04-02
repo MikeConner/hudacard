@@ -19,6 +19,7 @@
 #  current_game_id          :integer
 #  outbound_bitcoin_address :string(255)
 #  msg_email                :string(255)
+#  admin                    :boolean          default(FALSE), not null
 #
 
 describe User do

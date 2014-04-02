@@ -2,8 +2,9 @@ describe UserMailer do
   describe "Comment email" do
     CATEGORY = 'Comment'
     CONTENT = 'This is a comment'
+    EMAIL = 'jkb@claritech.com'
     
-    let(:msg) { UserMailer.comment_email(CATEGORY, CONTENT) }
+    let(:msg) { UserMailer.comment_email(CATEGORY, EMAIL, CONTENT) }
 
     it "should return a message object" do
       msg.should_not be_nil

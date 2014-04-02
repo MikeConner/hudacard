@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.17'
 ruby '1.9.3'
 
 gem 'pg', '0.15.1'
 gem 'taps', '0.3.24'
-gem 'httparty'
+gem 'httparty', '0.13.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -14,6 +14,7 @@ group :assets do
   gem 'jquery-ui-rails', '1.1.1'
   gem 'uglifier', '2.1.0'
   gem 'sass-rails',   '3.2.5'
+  gem 'sass', '3.2.13'
   #gem 'sass-twitter-bootstrap-rails', '~> 1.0'
   gem 'foundation-rails'
   gem 'foundation-icons-sass-rails'
@@ -40,7 +41,7 @@ end
 group :test do
   gem 'capybara', '2.1.0'
   gem 'capybara-webkit', '0.14.2'
-  gem 'selenium-webdriver', '2.32.1'
+  gem 'selenium-webdriver', '2.41.0'
   gem 'launchy', '2.1.2'
   gem 'database_cleaner', '0.9.1'
   gem 'factory_girl_rails', '4.1.0'
