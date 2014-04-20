@@ -42,9 +42,9 @@ $(document).ready(function() {
 });
  
   function progress() {
+    $('#progress' + (cardNum - 1).toString()).hide();
   	$('#progress' + cardNum).show();
-  	$('#progress' + (cardNum - 1).toString()).hide();
-  	document.getElementById('flip-sound').play();
+  	document.getElementById('flip-sound2').play();
   	cardNum++;
   }
   

@@ -34,9 +34,9 @@
                 - if @game.payout != 0
                   = hidden_field_tag :payout, (@game.payout * 100000).round
                 - if @game.payout > 0
-                  %h3 WIN #{@game.payout}
+                  %h3 WIN #{@game.payout}x
                 - else
-                  %h3 LOSE #{@game.payout}
+                  %h3 LOSE #{@game.payout}x
       .tabs-section
         %h3 Send Bitcoin to address
         %span.disclaimer (update this as many times as needed)
