@@ -4,11 +4,11 @@
   - progress = 1 == x ? "" : 'bet-progress'
   - game_progress = (x > 1 and x < 5) ? game.mid_game_progress[x - 2] : ""
   .row{:id => "progress#{x}", :class => "title clear #{game_progress} #{progress}"}  
-    .bet_text Make your bet (Maximum is 50)
+    .large-6.column.bet-box Make your bet (Maximum is 50)
     - if 5 == x
-      .payout-announcer= @payout
+      .large-6.column.payout-announcer= @payout 
     - else
-      .no_announcer
+      .large-6.column.no_announcer
     .make_bet= f.text_field :bet, :class => 'game_bet', :onclick => "$('#clicked_on').val('amount')"
 .increments
   .minus#halfMilli
