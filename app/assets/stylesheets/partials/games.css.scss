@@ -3,42 +3,44 @@
 }
 
 .neutral-color {
-  background-color: blue;
-  // Also set foreground color so you can see the text
+  background-color: lighten($primary-color, 45%);
 }
 
 .winning-color {
-  background-color: yellowgreen;
-  // Also set foreground color so you can see the text  
+  background-color: lighten($secondary-color, 15%);;
 }
 
 .jackpot-color {
-  background-color: green;
-  // Also set foreground color so you can see the text  
+  background-color: darken($secondary-color, 15%);;
 }
 
 .small-loss-color {
   background-color: orange;
-  // Also set foreground color so you can see the text  
 }
 
 .big-loss-color {
-  background-color: red;
-  // Also set foreground color so you can see the text  
+  background-color: $tertiary-color;
 }
 
-.oldbalance {
+h1, #satoshibalance {
+  display: inline-block;
+}
+
+#satoshibalance {
   color: $secondary-color;
-  font-size: 1.6rem;
   font-weight: bold;
-  position: absolute;
-  right: 12rem;
-  top: 22.5rem;
-  &:after {
-    content: 'm';
-    position: absolute;
-    top: 0;
-    left: 9rem;
+  font-size: 2.2rem;
+}
+
+.bet-box {
+  margin: 0.75rem;
+  div {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  p {
+    font-size: 1.4rem;;
+    margin-bottom: 0;
   }
 }
 

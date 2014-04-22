@@ -12,13 +12,12 @@
         #bookmark
           %a{href: "#"} #{request.protocol}#{request.host_with_port}#{request.fullpath}
       .tabs-section
-        %h1 Balance
-        %h2.oldbalance
-          #satoshibalance
-            -if ! @old_balance.nil?
-              =@old_balance.as_satoshi
-            - else
-              = current_user.balance.as_satoshi
+        %h1 Balance:
+        %h2#satoshibalance
+          -if ! @old_balance.nil?
+            =@old_balance.as_satoshi
+          - else
+            = current_user.balance.as_satoshi
         %h2.mbBalance
           #btcbalance
             - if @old_balance.nil?
