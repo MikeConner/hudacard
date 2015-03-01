@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
-ruby '1.9.3'
+ruby '2.1.5'
 
 gem 'pg', '0.15.1'
 gem 'taps', '0.3.24'
